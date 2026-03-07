@@ -30,10 +30,20 @@
                     <div class="offcanvas-body">
                         <div class="offcanvas-top-area">
                             <div class="create-bg d-flex gap-2 flex-wrap">
-                                <a href="{{ route('login', ['locale' => $locale ?? 'fr']) }}" class="offcanvas-create-btn">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>{{ __('Connexion') }}</span>
-                                </a>
+                                @if(session(config('votix_api.session_access_token_key')))
+                                    <form method="POST" action="{{ route('logout', ['locale' => $locale ?? 'fr']) }}" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="offcanvas-create-btn border-0 bg-transparent p-0" style="cursor:pointer;">
+                                            <i class="fa-solid fa-right-from-bracket"></i>
+                                            <span>{{ __('Logout') }}</span>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login', ['locale' => $locale ?? 'fr']) }}" class="offcanvas-create-btn">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>{{ __('Connexion') }}</span>
+                                    </a>
+                                @endif
                                 <a href="#" class="offcanvas-create-btn">
                                     <i class="fa-solid fa-calendar-days"></i>
                                     <span>{{ __('Create Event') }}</span>
@@ -91,10 +101,20 @@
                 <div class="right-header order-3">
                     <ul class="align-self-stretch">
                         <li class="d-none d-lg-inline-block header-buttons-group">
-                            <a href="{{ route('login', ['locale' => $locale ?? 'fr']) }}" class="create-btn btn-hover">
-                                <i class="fa-solid fa-user"></i>
-                                <span>{{ __('Connexion') }}</span>
-                            </a>
+                            @if(session(config('votix_api.session_access_token_key')))
+                                <form method="POST" action="{{ route('logout', ['locale' => $locale ?? 'fr']) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="create-btn btn-hover">
+                                        <i class="fa-solid fa-right-from-bracket"></i>
+                                        <span>{{ __('Logout') }}</span>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login', ['locale' => $locale ?? 'fr']) }}" class="create-btn btn-hover">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>{{ __('Connexion') }}</span>
+                                </a>
+                            @endif
                             <a href="#" class="create-btn btn-hover">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>{{ __('Create Event') }}</span>

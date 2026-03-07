@@ -20,40 +20,20 @@
                 </div>
             @endif
 
-            <div class="row mt-3">
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group mt-4">
-                        <label class="form-label">{{ __('First Name') }} *</label>
-                        <input class="form-control h_50" type="text" name="first_name" placeholder="{{ __('First Name') }}" value="{{ old('first_name') }}" required>
-                    </div>
+            <div class="form-group mt-5">
+                <label class="form-label">{{ __('Email') }} *</label>
+                <input class="form-control h_50" type="email" name="email" placeholder="{{ __('Your email') }}" value="{{ old('email') }}" required>
+            </div>
+            <div class="form-group mt-4">
+                <div class="field-password">
+                    <label class="form-label">{{ __('Password') }} *</label>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group mt-4">
-                        <label class="form-label">{{ __('Last Name') }} *</label>
-                        <input class="form-control h_50" type="text" name="last_name" placeholder="{{ __('Last Name') }}" value="{{ old('last_name') }}" required>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="form-group mt-4">
-                        <label class="form-label">{{ __('Email') }} *</label>
-                        <input class="form-control h_50" type="email" name="email" placeholder="{{ __('Your email') }}" value="{{ old('email') }}" required>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="form-group mt-4">
-                        <div class="field-password">
-                            <label class="form-label">{{ __('Password') }} *</label>
-                        </div>
-                        <div class="loc-group position-relative">
-                            <input class="form-control h_50" type="password" name="password" placeholder="{{ __('Password') }}" required id="password-field">
-                            <span class="pass-show-eye" id="toggle-password" role="button" aria-label="Afficher le mot de passe"><i class="fas fa-eye-slash"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <button class="main-btn btn-hover w-100 mt-4" type="submit">{{ __('Sign up') }}</button>
+                <div class="loc-group position-relative">
+                    <input class="form-control h_50" type="password" name="password" placeholder="{{ __('Password') }}" required minlength="8" id="password-field">
+                    <span class="pass-show-eye" id="toggle-password" role="button" aria-label="Afficher le mot de passe"><i class="fas fa-eye-slash"></i></span>
                 </div>
             </div>
+            <button class="main-btn btn-hover w-100 mt-4" type="submit">{{ __('Sign up') }}</button>
         </form>
         <div class="agree-text">
             En cliquant sur « S'inscrire », vous acceptez les <a href="#">Conditions générales</a> et la <a href="#">Politique de confidentialité</a> de Votix.

@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,10 @@ Route::get('/locale/{locale}', [\App\Http\Controllers\LocaleController::class, '
     ->name('locale.switch')
     ->where(['locale' => 'fr|en']);
 
+// Backend redirects (no locale in URL)
+Route::get('/email-verified', [AuthController::class, 'showEmailVerified'])->name('email.verified.plain');
+Route::get('/reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset.plain');
+
 Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])->group(function () {
     Route::get('/', function (string $locale) {
         App::setLocale($locale);
@@ -25,24 +30,17 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
     })->name('home');
 
     // Auth
-    Route::get('/login', function (string $locale) {
-        return view('auth.login');
-    })->name('login');
-    Route::get('/register', function (string $locale) {
-        return view('auth.register');
-    })->name('register');
-    Route::get('/forgot-password', function (string $locale) {
-        return view('auth.forgot-password');
-    })->name('password.request');
-    Route::post('/forgot-password', function () {
-        return back()->with('status', __('auth.reset_link_sent'));
-    })->name('password.email');
-    Route::post('/login', function () {
-        return redirect()->route('home', ['locale' => request()->route('locale')]);
-    });
-    Route::post('/register', function () {
-        return redirect()->route('home', ['locale' => request()->route('locale')]);
-    });
+    Route::get('/login', fn (string $locale) => view('auth.login'))->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/register', fn (string $locale) => view('auth.register'))->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/forgot-password', fn (string $locale) => view('auth.forgot-password'))->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendForgotPassword'])->name('password.email');
+    Route::get('/reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'submitResetPassword'])->name('password.update');
+    Route::get('/email-verified', [AuthController::class, 'showEmailVerified'])->name('email.verified');
+    Route::post('/email/resend', [AuthController::class, 'resendVerification'])->name('verification.resend');
 
     // Ticketing
     Route::prefix('ticketing')->name('ticketing.')->group(function () {
