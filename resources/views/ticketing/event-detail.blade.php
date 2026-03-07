@@ -11,7 +11,7 @@
                         <div class="barren-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.home') }}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.index') }}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="{{ route('ticketing.events') }}">Explore
                                             Events</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Venue Event Detail View</li>

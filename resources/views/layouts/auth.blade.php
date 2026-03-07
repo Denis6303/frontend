@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=9">
+    <meta name="description" content="Votix - Billetterie évènementielle">
+    <meta name="author" content="Votix">
+
+    <title>@yield('title', 'Authentification') - {{ config('app.name', 'Votix') }}</title>
+
+    <link rel="icon" type="image/png" href="{{ asset('template/images/fav.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
+    <link href="{{ asset('template/vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/css/night-mode.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/vendor/OwlCarousel/assets/owl.carousel.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/vendor/OwlCarousel/assets/owl.theme.default.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .app-top-items { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; width: 100%; }
+        .app-top-left-link { flex-shrink: 0; }
+        .app-top-left-link .sidebar-register-link { color: #6ac045; font-weight: 500; }
+        .app-top-left-link .sidebar-register-link:hover { color: #7ad254 !important; }
+    </style>
+    @stack('styles')
+</head>
+<body>
+    <div class="form-wrapper">
+        <div class="app-form">
+            <div class="app-form-sidebar">
+                <div class="sidebar-sign-logo">
+                    <img src="{{ asset('template/images/logo.svg') }}" alt="Votix">
+                </div>
+                <div class="sign_sidebar_text">
+                    <h1>The Easiest Way to Create Events and Sell More Tickets Online</h1>
+                </div>
+            </div>
+            <div class="app-form-content">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10 col-md-10">
+                            <div class="app-top-items">
+                                <div class="app-top-left-link">
+                                    <a class="sidebar-register-link" href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __("Retour à l'accueil") }}</a>
+                                </div>
+                                <div class="app-top-right-link">
+                                    @yield('auth-top-link')
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 col-lg-6 col-md-7">
+                            @yield('content')
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright-footer">
+                    © {{ date('Y') }}, {{ config('app.name', 'Votix') }}. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @stack('scripts')
+</body>
+</html>
