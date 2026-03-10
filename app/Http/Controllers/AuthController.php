@@ -188,13 +188,69 @@ class AuthController extends Controller
     }
 
     /**
-     * GET email-verified (landing after backend redirect with ?verified=1)
+     * GET email-verified
+     *
+     * - When coming from the backend verification redirect, a ?login_ticket=... is present.
+     * - The frontend exchanges this ticket for an access_token and user data,
+     *   then redirects to the localized home as an authenticated user.
+     * - If the ticket is invalid/expired or missing, a simple info page is shown.
      */
-    public function showEmailVerified(Request $request): View
+    public function showEmailVerified(Request $request)
     {
-        $verified = $request->query('verified') === '1' || $request->query('verified') === 1;
+        $loginTicket = $request->query('login_ticket');
 
-        return view('auth.email-verified', ['verified' => $verified]);
+        if ($loginTicket) {
+            $response = $this->apiService->makeApiRequest('POST', 'auth/exchange-ticket', [
+                'json' => ['login_ticket' => $loginTicket],
+                'headers' => $this->apiJsonHeaders,
+            ], true);
+
+            if ($response->successful() && ($response->json('success') ?? false)) {
+                $data = $response->json('data') ?? [];
+                $token = $data['access_token'] ?? null;
+                $user = $data['user'] ?? null;
+
+                // Compute TTL from access_expires_at if provided
+                $expiresIn = 3600;
+                if (! empty($data['access_expires_at'])) {
+                    try {
+                        $expiresAt = now()->parse($data['access_expires_at']);
+                        $diff = $expiresAt->diffInSeconds(now(), false);
+                        if ($diff > 60) {
+                            $expiresIn = $diff;
+                        }
+                    } catch (\Throwable $e) {
+                        // Fallback to default TTL
+                    }
+                }
+
+                if ($token) {
+                    $this->apiService->setUserTokens($token, '', $expiresIn);
+                    if (is_array($user)) {
+                        Session::put(config('votix_api.session_user_key'), $user);
+                    }
+                }
+
+                $locale = $request->route('locale', config('app.locale', 'fr'));
+                $message = $response->json('message') ?: __('Email verified');
+
+                return redirect()->route('home', ['locale' => $locale])->with('success', $message);
+            }
+
+            // Ticket invalid or expired: show info page with error message
+            $errorMessage = $response->json('message') ?? __('This link may have expired or already been used.');
+
+            return view('auth.email-verified', [
+                'verified' => false,
+                'errorMessage' => $errorMessage,
+            ]);
+        }
+
+        // No ticket: just show generic info page (for manual visits)
+        return view('auth.email-verified', [
+            'verified' => false,
+            'errorMessage' => null,
+        ]);
     }
 
     /**

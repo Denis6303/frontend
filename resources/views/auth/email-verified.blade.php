@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="registration">
-        @if ($verified)
+        @if (!empty($verified))
             <div class="alert alert-success">
                 <h2 class="registration-title mb-3">{{ __('Email verified') }}</h2>
                 <p class="mb-0">{{ __('Your email has been verified. You can now use all features.') }}</p>
@@ -18,7 +18,9 @@
             </a>
         @else
             <h2 class="registration-title">{{ __('Email verification') }}</h2>
-            <p class="text-muted mt-3">{{ __('This link may have expired or already been used.') }}</p>
+            <p class="text-muted mt-3">
+                {{ $errorMessage ?? __('This link may have expired or already been used.') }}
+            </p>
             <p class="mt-3">
                 <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Back to login') }}</a>
             </p>
