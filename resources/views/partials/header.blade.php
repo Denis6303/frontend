@@ -57,7 +57,7 @@
                                     </span>
                                 </div>
                                 <div class="offcanvas-user-actions">
-                                    <a href="#" class="offcanvas-user-link">
+                                    <a href="{{ route('dashboard.index', ['locale' => $locale ?? 'fr']) }}" class="offcanvas-user-link">
                                         <i class="fa-solid fa-gauge-high"></i> {{ __('Dashboard') }}
                                     </a>
                                     <a href="#" class="offcanvas-user-link">
@@ -202,7 +202,7 @@
                                 id="headerUserDropdownMenu">
                                 @if(session(config('votix_api.session_access_token_key')))
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="{{ route('dashboard.index', ['locale' => $locale ?? 'fr']) }}">
                                             <span class="dropdown-item-icon" aria-hidden="true">
                                                 <i class="fa-solid fa-gauge-high"></i>
                                             </span>

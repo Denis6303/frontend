@@ -58,6 +58,11 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
         })->name('cart');
     });
 
+    // Tableau de bord (simple shell dashboard)
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', fn (string $locale) => view('dashboard.main.index', ['locale' => $locale]))->name('index');
+    });
+
     // Exemple page contact (à créer)
     Route::get('/nous-contacter', function (string $locale) {
         return view('pages.contact');

@@ -45,6 +45,92 @@ textarea.form-control {
 }
 
 /* ============================================================
+   SHELL DASHBOARD (sidebar + top bar + body)
+   ============================================================ */
+.dashboard-shell {
+    display: flex;
+    min-height: 100vh;
+    padding-top: 0;
+}
+.dashboard-sidebar {
+    flex: 0 0 240px;
+    max-width: 240px;
+    border-right: 1px solid rgba(0,0,0,.08);
+    background: #f9fafb;
+}
+.dashboard-sidebar-inner {
+    padding: 1rem 0.75rem;
+}
+.dashboard-sidebar-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #6b7280;
+}
+.dashboard-sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.dashboard-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #111827;
+    font-size: 0.95rem;
+    transition: background-color .15s, color .15s;
+}
+.dashboard-sidebar-link i {
+    width: 1.2rem;
+    text-align: center;
+    color: #6b7280;
+}
+.dashboard-sidebar-link:hover {
+    background: #e5f5e1;
+    color: #111827;
+}
+.dashboard-sidebar-link.active {
+    background: #6ac045;
+    color: #ffffff;
+}
+.dashboard-sidebar-link.active i {
+    color: #ffffff;
+}
+
+.dashboard-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    background: #f3f4f6;
+}
+.dashboard-topbar {
+    height: 60px;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.dashboard-body {
+    padding-inline: 1rem;
+}
+
+@media (max-width: 991.98px) {
+    .dashboard-shell {
+        flex-direction: column;
+        padding-top: 0;
+    }
+    .dashboard-sidebar {
+        flex: 0 0 auto;
+        max-width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .dashboard-main {
+        background: #f9fafb;
+    }
+}
+
+/* ============================================================
    GLOBAL – Boutons (1rem défaut, 0.875rem petits, 1.25rem grands)
    ============================================================ */
 .btn,
