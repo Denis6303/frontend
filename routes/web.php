@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Dashboard\EventDraftController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -81,7 +82,7 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
             return view('dashboard.main.about', ['locale' => $locale]);
         })->name('about');
 
-        // Création d'événement (brouillon) - 4 étapes
+        // Création d'événement (brouillon) - 4 étapes (affichage formulaires)
         Route::prefix('events/draft/create')->name('events.draft.create.')->group(function () {
             Route::get('/step-1', function (string $locale) {
                 if (!session(config('votix_api.session_access_token_key'))) {
@@ -110,6 +111,14 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
                 }
                 return view('dashboard.events.draft.create-step4', ['locale' => $locale]);
             })->name('step4');
+        });
+
+        // Création d'événement (brouillon) - 4 étapes (soumission vers API)
+        Route::prefix('events/draft/create')->name('events.draft.create.')->group(function () {
+            Route::post('/step-1', [EventDraftController::class, 'storeStep1'])->name('step1.store');
+            Route::post('/step-2', [EventDraftController::class, 'storeStep2'])->name('step2.store');
+            Route::post('/step-3', [EventDraftController::class, 'storeStep3'])->name('step3.store');
+            Route::post('/step-4/finalize', [EventDraftController::class, 'finalize'])->name('step4.finalize');
         });
     });
 

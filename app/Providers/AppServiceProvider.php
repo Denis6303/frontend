@@ -21,5 +21,11 @@ class AppServiceProvider extends ServiceProvider
             $locale = request()->route('locale') ?? config('app.locale', 'fr');
             $view->with('locale', $locale);
         });
+
+        View::composer('dashboard.events.draft.create-step1', function ($view) {
+            $api = app(ApiService::class);
+            $items = $api->getData('categories', [], true, 'items', true);
+            $view->with('categories', is_array($items) ? $items : []);
+        });
     }
 }

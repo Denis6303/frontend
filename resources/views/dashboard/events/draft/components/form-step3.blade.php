@@ -1,90 +1,102 @@
-<div class="step-tab-panel step-tab-location active" id="tab_step3">
+<div class="step-tab-panel step-tab-tickets active" id="tab_step3">
     <div class="tab-from-content">
         <div class="main-card">
             <div class="bp-title">
-                <h4><i class="fa-solid fa-gear step_icon me-3"></i>Setting</h4>
+                <h4><i class="fa-solid fa-ticket step_icon me-3"></i>{{ __('Tickets') }}</h4>
             </div>
             <div class="p_30 bp-form main-form">
                 <div class="form-group">
-                    <div class="ticket-section">
-                        <label class="form-label fs-16">Let's configure a few additional options for your event!</label>
+                    <div class="ticket-section mb-4">
+                        <label class="form-label fs-16">Define your tickets*</label>
                         <p class="mt-2 fs-14 d-block mb-3 pe_right">
-                            Change the following settings based on your preferences to customise your event accordingly.
+                            {{ __('Create tickets for your event by clicking on the Add Tickets button.') }}
                         </p>
                     </div>
-                    <div class="content-holder">
-                        <div class="setting-item border_bottom pb_30 pt-4">
-                            <div class="d-flex align-items-start">
-                                <label class="btn-switch m-0 me-3">
-                                    <input type="checkbox" id="booking-start-time-btn" checked>
-                                    <span class="checkbox-slider"></span>
-                                </label>
-                                <div class="d-flex flex-column">
-                                    <label class="color-black fw-bold mb-1">I want the bookings to start immediately.</label>
-                                    <p class="mt-2 fs-14 d-block mb-0">Disable this option if you want to start your booking from a specific date and time.</p>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="setting-item border_bottom pb_30 pt_30">
-                            <div class="d-flex align-items-start">
-                                <label class="btn-switch m-0 me-3">
-                                    <input type="checkbox" id="booking-end-time-btn" checked>
-                                    <span class="checkbox-slider"></span>
-                                </label>
-                                <div class="d-flex flex-column">
-                                    <label class="color-black fw-bold mb-1">I want the bookings to continue until my event ends.</label>
-                                    <p class="mt-2 fs-14 d-block mb-0">Disable this option if you want to end your booking from a specific date and time.</p>
-                                </div>
-                            </div>
+                    <div class="mb-3">
+                        <label class="form-label fs-6 d-block mb-2">{{ __('Is this a free event?') }}*</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="free_event" id="free_event_yes" value="true" {{ old('free_event', 'false') === 'true' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="free_event_yes">{{ __('Yes') }}</label>
                         </div>
-
-                        <div class="setting-item border_bottom pb_30 pt_30">
-                            <div class="d-flex align-items-start">
-                                <label class="btn-switch m-0 me-3">
-                                    <input type="checkbox" id="passing-service-charge-btn" checked>
-                                    <span class="checkbox-slider"></span>
-                                </label>
-                                <div class="d-flex flex-column">
-                                    <label class="color-black fw-bold mb-1">I want my customers to pay the applicable service fees at the time when they make the bookings.</label>
-                                    <p class="mt-2 fs-14 d-block mb-0 pe_right">
-                                        Passing your service charge means your attendees will pay your service charge in addition to the ticket price.
-                                        <a href="#" class="a-link">Learn more</a>
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="free_event" id="free_event_no" value="false" {{ old('free_event', 'false') !== 'true' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="free_event_no">{{ __('No') }}</label>
                         </div>
+                    </div>
 
-                        <div class="setting-item border_bottom pb_30 pt_30">
-                            <div class="d-flex align-items-start">
-                                <label class="btn-switch m-0 me-3">
-                                    <input type="checkbox" id="refund-policies-btn" checked>
-                                    <span class="checkbox-slider"></span>
-                                </label>
-                                <div class="d-flex flex-column">
-                                    <label class="color-black fw-bold mb-1">I do not wish to offer my customers with option to cancel their orders and receive refund.</label>
-                                    <p class="mt-2 fs-14 d-block mb-0">Disable this slider if you want to let your customers cancel their order and select a refund policy.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item pb-0 pt_30">
-                            <div class="d-flex align-items-start">
-                                <label class="btn-switch m-0 me-3">
-                                    <input type="checkbox" id="tags-btn" checked>
-                                    <span class="checkbox-slider"></span>
-                                </label>
-                                <div class="d-flex flex-column">
-                                    <label class="color-black fw-bold mb-1">I do not want to add tags in my event</label>
-                                    <p class="mt-2 fs-14 d-block mb-0">
-                                        Use relevant words as your tags to improve the discoverability of your event.
-                                        <a href="#" class="a-link">Learn more</a>
-                                    </p>
-                                </div>
+                    <div class="d-flex align-items-center justify-content-between pt-4 pb-3 full-width">
+                        <h3 class="fs-18 mb-0">{{ __('Tickets') }} (<span id="ticket-counter">0</span>)</h3>
+                        <div class="dropdown dropdown-default dropdown-normal btn-ticket-type-top">
+                            <button class="dropdown-toggle main-btn btn-hover h_40 pe-4 ps-4" type="button" id="addTicketBtn"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>{{ __('Add Tickets') }}</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addTicketBtn">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addTicketModal">
+                                    <i class="fa-solid fa-ticket me-2"></i>
+                                    {{ __('Single Ticket') }}
+                                </a>
                             </div>
                         </div>
                     </div>
+
+                    <div id="ticket-empty" class="ticket-type-item-empty text-center p_30">
+                        <div class="ticket-list-icon d-inline-block">
+                            <img src="{{ asset('template/images/ticket.png') }}" alt="">
+                        </div>
+                        <h4 class="color-black mt-4 mb-3 fs-18">{{ __('You have no tickets yet.') }}</h4>
+                        <p class="mb-0">{{ __('Click Add Tickets above to create your first ticket.') }}</p>
+                    </div>
+
+                    <div id="ticket-list" class="ticket-type-item-list mt-4"></div>
+
+                    <div id="ticket-hidden-inputs"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Add Ticket --}}
+<div class="modal fade" id="addTicketModal" tabindex="-1" aria-labelledby="addTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTicketModalLabel">{{ __('Add Ticket') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">{{ __('Name') }}*</label>
+                        <input type="text" class="form-control" id="ticket-name" maxlength="50">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">{{ __('Price') }}*</label>
+                        <input type="number" class="form-control" id="ticket-price" step="0.01" value="0">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">{{ __('Online quantity') }}*</label>
+                        <input type="number" class="form-control" id="ticket-online-qty" min="1" value="1">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">{{ __('Printed quantity') }}</label>
+                        <input type="number" class="form-control" id="ticket-print-qty" min="0" value="0">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">{{ __('Description') }}</label>
+                        <textarea class="form-control" id="ticket-description" rows="2" maxlength="200"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">{{ __('General conditions') }}</label>
+                        <textarea class="form-control" id="ticket-conditions" rows="2" maxlength="1000"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                <button type="button" class="btn main-btn btn-hover" id="ticket-modal-add">{{ __('Add') }}</button>
             </div>
         </div>
     </div>
