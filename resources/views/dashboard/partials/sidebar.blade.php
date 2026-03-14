@@ -3,23 +3,28 @@
         <div class="left_section">
             <ul>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.index', ['locale' => $locale ?? app()->getLocale()]) }}" class="menu--link active" title="{{ __('Dashboard') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <a href="{{ route('dashboard.index', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}"
+                       title="{{ __('Dashboard') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-gauge menu--icon"></i>
                         <span class="menu--label">{{ __('Dashboard') }}</span>
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="#" class="menu--link" title="{{ __('Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <a href="{{ route('dashboard.events', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.events') ? 'active' : '' }}"
+                       title="{{ __('Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-calendar-days menu--icon"></i>
                         <span class="menu--label">{{ __('Events') }}</span>
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="#" class="menu--link" title="{{ __('Promotion') }}" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <i class="fa-solid fa-rectangle-ad menu--icon"></i>
-                        <span class="menu--label">{{ __('Promotion') }}</span>
+                    <a href="#" class="menu--link" title="{{ __('Mon compte') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa-solid fa-user menu--icon"></i>
+                        <span class="menu--label">{{ __('Mon compte') }}</span>
                     </a>
                 </li>
+                 <!--
                 <li class="menu--item">
                     <a href="#" class="menu--link" title="{{ __('Contact List') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-regular fa-address-card menu--icon"></i>
@@ -62,6 +67,7 @@
                         <span class="menu--label">{{ __('My Team') }}</span>
                     </a>
                 </li>
+                -->
             </ul>
         </div>
     </div>

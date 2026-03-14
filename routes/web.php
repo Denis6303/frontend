@@ -66,6 +66,13 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
             }
             return view('dashboard.main.index', ['locale' => $locale]);
         })->name('index');
+
+        Route::get('/events', function (string $locale) {
+            if (!session(config('votix_api.session_access_token_key'))) {
+                return redirect()->route('login', ['locale' => $locale]);
+            }
+            return view('dashboard.main.events', ['locale' => $locale]);
+        })->name('events');
     });
 
     // Exemple page contact (à créer)
