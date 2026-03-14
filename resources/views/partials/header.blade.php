@@ -121,7 +121,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ url('/locale/fr') }}">
                                             <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                                <img class="dropdown-flag-img" src="{{ asset('flags/fr.svg') }}" alt="FR">
+                                                <img class="dropdown-flag-img" src="{{ asset('template/flags/fr.svg') }}" alt="FR">
                                             </span>
                                             <span class="dropdown-item-text">{{ __('Français') }}</span>
                                         </a>
@@ -129,7 +129,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ url('/locale/en') }}">
                                             <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                                <img class="dropdown-flag-img" src="{{ asset('flags/gb.svg') }}" alt="EN">
+                                                <img class="dropdown-flag-img" src="{{ asset('template/flags/gb.svg') }}" alt="EN">
                                             </span>
                                             <span class="dropdown-item-text">{{ __('English') }}</span>
                                         </a>
@@ -159,7 +159,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ url('/locale/fr') }}">
                                         <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                            <img class="dropdown-flag-img" src="{{ asset('flags/fr.svg') }}" alt="FR">
+                                            <img class="dropdown-flag-img" src="{{ asset('template/flags/fr.svg') }}" alt="FR">
                                         </span>
                                         <span class="dropdown-item-text">{{ __('Français') }}</span>
                                     </a>
@@ -167,7 +167,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ url('/locale/en') }}">
                                         <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                            <img class="dropdown-flag-img" src="{{ asset('flags/gb.svg') }}" alt="EN">
+                                            <img class="dropdown-flag-img" src="{{ asset('template/flags/gb.svg') }}" alt="EN">
                                         </span>
                                         <span class="dropdown-item-text">{{ __('English') }}</span>
                                     </a>

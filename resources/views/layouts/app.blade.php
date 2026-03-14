@@ -29,8 +29,9 @@
         <link href="{{ asset('template/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('template/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
 
-        {{-- Styles globaux (Laravel/Vite) --}}
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        {{-- Styles globaux --}}
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @vite(['resources/js/app.js'])
 
         @stack('styles')
     </head>

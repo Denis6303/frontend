@@ -5,7 +5,6 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css',
                 'resources/js/app.js',
                 // Entrées dédiées au template front (styles + scripts)
                 // Exemple : à adapter une fois les fichiers du template ajoutés
