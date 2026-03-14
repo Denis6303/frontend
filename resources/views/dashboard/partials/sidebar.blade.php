@@ -19,7 +19,15 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="#" class="menu--link" title="{{ __('Mon compte') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <a href="#" class="menu--link" title="{{ __('Tickets') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa-solid fa-ticket menu--icon"></i>
+                        <span class="menu--label">{{ __('Tickets') }}</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="{{ route('dashboard.about', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.about') ? 'active' : '' }}"
+                       title="{{ __('About') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-user menu--icon"></i>
                         <span class="menu--label">{{ __('Mon compte') }}</span>
                     </a>
