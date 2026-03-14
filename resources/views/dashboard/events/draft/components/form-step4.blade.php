@@ -24,72 +24,61 @@
 
                     @if(!empty($event) || !empty($tickets))
 
-                        {{-- Hero : infos à gauche, image à droite --}}
-                        <div class="ef-summary-hero">
-
-                            {{-- Colonne infos --}}
-                            <div class="ef-summary-info">
-
-                                {{-- Titre + badge --}}
-                                <div class="d-flex align-items-start justify-content-between gap-2">
-                                    <div>
-                                        @if(!empty($event['title']))
-                                            <p class="ef-event-title">{{ $event['title'] }}</p>
+                        {{-- Grille 50/50 : gauche = titre + méta + image, droite = cartes (stats + tickets) --}}
+                        <div class="ef-summary-layout">
+                            {{-- Colonne gauche : titre, date, devise, puis image en dessous --}}
+                            <div class="ef-summary-left-col">
+                                <div class="ef-summary-info">
+                                    <div class="d-flex align-items-start justify-content-between gap-2">
+                                        <div>
+                                            @if(!empty($event['title']))
+                                                <p class="ef-event-title">{{ $event['title'] }}</p>
+                                            @endif
+                                        </div>
+                                        <span class="ef-badge-draft">{{ __('Draft') }}</span>
+                                    </div>
+                                    <div class="ef-event-meta">
+                                        @if(!empty($startDates))
+                                            <span class="ef-meta-pill">
+                                                <i class="fa-regular fa-calendar"></i>
+                                                @foreach($startDates as $i => $start)
+                                                    {{ \Carbon\Carbon::parse($start)->translatedFormat('d M Y · H:i') }}
+                                                    @if(isset($endDates[$i]))
+                                                        → {{ \Carbon\Carbon::parse($endDates[$i])->translatedFormat('H:i') }}
+                                                    @endif
+                                                    @if($i < count($startDates) - 1) &nbsp;·&nbsp; @endif
+                                                @endforeach
+                                            </span>
+                                        @endif
+                                        @if(!empty($event['city']) || !empty($event['address']))
+                                            <span class="ef-meta-pill">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) }}
+                                            </span>
+                                        @endif
+                                        @if(!empty($event['currency']))
+                                            <span class="ef-meta-pill">
+                                                <i class="fa-solid fa-coins"></i>
+                                                {{ $event['currency'] }} &nbsp;·&nbsp; {{ $freeEvent ? __('Free') : __('Paid') }}
+                                            </span>
                                         @endif
                                     </div>
-                                    <span class="ef-badge-draft">{{ __('Draft') }}</span>
                                 </div>
-
-                                {{-- Méta-pilules --}}
-                                <div class="ef-event-meta">
-                                    @if(!empty($startDates))
-                                        <span class="ef-meta-pill">
-                                            <i class="fa-regular fa-calendar"></i>
-                                            @foreach($startDates as $i => $start)
-                                                {{ \Carbon\Carbon::parse($start)->translatedFormat('d M Y · H:i') }}
-                                                @if(isset($endDates[$i]))
-                                                    → {{ \Carbon\Carbon::parse($endDates[$i])->translatedFormat('H:i') }}
-                                                @endif
-                                                @if($i < count($startDates) - 1) &nbsp;·&nbsp; @endif
-                                            @endforeach
-                                        </span>
-                                    @endif
-
-                                    @if(!empty($event['city']) || !empty($event['address']))
-                                        <span class="ef-meta-pill">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) }}
-                                        </span>
-                                    @endif
-
-                                    @if(!empty($event['currency']))
-                                        <span class="ef-meta-pill">
-                                            <i class="fa-solid fa-coins"></i>
-                                            {{ $event['currency'] }} &nbsp;·&nbsp; {{ $freeEvent ? __('Free') : __('Paid') }}
-                                        </span>
+                                <div class="ef-summary-cover-col">
+                                    @if(!empty($draft['cover_url']))
+                                        <img src="{{ $draft['cover_url'] }}" alt="{{ $event['title'] ?? '' }}">
+                                    @else
+                                        <div class="ef-summary-cover-placeholder">
+                                            <i class="fa-regular fa-image fa-2x"></i>
+                                            {{ __('No banner') }}
+                                        </div>
                                     @endif
                                 </div>
-
-                            </div>{{-- /ef-summary-info --}}
-
-                            {{-- Colonne image --}}
-                            <div class="ef-summary-cover-col">
-                                @if(!empty($draft['cover_url']))
-                                    <img src="{{ $draft['cover_url'] }}" alt="{{ $event['title'] ?? '' }}">
-                                @else
-                                    <div class="ef-summary-cover-placeholder">
-                                        <i class="fa-regular fa-image fa-2x"></i>
-                                        {{ __('No banner') }}
-                                    </div>
-                                @endif
                             </div>
 
-                        </div>{{-- /ef-summary-hero --}}
-
-                        <hr class="ef-summary-divider">
-
-                        {{-- Footer : stats + tickets --}}
-                        <div class="ef-summary-footer">
+                            {{-- Colonne droite : cartes stats + tickets --}}
+                            <div class="ef-summary-right-col">
+                                <div class="ef-summary-footer">
 
                             {{-- Statistiques rapides --}}
                             <div class="ef-stats-grid">
@@ -150,9 +139,11 @@
                                 </div>
                             @endif
 
-                        </div>{{-- /ef-summary-footer --}}
+                                </div>{{-- /ef-summary-footer --}}
+                            </div>{{-- /ef-summary-right-col --}}
+                        </div>{{-- /ef-summary-layout --}}
 
-                        {{-- Description tout en bas --}}
+                        {{-- Description seule, tout en bas --}}
                         @if(!empty($event['description']))
                             <div class="ef-summary-desc-bottom">
                                 <button
