@@ -1,10 +1,7 @@
 <div class="step-tab-panel step-tab-gallery active" id="tab_step2">
     <div class="tab-from-content">
         <div class="main-card">
-            <div class="bp-title">
-                <h4><i class="fa-solid fa-location-dot step_icon me-3"></i>Location & Dates</h4>
-            </div>
-            <div class="bp-form main-form">
+          
                 <div class="p-4 form-group border_bottom pb_30">
                     <label class="form-label fs-16">Where and when is your event?*</label>
                     <p class="mt-2 fs-14 d-block mb-3">
@@ -40,24 +37,33 @@
                         </div>
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
+                    {{-- Separator before dates block --}}
+                    <div class="ef-divider mb-3 mt-1"></div>
+
+                    <div id="dates-container">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
                             <label class="form-label fs-6">Start date & time*</label>
                             <div class="loc-group position-relative">
                                 <input class="form-control h_50 event-datetime-picker" type="text" name="start_dates[0]" id="start_date_0" placeholder="YYYY-MM-DD HH:MM" value="{{ old('start_dates.0') }}" autocomplete="off">
                                 <span class="absolute-icon"><i class="fa-solid fa-calendar-days"></i></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                            <div class="col-md-6">
                             <label class="form-label fs-6">End date & time*</label>
                             <div class="loc-group position-relative">
                                 <input class="form-control h_50 event-datetime-picker" type="text" name="end_dates[0]" id="end_date_0" placeholder="YYYY-MM-DD HH:MM" value="{{ old('end_dates.0') }}" autocomplete="off">
                                 <span class="absolute-icon"><i class="fa-solid fa-calendar-days"></i></span>
                             </div>
+                            </div>
                         </div>
                     </div>
+
+                    <button type="button" class="btn btn-outline-dark mt-2" id="add-date-row">
+                        <i class="fa-solid fa-plus me-2"></i>{{ __('Add another date') }}
+                    </button>
                 </div>
-            </div>
+            
         </div>
     </div>
 </div>

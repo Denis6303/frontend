@@ -105,12 +105,7 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
                 return view('dashboard.events.draft.create-step3', ['locale' => $locale]);
             })->name('step3');
 
-            Route::get('/step-4', function (string $locale) {
-                if (!session(config('votix_api.session_access_token_key'))) {
-                    return redirect()->route('login', ['locale' => $locale]);
-                }
-                return view('dashboard.events.draft.create-step4', ['locale' => $locale]);
-            })->name('step4');
+            Route::get('/step-4', [EventDraftController::class, 'showStep4'])->name('step4');
         });
 
         // Création d'événement (brouillon) - 4 étapes (soumission vers API)

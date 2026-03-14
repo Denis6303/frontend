@@ -5,63 +5,90 @@
 @section('content')
 <div class="wrapper">
     <div class="event-dt-block event-create-form-block">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-8 col-lg-9 col-md-12">
-                    <div class="wizard-steps-block">
-                        <div id="add-event-tab" class="step-app">
-                            <ul class="step-steps">
-                                <li>
-                                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                        <span class="number"></span>
-                                        <span class="step-name">Details</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                        <span class="number"></span>
-                                        <span class="step-name">Tickets</span>
-                                    </a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                        <span class="number"></span>
-                                        <span class="step-name">{{ __('Tickets') }}</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                        <span class="number"></span>
-                                        <span class="step-name">Summary</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="step-content">
-                                <form method="POST"
-                                      action="{{ route('dashboard.events.draft.create.step3.store', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                    @csrf
-                                    <input type="hidden" name="draft_id" value="{{ request('draft_id') }}">
+        <div class="ef-root">
+            <div class="ef-shell">
 
-                                    @include('dashboard.events.draft.components.form-step3')
+                <div class="ef-stepper">
+                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                       class="ef-step">
+                        <div class="ef-step-num">1</div>
+                        <span class="ef-step-label">{{ __('Details') }}</span>
+                        <span class="ef-step-line"></span>
+                    </a>
+                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                       class="ef-step">
+                        <div class="ef-step-num">2</div>
+                        <span class="ef-step-label">{{ __('Location & Dates') }}</span>
+                        <span class="ef-step-line"></span>
+                    </a>
+                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                       class="ef-step active">
+                        <div class="ef-step-num">3</div>
+                        <span class="ef-step-label">{{ __('Tickets') }}</span>
+                        <span class="ef-step-line"></span>
+                    </a>
+                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                       class="ef-step">
+                        <div class="ef-step-num">4</div>
+                        <span class="ef-step-label">{{ __('Summary') }}</span>
+                    </a>
+                </div>
 
-                                    <div class="step-footer step-tab-pager mt-4">
-                                        <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
-                                           class="btn btn-default btn-hover steps_btn">
-                                            {{ __('Previous') }}
-                                        </a>
-                                        <button type="submit" class="btn btn-default btn-hover steps_btn">
-                                            {{ __('Next') }}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                <div class="ef-card">
+                    <div class="ef-header">
+                        <div class="ef-header-icon">
+                            <i class="fa-solid fa-ticket"></i>
+                        </div>
+                        <div>
+                            <h2 class="ef-header-title">{{ __('Tickets') }}</h2>
+                            <p class="ef-header-sub">
+                                {{ __('Configure your free or paid tickets, quantities and conditions.') }}
+                            </p>
                         </div>
                     </div>
+
+                    <form method="POST"
+                          action="{{ route('dashboard.events.draft.create.step3.store', ['locale' => $locale ?? app()->getLocale()]) }}">
+                        @csrf
+                        <input type="hidden" name="draft_id" value="{{ request('draft_id') }}">
+
+                        <div class="ef-body">
+                            <div class="ef-col" style="grid-column: 1 / -1;">
+                                @include('dashboard.events.draft.components.form-step3')
+                            </div>
+                        </div>
+
+                        <div class="ef-footer">
+                            <div class="ef-progress">
+                                <div class="ef-progress-dots">
+                                    <div class="ef-dot active"></div>
+                                    <div class="ef-dot active"></div>
+                                    <div class="ef-dot active"></div>
+                                    <div class="ef-dot"></div>
+                                </div>
+                                <span class="ef-progress-text">{{ __('Step 3 of 4') }}</span>
+                            </div>
+                            <div>
+                                <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                                   class="btn btn-outline-dark me-2">
+                                    <i class="fa-solid fa-arrow-left-long me-2"></i>{{ __('Previous') }}
+                                </a>
+                                <button type="submit" class="ef-btn-next">
+                                    {{ __('Continue') }}
+                                    <i class="fa-solid fa-arrow-right-long ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/form-step.css') }}">
+@endpush
 
 @push('scripts')
 <script>
@@ -177,6 +204,20 @@
         });
 
         updateUI();
+    });
+    // --- Card-style radio toggles (free_event, etc.) ---
+    document.querySelectorAll('.ef-attendance').forEach(function(group) {
+        group.querySelectorAll('.ef-att-card').forEach(function(card) {
+            card.addEventListener('click', function () {
+                var radio = card.querySelector('input[type="radio"]');
+                if (!radio) return;
+                group.querySelectorAll('.ef-att-card').forEach(function (c) {
+                    c.classList.remove('selected');
+                });
+                card.classList.add('selected');
+                radio.checked = true;
+            });
+        });
     });
 })();
 </script>

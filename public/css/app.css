@@ -1,6 +1,7 @@
 /* ============================================================
-   GLOBAL – Police Raleway
+   GLOBAL – Police DM Sans
    ============================================================ */
+   html,
    body,
    .nav-link,
    .dropdown-item,
@@ -12,7 +13,7 @@
    .header-lang-toggle,
    input.form-control,
    textarea.form-control {
-       font-family: 'Raleway', sans-serif !important;
+       font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
    }
    
    /* ============================================================

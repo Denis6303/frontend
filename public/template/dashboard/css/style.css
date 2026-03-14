@@ -739,7 +739,7 @@ body {
 /* --- Index Page --- */
 
 .wrapper {
-	margin-top: 60px;
+	margin-top: 10px;
 }
 
 .hero-banner {
@@ -4355,7 +4355,7 @@ body {
 /* --- Create Events --- */
 
 .event-create-form-block {
-    padding-top: 1.5rem;
+    padding-top: 0;
     padding-bottom: 2rem;
 }
 

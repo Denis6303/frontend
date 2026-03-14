@@ -1,0 +1,887 @@
+/* ============================================================
+   Event Create Form — Steps 1-4
+   ============================================================ */
+
+/* ── Reset ── */
+.ef-root *, .ef-root *::before, .ef-root *::after {
+    box-sizing: border-box;
+}
+
+/* ── Root & Shell ── */
+.ef-root {
+    font-family: 'DM Sans', sans-serif;
+    padding: 2rem 1rem 3rem;
+    color: var(--bs-body-color, #1a1a1a);
+}
+
+.ef-shell {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* ── Stepper ── */
+.ef-stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 0.25rem;
+}
+
+.ef-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ef-step-line {
+    flex: 1;
+    height: 1px;
+    background: #dee2e6;
+    margin: 0 10px;
+    display: block;
+}
+
+.ef-step:last-child { flex: unset; }
+
+.ef-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    border: 1px solid #dee2e6;
+    background: #fff;
+    color: #adb5bd;
+}
+
+.ef-step.active .ef-step-num {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+}
+
+.ef-step-label {
+    font-size: 13px;
+    color: #adb5bd;
+    white-space: nowrap;
+}
+
+.ef-step.active .ef-step-label {
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+/* ── Card ── */
+.ef-card {
+    background: #fff;
+    border: 0.5px solid #dee2e6;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* ── Header ── */
+.ef-header {
+    padding: 1.75rem 2.5rem 1.5rem;
+    border-bottom: 0.5px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ef-header-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ef-header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+.ef-header-sub {
+    font-size: 13px;
+    color: #6c757d;
+    margin: 2px 0 0;
+}
+
+/* ── Body: 2-column grid ── */
+.ef-body {
+    display: grid;
+    grid-template-columns: 1.2fr 1.3fr;
+}
+
+.ef-col {
+    padding: 2rem 2.5rem;
+}
+
+.ef-col:first-child {
+    border-right: 0.5px solid #dee2e6;
+}
+
+/* ── Section label ── */
+.ef-section-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #adb5bd;
+    margin-bottom: 1.25rem;
+}
+
+/* ── Field ── */
+.ef-field {
+    margin-bottom: 1.25rem;
+}
+
+.ef-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.ef-required { color: #c0392b; margin-left: 2px; }
+
+.ef-hint {
+    font-size: 12px;
+    color: #adb5bd;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.ef-error {
+    font-size: 12px;
+    color: #c0392b;
+    margin-top: 4px;
+}
+
+/* ── Inputs ── */
+.ef-input,
+.ef-select {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 0.5px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: #1a1a1a;
+    transition: border-color 0.15s;
+    outline: none;
+}
+
+.ef-input:focus,
+.ef-select:focus { border-color: #868e96; }
+
+.ef-input.is-invalid,
+.ef-select.is-invalid { border-color: #c0392b; }
+
+.ef-select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+/* ── Divider ── */
+.ef-divider {
+    height: 0.5px;
+    background: #dee2e6;
+    margin: 1.25rem 0;
+}
+
+/* ── Attendance cards ── */
+.ef-attendance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.ef-att-card {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    position: relative;
+    user-select: none;
+}
+
+.ef-att-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ef-att-card.selected {
+    border-color: #1a1a1a;
+}
+
+.ef-att-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.ef-att-info strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+    color: #1a1a1a;
+}
+
+.ef-att-info span { font-size: 12px; color: #adb5bd; }
+
+/* ── Tickets grid (step 3) ── */
+#ticket-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+/* Border seulement autour de la section sous "free event" */
+#tab_step3 .tickets-shell {
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+    #ticket-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Step 4: section Résumé (bordure + style) ── */
+.ef-summary-section {
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    background: #fafbfc;
+}
+.ef-summary-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e9ecef;
+}
+.ef-summary {
+    font-size: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 2.5rem;
+}
+.ef-summary-row {
+    margin-bottom: 0;
+    min-width: 0;
+}
+.ef-summary-row--full {
+    grid-column: 1 / -1;
+}
+.ef-summary-label {
+    display: block;
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+.ef-summary-value {
+    color: #1a1a1a;
+    font-weight: 500;
+    line-height: 1.45;
+}
+.ef-summary-cover img {
+    max-width: 100%;
+    max-height: 140px;
+    width: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+.ef-summary-ticket {
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 0.5rem;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 13px;
+}
+.ef-summary-ticket:last-child { margin-bottom: 0; }
+.ef-summary-empty {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* ── Step 4: section Options de publication (bordure) ── */
+.ef-publish-section {
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    background: #fff;
+}
+.ef-publish-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+@media (max-width: 768px) {
+    .ef-summary {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .ef-summary-section,
+    .ef-publish-section {
+        padding: 1.25rem 1.25rem;
+    }
+}
+
+/* ── Banner upload zone ── */
+.ef-banner-zone {
+    border: 1px dashed #ced4da;
+    border-radius: 12px;
+    aspect-ratio: 16 / 5;
+    max-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.ef-banner-zone:hover {
+    border-color: #868e96;
+    background: #f1f3f5;
+}
+
+.ef-banner-zone img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+/* ── Remove outer card frame on steps 2–4 ── */
+#tab_step2 .main-card,
+#tab_step3 .main-card,
+#tab_step4 .main-card {
+    border: 0;
+    box-shadow: none;
+}
+
+.ef-banner-zone img.has-img { display: block; }
+
+.ef-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.ef-banner-zone:hover .ef-banner-overlay { opacity: 1; }
+
+.ef-banner-overlay span {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.ef-banner-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.ef-banner-placeholder p {
+    font-size: 13px;
+    color: #adb5bd;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.ef-banner-placeholder strong {
+    font-weight: 500;
+    color: #6c757d;
+}
+
+/* ── Char counter ── */
+.ef-char-count {
+    font-size: 11px;
+    color: #adb5bd;
+    text-align: right;
+    margin-top: 4px;
+}
+
+/* ── CKEditor wrapper + fallback textarea ── */
+.event-description-editor .ck-editor__editable {
+    min-height: 220px;
+}
+.event-description-editor .ck-editor {
+    border-radius: 10px;
+}
+.event-description-editor textarea#pd_editor {
+    width: 100%;
+    min-height: 220px;
+    border-radius: 10px;
+    border: 0.5px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+}
+
+/* ── Footer ── */
+.ef-footer {
+    padding: 1.25rem 2.5rem;
+    border-top: 0.5px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ef-footer > div:last-child {
+    display: flex;
+    align-items: center;
+}
+
+.ef-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ef-progress-dots { display: flex; gap: 4px; }
+
+.ef-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dee2e6;
+    transition: width 0.2s, border-radius 0.2s;
+}
+
+.ef-dot.active {
+    background: #1a1a1a;
+    width: 18px;
+    border-radius: 3px;
+}
+
+.ef-progress-text {
+    font-size: 12px;
+    color: #adb5bd;
+}
+
+/* ── Buttons (noirs) ── */
+.ef-btn,
+.ef-btn-next,
+.ef-btn-prev,
+.ef-btn-secondary,
+.ef-btn-modal {
+    height: 40px;
+    padding: 0 24px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+.ef-btn-next:hover,
+.ef-btn-prev:hover,
+.ef-btn-secondary:hover,
+.ef-btn-modal:hover { opacity: 0.82; }
+
+.ef-btn-next:active,
+.ef-btn-prev:active,
+.ef-btn-secondary:active,
+.ef-btn-modal:active { transform: scale(0.98); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .ef-body { grid-template-columns: 1fr; }
+    .ef-col:first-child { border-right: none; border-bottom: 0.5px solid #dee2e6; }
+    .ef-col { padding: 1.5rem; }
+    .ef-header { padding: 1.25rem 1.5rem; }
+    .ef-footer { padding: 1rem 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .ef-stepper { overflow-x: auto; padding-bottom: 0.5rem; }
+    .ef-step-label { display: none; }
+    .ef-step.active .ef-step-label { display: block; }
+}
+
+
+/* =====================================================
+   RÉSUMÉ BROUILLON — Section redesignée
+   ===================================================== */
+
+   .ef-summary-section {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    background: #fff;
+}
+
+/* Titre section */
+.ef-summary-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #111827;
+}
+
+/* Layout hero : infos | image */
+.ef-summary-hero {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+}
+
+@media (max-width: 640px) {
+    .ef-summary-hero {
+        grid-template-columns: 1fr;
+    }
+    .ef-summary-cover-col {
+        border-left: none !important;
+        border-top: 1px solid #e5e7eb;
+    }
+    .ef-summary-cover-col img,
+    .ef-summary-cover-placeholder {
+        min-height: 160px !important;
+    }
+}
+
+/* Colonne infos */
+.ef-summary-info {
+    padding: 1.25rem;
+}
+
+.ef-event-title {
+    font-size: 19px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 2px;
+    line-height: 1.3;
+}
+
+.ef-event-slug {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+/* Badge brouillon */
+.ef-badge-draft {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+/* Bloc description repliable */
+.ef-desc-block {
+    margin-top: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ef-desc-toggle {
+    width: 100%;
+    background: #f9fafb;
+    border: none;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.ef-desc-toggle:hover {
+    background: #f3f4f6;
+}
+
+.ef-desc-toggle i {
+    font-size: 11px;
+    transition: transform 0.22s ease;
+}
+
+.ef-desc-toggle.open i {
+    transform: rotate(180deg);
+}
+
+.ef-desc-body {
+    display: none;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.65;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+.ef-desc-body.open {
+    display: block;
+}
+
+/* Méta-pilules (date, lieu, devise) */
+.ef-event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+}
+
+.ef-meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    font-size: 12px;
+    color: #4b5563;
+}
+
+.ef-meta-pill i {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+/* Colonne image */
+.ef-summary-cover-col {
+    border-left: 1px solid #e5e7eb;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.ef-summary-cover-col img {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.ef-summary-cover-placeholder {
+    width: 100%;
+    min-height: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #d1d5db;
+    font-size: 13px;
+    gap: 8px;
+}
+
+/* Séparateur */
+.ef-summary-divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 0;
+}
+
+/* Footer : stats + tickets */
+.ef-summary-footer {
+    padding: 1.15rem 1.25rem;
+}
+
+.ef-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-bottom: 1.15rem;
+}
+
+.ef-stat-card {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.ef-stat-label {
+    font-size: 10px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+}
+
+.ef-stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Tickets : grille 3 colonnes */
+.ef-tickets-heading {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 8px;
+}
+
+.ef-tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 991px) {
+    .ef-tickets-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 575px) {
+    .ef-tickets-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ef-ticket-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 0;
+    background: #fff;
+    transition: border-color 0.15s;
+}
+
+.ef-ticket-item:hover {
+    border-color: #d1d5db;
+}
+
+.ef-ticket-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.ef-ticket-detail {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+.ef-ticket-desc {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 3px;
+}
+
+.ef-ticket-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+    padding-top: 1px;
+}
+
+/* Vide */
+.ef-summary-empty {
+    padding: 2rem 1.25rem;
+    color: #9ca3af;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Description tout en bas de la section résumé */
+.ef-summary-desc-bottom {
+    margin-top: 1.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ef-summary-desc-bottom .ef-desc-toggle {
+    border-radius: 8px 8px 0 0;
+}
+
+.ef-summary-desc-bottom .ef-desc-body {
+    border-radius: 0 0 8px 8px;
+}

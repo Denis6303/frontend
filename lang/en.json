@@ -131,5 +131,14 @@
     "Publication options": "Publication options",
     "Publish now?": "Publish now?",
     "No, schedule or save": "No, schedule or save",
-    "Schedule at": "Schedule at"
+    "Schedule at": "Schedule at",
+    "Location": "Location",
+    "Event name": "Event name",
+    "Description": "Description",
+    "Banner image": "Banner image",
+    "Dates": "Dates",
+    "Currency": "Currency",
+    "Free event": "Free event",
+    "Review your draft": "Review your draft",
+    "Complete the previous steps to see the summary here.": "Complete the previous steps to see the summary here."
 }

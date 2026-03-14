@@ -12,9 +12,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&amp;display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
-    <style>body,.nav-link,.btn,.main-btn,.create-btn,.dropdown-item,input,textarea,.form-control{font-family:'Raleway',sans-serif!important}</style>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body,
+        .nav-link,
+        .btn,
+        .main-btn,
+        .create-btn,
+        .dropdown-item,
+        input,
+        textarea,
+        .form-control {
+            font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+    </style>
     <link href="{{ asset('template/vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
     <link href="{{ asset('template/dashboard/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('template/dashboard/css/vertical-responsive-menu.min.css') }}" rel="stylesheet">
@@ -40,6 +51,29 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="modal fade" id="eventSuccessModal" tabindex="-1" aria-labelledby="eventSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0">
+                    <div class="modal-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3 d-flex align-items-center justify-content-center rounded-circle" style="width:40px;height:40px;background:#e6f4ea;color:#1a7f37;">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">{{ __('Event published') }}</h5>
+                                <p class="mb-0 text-muted small">{{ session('success') }}</p>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">{{ __('Close') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <script src="{{ asset('template/dashboard/js/vertical-responsive-menu.min.js') }}"></script>
     <script src="{{ asset('template/dashboard/js/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -49,6 +83,17 @@
     <script src="{{ asset('template/dashboard/js/analytics.js') }}"></script>
     <script src="{{ asset('template/dashboard/js/custom.js') }}"></script>
     <script src="{{ asset('template/dashboard/js/night-mode.js') }}"></script>
+    @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var modalEl = document.getElementById('eventSuccessModal');
+                if (modalEl && window.bootstrap) {
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                }
+            });
+        </script>
+    @endif
     @stack('scripts')
 </body>
 </html>

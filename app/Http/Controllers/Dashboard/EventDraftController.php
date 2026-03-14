@@ -164,12 +164,52 @@ class EventDraftController extends Controller
         $json = $response->json() ?? [];
 
         if ($response->successful() && ($json['success'] ?? false)) {
+            Session::put('event_draft.summary_data', $json['data'] ?? []);
+
             return redirect()
                 ->route('dashboard.events.draft.create.step4', ['locale' => $locale, 'draft_id' => $draftId])
                 ->with('success', $json['message'] ?? __('Step 3 saved successfully.'));
         }
 
         return $this->handleApiResponse($response);
+    }
+
+    /**
+     * Afficher l'étape 4 (résumé + publication). Utilise les données en session (réponse du POST step3)
+     * ou tente GET event-drafts/{id} en secours.
+     */
+    public function showStep4(Request $request, string $locale)
+    {
+        if (! session(config('votix_api.session_access_token_key'))) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $draftId = $request->input('draft_id') ?: Session::get('event_draft.current_id');
+        if (! $draftId) {
+            return redirect()->route('dashboard.events.draft.create.step1', ['locale' => $locale]);
+        }
+
+        $draft = Session::get('event_draft.summary_data', []);
+
+        if (empty($draft)) {
+            $response = $this->apiService->makeApiRequest(
+                'GET',
+                "event-drafts/{$draftId}",
+                ['headers' => ['Accept' => 'application/json']],
+                false
+            );
+            if ($response->successful()) {
+                $json = $response->json() ?? [];
+                if ($json['success'] ?? false) {
+                    $draft = $json['data'] ?? [];
+                }
+            }
+        }
+
+        return view('dashboard.events.draft.create-step4', [
+            'locale' => $locale,
+            'draft'  => $draft,
+        ]);
     }
 
     /**
@@ -207,7 +247,7 @@ class EventDraftController extends Controller
         if ($response->successful() && ($json['success'] ?? false)) {
             $eventId = $json['data']['event']['id'] ?? null;
 
-            Session::forget('event_draft.current_id');
+            Session::forget(['event_draft.current_id', 'event_draft.summary_data']);
 
             $redirect = $eventId
                 ? route('ticketing.events.show', ['locale' => $locale, 'id' => $eventId])
