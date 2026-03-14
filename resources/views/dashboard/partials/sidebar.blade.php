@@ -29,7 +29,7 @@
                        class="menu--link {{ request()->routeIs('dashboard.about') ? 'active' : '' }}"
                        title="{{ __('About') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-user menu--icon"></i>
-                        <span class="menu--label">{{ __('Mon compte') }}</span>
+                        <span class="menu--label">{{ __('My Account') }}</span>
                     </a>
                 </li>
                  <!--

@@ -80,6 +80,37 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
             }
             return view('dashboard.main.about', ['locale' => $locale]);
         })->name('about');
+
+        // Création d'événement (brouillon) - 4 étapes
+        Route::prefix('events/draft/create')->name('events.draft.create.')->group(function () {
+            Route::get('/step-1', function (string $locale) {
+                if (!session(config('votix_api.session_access_token_key'))) {
+                    return redirect()->route('login', ['locale' => $locale]);
+                }
+                return view('dashboard.events.draft.create-step1', ['locale' => $locale]);
+            })->name('step1');
+
+            Route::get('/step-2', function (string $locale) {
+                if (!session(config('votix_api.session_access_token_key'))) {
+                    return redirect()->route('login', ['locale' => $locale]);
+                }
+                return view('dashboard.events.draft.create-step2', ['locale' => $locale]);
+            })->name('step2');
+
+            Route::get('/step-3', function (string $locale) {
+                if (!session(config('votix_api.session_access_token_key'))) {
+                    return redirect()->route('login', ['locale' => $locale]);
+                }
+                return view('dashboard.events.draft.create-step3', ['locale' => $locale]);
+            })->name('step3');
+
+            Route::get('/step-4', function (string $locale) {
+                if (!session(config('votix_api.session_access_token_key'))) {
+                    return redirect()->route('login', ['locale' => $locale]);
+                }
+                return view('dashboard.events.draft.create-step4', ['locale' => $locale]);
+            })->name('step4');
+        });
     });
 
     // Exemple page contact (à créer)

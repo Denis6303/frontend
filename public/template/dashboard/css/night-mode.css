@@ -600,8 +600,8 @@ Night Mood
     background-color: #6ac045;
 }
 
-.night-mode #add-event-tab .step-steps > li.active > a > .step-name, 
-.night-mode #add-eventevent-tab .step-steps > li.done > a > .step-name {
+.night-mode #add-event-tab .step-steps > li.active > a > .step-name,
+.night-mode #add-event-tab .step-steps > li.done > a > .step-name {
     color: #fff;
 }
 

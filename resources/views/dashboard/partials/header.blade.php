@@ -177,7 +177,7 @@
                     <div class="offcanvas-body">
                         <div class="offcanvas-top-area">
                             <div class="create-bg">
-                                <a href="#" class="offcanvas-create-btn">
+                                <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()]) }}" class="offcanvas-create-btn">
                                     <i class="fa-solid fa-calendar-days"></i>
                                     <span>{{ __('Create Event') }}</span>
                                 </a>
@@ -212,7 +212,7 @@
                 <div class="right-header order-2">
                     <ul class="align-self-stretch">
                         <li>
-                            <a href="#" class="create-btn btn-hover">
+                            <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()]) }}" class="create-btn btn-hover">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>{{ __('Create Event') }}</span>
                             </a>
