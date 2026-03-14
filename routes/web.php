@@ -58,9 +58,14 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
         })->name('cart');
     });
 
-    // Tableau de bord (simple shell dashboard)
+    // Tableau de bord (protégé : redirection vers login si non connecté)
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('/', fn (string $locale) => view('dashboard.main.index', ['locale' => $locale]))->name('index');
+        Route::get('/', function (string $locale) {
+            if (!session(config('votix_api.session_access_token_key'))) {
+                return redirect()->route('login', ['locale' => $locale]);
+            }
+            return view('dashboard.main.index', ['locale' => $locale]);
+        })->name('index');
     });
 
     // Exemple page contact (à créer)
