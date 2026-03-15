@@ -82,7 +82,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('dashboard/js/analytics.js') }}"></script>
     <script src="{{ asset('dashboard/js/custom.js') }}"></script>
-    <script src="{{ asset('dashboard/js/night-mode.js') }}"></script>
     @if(session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {

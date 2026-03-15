@@ -1,145 +1,3 @@
-{{-- Add Organisation Modal --}}
-<div class="modal fade" id="addorganisationModal" tabindex="-1" aria-labelledby="addorganisationLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addorganisationLabel">{{ __('Organisation details') }}</h5>
-                <button type="button" class="close-model-btn" data-bs-dismiss="modal" aria-label="Close"><i class="uil uil-multiply"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="model-content main-form">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group text-center mt-4">
-                                <label class="form-label">Avatar*</label>
-                                <span class="org_design_button btn-file">
-                                    <span><i class="fa-solid fa-camera"></i></span>
-                                    <input type="file" id="org_avatar" accept="image/*" name="Organisation_avatar">
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Name') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Profile Link') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="https://www.barren.com/b/organiser/" disabled>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('About') }}*</label>
-                                <textarea class="form-textarea" placeholder="">{{ __('About') }}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Email') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Phone') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Website') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">Facebook*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">Instagram*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">Twitter*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">LinkedIn*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">Youtube*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-12">
-                            <h4 class="address-title">{{ __('Address') }}</h4>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Address') }} 1*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Address') }} 2*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group main-form mt-4">
-                                <label class="form-label">{{ __('Country') }}*</label>
-                                <select class="selectpicker" data-size="5" title="{{ __('Nothing selected') }}" data-live-search="true">
-                                    <option value="France">France</option>
-                                    <option value="United Kingdom">United Kingdom</option>
-                                    <option value="United States">United States</option>
-                                    <option value="Germany">Germany</option>
-                                    <option value="Belgium">Belgium (België)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('State') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('City') }}/{{ __('Suburb') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group mt-4">
-                                <label class="form-label">{{ __('Zip') }}/{{ __('Post Code') }}*</label>
-                                <input class="form-control h_40" type="text" placeholder="" value="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="co-main-btn min-width btn-hover h_40" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                <button type="button" class="main-btn min-width btn-hover h_40">{{ __('Add') }}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <header class="header">
     <div class="header-inner">
         <nav class="navbar navbar-expand-lg bg-barren barren-head navbar fixed-top justify-content-sm-start pt-0 pb-0 ps-lg-0 pe-2">
@@ -186,12 +44,12 @@
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe_5">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                    <i class="fa-solid fa-right-left me-2"></i>{{ __('My Home') }}
+                                    <i class="fa-solid fa-right-left me-2"></i>{{ __('Home') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('ticketing.events', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                    <i class="fa-solid fa-compass me-2"></i>{{ __('Explore Events') }}
+                                    <i class="fa-solid fa-compass me-2"></i>{{ __('Events') }}
                                 </a>
                             </li>
                         </ul>
@@ -233,7 +91,7 @@
                                     </div>
                                 </li>
                                 <li class="profile-link">
-                                    <a href="#" class="link-item">{{ __('My Profile') }}</a>
+                                    <!-- <a href="#" class="link-item">{{ __('My Profile') }}</a> -->
                                     <form method="POST" action="{{ route('logout', ['locale' => $locale ?? app()->getLocale()]) }}" class="d-inline">
                                         @csrf
                                         <button type="submit" class="link-item border-0 bg-transparent p-0">{{ __('Sign Out') }}</button>
@@ -241,11 +99,11 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <!-- <li>
                             <div class="night_mode_switch__btn">
                                 <div id="night-mode" class="fas fa-moon fa-sun"></div>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -253,3 +111,4 @@
         <div class="overlay"></div>
     </div>
 </header>
+

@@ -5,8 +5,8 @@ Night Mood
 .night-mode #night-mode {
     padding: 0;
     font-size: 15px;
-    background: #6ac045;
-    color: #fff;
+    background: #ffffff;
+    color: #000000;
     cursor: pointer;
     border-radius: 50%;
     width: 40px;
@@ -20,12 +20,12 @@ Night Mood
 
 .night-mode html , 
 .night-mode body  {
-    background-color: #111315 !important;
-    color: #6F767E !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
 }
-
+ 
 .night-mode body {
-    background: #111315 !important;
+    background: #000000 !important;
 	height: auto;
     float: left;
     width: 100%;
@@ -76,8 +76,8 @@ Night Mood
 }
 
 .night-mode .bg-barren {
-    background: #1A1D1F;
-    box-shadow: inset 1px 0px 0px #111315, inset 0 -1px 0px #111315;
+    background: #000000;
+    box-shadow: none;
 }
 
 .night-mode .nav-link {

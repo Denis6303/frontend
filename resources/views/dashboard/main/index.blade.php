@@ -5,13 +5,13 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <div class="d-main-title">
                 <h3><i class="fa-solid fa-gauge me-3"></i>{{ __('Dashboard') }}</h3>
             </div>
-        </div>
+        </div> -->
         <div class="col-md-12">
-            <div class="main-card add-organisation-card p-4 mt-5">
+            <div class="main-card add-organisation-card p-2 mt-2">
                 <div class="ocard-left">
                     <div class="ocard-avatar">
                         <img src="{{ asset('images/profile-imgs/img-13.jpg') }}" alt="">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="ocard-right">
-                    <button class="pe-4 ps-4 co-main-btn min-width" data-bs-toggle="modal" data-bs-target="#addorganisationModal"><i class="fa-solid fa-plus"></i>{{ __('Add Organisation') }}</button>
+                    <button class="pe-4 ps-4 co-main-btn min-width" data-bs-toggle="modal" data-bs-target="#addorganisationModal"><i class="fa-solid fa-plus"></i>{{ __('Update profile') }}</button>
                 </div>
             </div>
             <div class="main-card mt-4">

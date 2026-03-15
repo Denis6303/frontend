@@ -277,16 +277,16 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <!-- <div class="col-md-12">
                 <div class="d-main-title">
                     <h3><i class="fa-solid fa-circle-info me-3"></i>About My Organisation</h3>
                 </div>
-            </div>
+            </div> -->
             <div class="col-lg-6 col-md-12">
                 <div class="conversion-setup">
                     <div class="main-card mt-5">
                         <div class="bp-title position-relative">
-                            <h4>About</h4>
+                            <h4>Profile</h4>
                             <div class="profile-edit-btn">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#orgSettings" class="btn">
                                     <i class="fa-solid fa-user-gear"></i>

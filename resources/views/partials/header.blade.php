@@ -263,7 +263,7 @@
                         </li>
 
                         {{-- Thème clair/sombre – dernier sur le header desktop --}}
-                        <li class="d-none d-lg-inline-block header-theme-sep">
+                        <!-- <li class="d-none d-lg-inline-block header-theme-sep">
                             <div class="night_mode_switch__btn">
                                 <div id="night-mode" class="fas fa-moon fa-sun"></div>
                             </div>
@@ -271,9 +271,9 @@
 
                         <li class="header-theme-sep header-responsive-order-3 d-lg-none">
                             <div class="night_mode_switch__btn">
-                                <div id="night-mode" class="fas fa-moon fa-sun"></div>
+                                <div class="fas fa-moon fa-sun"></div>
                             </div>
-                        </li>
+                        </li> -->
 
                         <li class="d-lg-none header-search-trigger-li header-responsive-order-2">
                             <button type="button" class="header-search-trigger btn btn-link p-0"
@@ -350,3 +350,4 @@
     }
 })();
 </script>
+

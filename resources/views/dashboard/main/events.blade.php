@@ -5,11 +5,11 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <div class="d-main-title">
                 <h3><i class="fa-solid fa-calendar-days me-3"></i>{{ __('Events') }}</h3>
             </div>
-        </div>
+        </div> -->
         <div class="col-md-12">
             <div class="main-card mt-5">
                 <div class="dashboard-wrap-content p-4">
