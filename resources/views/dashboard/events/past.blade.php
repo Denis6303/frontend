@@ -4,7 +4,7 @@
             <div class="card-top event-top p-4 align-items-center top d-md-flex flex-wrap justify-content-between">
                 <div class="d-md-flex align-items-center event-top-info">
                     <div class="card-event-img">
-                        <img src="{{ asset('template/images/event-imgs/img-2.jpg') }}" alt="">
+                        <img src="{{ asset('images/event-imgs/img-2.jpg') }}" alt="">
                     </div>
                     <div class="card-event-dt">
                         <h5>Earrings Workshop with Bronwyn David</h5>

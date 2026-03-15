@@ -87,7 +87,7 @@
 </div>
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/form-step.css') }}">
+<link rel="stylesheet" href="{{ asset('dashboard/css/form-step.css') }}">
 @endpush
 
 @push('scripts')

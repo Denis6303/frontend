@@ -48,7 +48,7 @@
                     <div class="col-xl-8 col-lg-7 col-md-12">
                         <div class="main-event-dt">
                             <div class="event-img">
-                                <img src="{{ asset('template/images/logo.svg') }}" alt="Event image">
+                                <img src="{{ asset('images/logo.svg') }}" alt="Event image">
                             </div>
                             <div class="main-event-content">
                                 <h4>About This Event</h4>

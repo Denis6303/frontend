@@ -44,9 +44,9 @@
                     <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
                 <div class="carousel-inner">
-                    {{-- Slide 1 : concert le plus hype - Remplace par asset('template/images/hero/slide-1.jpg') quand tu ajoutes tes affiches --}}
+                    {{-- Slide 1 : concert le plus hype - Remplace par asset('images/hero/slide-1.jpg') quand tu ajoutes tes affiches --}}
                     <div class="carousel-item active">
-                        <div class="hero-slide-img" style="background-image: url('{{ file_exists(public_path('template/images/hero/slide-1.jpg')) ? asset('template/images/hero/slide-1.jpg') : 'https://picsum.photos/1920/600?random=1' }}'); background-size: cover; background-position: center;">
+                        <div class="hero-slide-img" style="background-image: url('{{ file_exists(public_path('images/hero/slide-1.jpg')) ? asset('images/hero/slide-1.jpg') : 'https://picsum.photos/1920/600?random=1' }}'); background-size: cover; background-position: center;">
                             <div class="hero-slide-overlay"></div>
                         </div>
                         <div class="carousel-caption hero-slide-content">
@@ -60,7 +60,7 @@
                     </div>
                     {{-- Slide 2 --}}
                     <div class="carousel-item">
-                        <div class="hero-slide-img" style="background-image: url('{{ file_exists(public_path('template/images/hero/slide-2.jpg')) ? asset('template/images/hero/slide-2.jpg') : 'https://picsum.photos/1920/600?random=2' }}'); background-size: cover; background-position: center;">
+                        <div class="hero-slide-img" style="background-image: url('{{ file_exists(public_path('images/hero/slide-2.jpg')) ? asset('images/hero/slide-2.jpg') : 'https://picsum.photos/1920/600?random=2' }}'); background-size: cover; background-position: center;">
                             <div class="hero-slide-overlay"></div>
                         </div>
                         <div class="carousel-caption hero-slide-content">
@@ -74,7 +74,7 @@
                     </div>
                     {{-- Slide 3 --}}
                     <div class="carousel-item">
-                        <div class="hero-slide-img" style="background-image: url('{{ file_exists(public_path('template/images/hero/slide-3.jpg')) ? asset('template/images/hero/slide-3.jpg') : 'https://picsum.photos/1920/600?random=3' }}'); background-size: cover; background-position: center;">
+                        <div class="hero-slide-img" style="background-image: url('{{ file_exists(public_path('images/hero/slide-3.jpg')) ? asset('images/hero/slide-3.jpg') : 'https://picsum.photos/1920/600?random=3' }}'); background-size: cover; background-position: center;">
                             <div class="hero-slide-overlay"></div>
                         </div>
                         <div class="carousel-caption hero-slide-content">
@@ -136,7 +136,7 @@
                                             <div class="event-thumbnail">
                                                 <a href="{{ route('ticketing.events.show', ['locale' => $locale ?? 'fr', 'id' => 1]) }}"
                                                     class="thumbnail-img">
-                                                    <img src="{{ asset('template/images/event-imgs/img-1.jpg') }}"
+                                                    <img src="{{ asset('images/event-imgs/img-1.jpg') }}"
                                                         alt="">
                                                 </a>
                                                 <span class="bookmark-icon" title="Bookmark"></span>

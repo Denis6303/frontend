@@ -30,7 +30,7 @@
                                             <div class="event-thumbnail">
                                                 <a href="{{ route('ticketing.events.show', ['id' => 1]) }}"
                                                     class="thumbnail-img">
-                                                    <img src="{{ asset('template/images/event-imgs/img-1.jpg') }}"
+                                                    <img src="{{ asset('images/event-imgs/img-1.jpg') }}"
                                                         alt="">
                                                 </a>
                                                 <span class="bookmark-icon" title="Bookmark"></span>

@@ -17,11 +17,11 @@
                 <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 me-auto"
                    href="{{ route('home', ['locale' => $locale ?? 'fr']) }}">
                     <div class="res-main-logo">
-                        <img src="{{ asset('template/images/logo-icon.svg') }}" alt="">
+                        <img src="{{ asset('images/logo-icon.svg') }}" alt="">
                     </div>
                     <div class="main-logo" id="logo">
-                        <img src="{{ asset('template/images/logo.svg') }}" alt="">
-                        <img class="logo-inverse" src="{{ asset('template/images/dark-logo.svg') }}" alt="">
+                        <img src="{{ asset('images/logo.svg') }}" alt="">
+                        <img class="logo-inverse" src="{{ asset('images/dark-logo.svg') }}" alt="">
                     </div>
                 </a>
 
@@ -31,7 +31,7 @@
 
                     <div class="offcanvas-header">
                         <div class="offcanvas-logo" id="offcanvasNavbarLabel">
-                            <img src="{{ asset('template/images/logo-icon.svg') }}" alt="">
+                            <img src="{{ asset('images/logo-icon.svg') }}" alt="">
                         </div>
                         <button type="button" class="close-btn" data-bs-dismiss="offcanvas" aria-label="Close">
                             <i class="fa-solid fa-xmark"></i>
@@ -121,7 +121,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ url('/locale/fr') }}">
                                             <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                                <img class="dropdown-flag-img" src="{{ asset('template/flags/fr.svg') }}" alt="FR">
+                                                <img class="dropdown-flag-img" src="{{ asset('flags/fr.svg') }}" alt="FR">
                                             </span>
                                             <span class="dropdown-item-text">{{ __('Français') }}</span>
                                         </a>
@@ -129,7 +129,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ url('/locale/en') }}">
                                             <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                                <img class="dropdown-flag-img" src="{{ asset('template/flags/gb.svg') }}" alt="EN">
+                                                <img class="dropdown-flag-img" src="{{ asset('flags/gb.svg') }}" alt="EN">
                                             </span>
                                             <span class="dropdown-item-text">{{ __('English') }}</span>
                                         </a>
@@ -159,7 +159,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ url('/locale/fr') }}">
                                         <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                            <img class="dropdown-flag-img" src="{{ asset('template/flags/fr.svg') }}" alt="FR">
+                                            <img class="dropdown-flag-img" src="{{ asset('flags/fr.svg') }}" alt="FR">
                                         </span>
                                         <span class="dropdown-item-text">{{ __('Français') }}</span>
                                     </a>
@@ -167,7 +167,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ url('/locale/en') }}">
                                         <span class="dropdown-item-icon dropdown-flag" aria-hidden="true">
-                                            <img class="dropdown-flag-img" src="{{ asset('template/flags/gb.svg') }}" alt="EN">
+                                            <img class="dropdown-flag-img" src="{{ asset('flags/gb.svg') }}" alt="EN">
                                         </span>
                                         <span class="dropdown-item-text">{{ __('English') }}</span>
                                     </a>

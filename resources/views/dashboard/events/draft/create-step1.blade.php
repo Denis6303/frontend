@@ -90,7 +90,7 @@
 @push('styles')
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/form-step.css') }}">
+<link rel="stylesheet" href="{{ asset('dashboard/css/form-step.css') }}">
 @endpush
 
 @push('scripts')

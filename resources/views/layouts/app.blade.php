@@ -10,23 +10,23 @@
         <title>@yield('title', config('app.name', 'Votix'))</title>
 
         {{-- Favicon --}}
-        <link rel="icon" type="image/png" href="{{ asset('template/images/fav.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/fav.png') }}">
 
         {{-- Fonts et styles du template --}}
         <link rel="preconnect" href="https://fonts.googleapis.com/">
         <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-        <link href="{{ asset('template/vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/css/style.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/css/responsive.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/css/night-mode.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
+        <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
+        <link href="{{ asset('dashboard/css/responsive.css') }}" rel="stylesheet">
+        <link href="{{ asset('dashboard/css/night-mode.css') }}" rel="stylesheet">
 
         {{-- Vendor styles --}}
-        <link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/vendor/OwlCarousel/assets/owl.carousel.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/vendor/OwlCarousel/assets/owl.theme.default.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/OwlCarousel/assets/owl.carousel.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/OwlCarousel/assets/owl.theme.default.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
 
         {{-- Styles globaux --}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">

@@ -302,7 +302,7 @@
                         <div class="about-details">
                             <div class="about-step text-center">
                                 <div class="user-avatar-img">
-                                    <img src="{{ asset('template/images/profile-imgs/img-13.jpg') }}" alt="">
+                                    <img src="{{ asset('images/profile-imgs/img-13.jpg') }}" alt="">
                                 </div>
                                 <div class="user-dts">
                                     <h4 class="user-name">

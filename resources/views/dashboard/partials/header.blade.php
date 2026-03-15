@@ -158,17 +158,17 @@
                 </button>
                 <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 me-auto" href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
                     <div class="res-main-logo">
-                        <img src="{{ asset('template/images/logo-icon.svg') }}" alt="">
+                        <img src="{{ asset('images/logo-icon.svg') }}" alt="">
                     </div>
                     <div class="main-logo" id="logo">
-                        <img src="{{ asset('template/images/logo.svg') }}" alt="">
-                        <img class="logo-inverse" src="{{ asset('template/images/dark-logo.svg') }}" alt="">
+                        <img src="{{ asset('images/logo.svg') }}" alt="">
+                        <img class="logo-inverse" src="{{ asset('images/dark-logo.svg') }}" alt="">
                     </div>
                 </a>
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
                         <div class="offcanvas-logo" id="offcanvasNavbarLabel">
-                            <img src="{{ asset('template/images/logo-icon.svg') }}" alt="">
+                            <img src="{{ asset('images/logo-icon.svg') }}" alt="">
                         </div>
                         <button type="button" class="close-btn" data-bs-dismiss="offcanvas" aria-label="Close">
                             <i class="fa-solid fa-xmark"></i>
@@ -219,14 +219,14 @@
                         </li>
                         <li class="dropdown account-dropdown order-3">
                             <a href="#" class="account-link" role="button" id="accountClick" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ asset('template/images/profile-imgs/img-13.jpg') }}" alt="">
+                                <img src="{{ asset('images/profile-imgs/img-13.jpg') }}" alt="">
                                 <i class="fas fa-caret-down arrow-icon"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-account dropdown-menu-end" aria-labelledby="accountClick">
                                 <li>
                                     <div class="dropdown-account-header">
                                         <div class="account-holder-avatar">
-                                            <img src="{{ asset('template/images/profile-imgs/img-13.jpg') }}" alt="">
+                                            <img src="{{ asset('images/profile-imgs/img-13.jpg') }}" alt="">
                                         </div>
                                         <h5>John Doe</h5>
                                         <p>johndoe@example.com</p>

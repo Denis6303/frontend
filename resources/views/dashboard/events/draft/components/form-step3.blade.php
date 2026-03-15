@@ -64,7 +64,7 @@
 
                         <div id="ticket-empty" class="ticket-type-item-empty text-center p_30">
                             <div class="ticket-list-icon d-inline-block">
-                                <img src="{{ asset('template/images/ticket.png') }}" alt="">
+                                <img src="{{ asset('images/ticket.png') }}" alt="">
                             </div>
                             <h4 class="color-black mt-4 mb-3 fs-18">{{ __('You have no tickets yet.') }}</h4>
                             <p class="mb-0">{{ __('Click Add Tickets above to create your first ticket.') }}</p>

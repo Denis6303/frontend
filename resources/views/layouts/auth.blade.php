@@ -9,21 +9,21 @@
 
     <title>@yield('title', 'Authentification') - {{ config('app.name', 'Votix') }}</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('template/images/fav.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/fav.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
-    <link href="{{ asset('template/vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/css/responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/css/night-mode.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
+    <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('dashboard/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('dashboard/css/night-mode.css') }}" rel="stylesheet">
 
-    <link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/vendor/OwlCarousel/assets/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/vendor/OwlCarousel/assets/owl.theme.default.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('template/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/OwlCarousel/assets/owl.carousel.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/OwlCarousel/assets/owl.theme.default.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite(['resources/js/app.js'])
@@ -40,7 +40,7 @@
         <div class="app-form">
             <div class="app-form-sidebar">
                 <div class="sidebar-sign-logo">
-                    <img src="{{ asset('template/images/logo.svg') }}" alt="Votix">
+                    <img src="{{ asset('images/logo.svg') }}" alt="Votix">
                 </div>
                 <div class="sign_sidebar_text">
                     <h1>The Easiest Way to Create Events and Sell More Tickets Online</h1>
