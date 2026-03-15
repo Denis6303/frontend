@@ -9,7 +9,7 @@
 
 /* ── Root & Shell ── */
 .ef-root {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans';
     padding: 2rem 1rem 3rem;
     color: var(--bs-body-color, #1a1a1a);
 }
@@ -108,7 +108,7 @@
 }
 
 .ef-header-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans';
     font-size: 22px;
     font-weight: 600;
     letter-spacing: -0.3px;
@@ -182,7 +182,7 @@
     border: 0.5px solid #dee2e6;
     border-radius: 8px;
     font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans';
     background: #fff;
     color: #1a1a1a;
     transition: border-color 0.15s;
@@ -479,10 +479,10 @@
     border-radius: 10px;
     border: 0.5px solid #dee2e6;
     padding: 0.75rem 1rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans';
     font-size: 14px;
 }
-
+    
 /* ── Footer ── */
 .ef-footer {
     padding: 1.25rem 2.5rem;
@@ -538,7 +538,7 @@
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans';
     cursor: pointer;
     display: inline-flex;
     align-items: center;
