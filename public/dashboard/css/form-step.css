@@ -137,7 +137,7 @@
 
 /* ── Section label ── */
 .ef-section-label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -152,7 +152,7 @@
 
 .ef-label {
     display: block;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     color: #1a1a1a;
     margin-bottom: 6px;
@@ -293,7 +293,7 @@
     background: #fafbfc;
 }
 .ef-summary-section-title {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #1a1a1a;
     margin: 0 0 1.25rem 0;

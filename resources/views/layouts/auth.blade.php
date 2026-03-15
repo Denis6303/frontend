@@ -10,15 +10,13 @@
     <title>@yield('title', 'Authentification') - {{ config('app.name', 'Votix') }}</title>
 
     <link rel="icon" type="image/png" href="{{ asset('images/fav.png') }}">
-
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
     <link href="{{ asset('vendor/unicons-2.0.1/css/unicons.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/responsive.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/night-mode.css') }}" rel="stylesheet">
-
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/OwlCarousel/assets/owl.carousel.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/OwlCarousel/assets/owl.theme.default.min.css') }}" rel="stylesheet">
@@ -30,8 +28,8 @@
     <style>
         .app-top-items { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; width: 100%; }
         .app-top-left-link { flex-shrink: 0; }
-        .app-top-left-link .sidebar-register-link { color: #6ac045; font-weight: 500; }
-        .app-top-left-link .sidebar-register-link:hover { color: #7ad254 !important; }
+        .app-top-left-link .sidebar-register-link { color: #000; font-weight: 500; }
+        .app-top-left-link .sidebar-register-link:hover { color: #000 !important; }
     </style>
     @stack('styles')
 </head>
