@@ -248,7 +248,7 @@ class EventDraftController extends Controller
             Session::forget(['event_draft.current_id', 'event_draft.summary_data']);
 
             // Après publication, rediriger vers la liste "À venir"
-            $redirect = route('dashboard.events', ['locale' => $locale, 'tab' => 'upcoming']);
+            $redirect = route('dashboard.events.index', ['locale' => $locale, 'tab' => 'upcoming']);
 
             return redirect($redirect)
                 ->with('success', $json['message'] ?? __('Event created successfully.'));

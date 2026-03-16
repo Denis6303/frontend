@@ -3,16 +3,16 @@
         <div class="left_section">
             <ul>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.index', ['locale' => $locale ?? app()->getLocale()]) }}"
-                       class="menu--link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}"
+                    <a href="{{ route('dashboard.home', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.home') ? 'active' : '' }}"
                        title="{{ __('Dashboard') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-gauge menu--icon"></i>
                         <span class="menu--label">{{ __('Dashboard') }}</span>
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.events', ['locale' => $locale ?? app()->getLocale()]) }}"
-                       class="menu--link {{ request()->routeIs('dashboard.events') ? 'active' : '' }}"
+                    <a href="{{ route('dashboard.events.index', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.events.*') ? 'active' : '' }}"
                        title="{{ __('Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-calendar-days menu--icon"></i>
                         <span class="menu--label">{{ __('Events') }}</span>
@@ -25,8 +25,8 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.about', ['locale' => $locale ?? app()->getLocale()]) }}"
-                       class="menu--link {{ request()->routeIs('dashboard.about') ? 'active' : '' }}"
+                    <a href="{{ route('dashboard.account', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.account') ? 'active' : '' }}"
                        title="{{ __('About') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-user menu--icon"></i>
                         <span class="menu--label">{{ __('My Account') }}</span>

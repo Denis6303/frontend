@@ -155,7 +155,7 @@ class AuthController extends Controller
         $token = $request->query('token');
         $email = $request->query('email');
 
-        return view('auth.reset-password', [
+        return view('pages.auth.reset-password', [
             'token' => $token,
             'email' => $email,
         ]);
@@ -240,14 +240,14 @@ class AuthController extends Controller
             // Ticket invalid or expired: show info page with error message
             $errorMessage = $response->json('message') ?? __('This link may have expired or already been used.');
 
-            return view('auth.email-verified', [
+            return view('pages.auth.email-verified', [
                 'verified' => false,
                 'errorMessage' => $errorMessage,
             ]);
         }
 
         // No ticket: just show generic info page (for manual visits)
-        return view('auth.email-verified', [
+        return view('pages.auth.email-verified', [
             'verified' => false,
             'errorMessage' => null,
         ]);

@@ -8,10 +8,29 @@ use Illuminate\Http\Request;
 class Authenticate extends Middleware
 {
     /**
+     * On considère l'utilisateur "auth" si le token API est en session.
+     * Cela permet d'utiliser le middleware `auth` (routes/dashboard) avec l'auth existante.
+     */
+    public function handle($request, \Closure $next, ...$guards)
+    {
+        if (session(config('votix_api.session_access_token_key'))) {
+            return $next($request);
+        }
+
+        return parent::handle($request, $next, ...$guards);
+    }
+
+    /**
      * Get the path the user should be redirected to when they are not authenticated.
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        if ($request->expectsJson()) {
+            return null;
+        }
+
+        $locale = $request->route('locale', app()->getLocale() ?? 'fr');
+
+        return route('login', ['locale' => $locale]);
     }
 }

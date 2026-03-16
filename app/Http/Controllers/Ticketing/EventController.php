@@ -29,7 +29,7 @@ class EventController extends Controller
 
         $this->rememberSlugMap($events);
 
-        return view('ticketing.home', [
+        return view('pages.home.index', [
             'locale' => $locale,
             'events' => $events,
         ]);
@@ -56,7 +56,7 @@ class EventController extends Controller
 
         $this->rememberSlugMap($events);
 
-        return view('ticketing.events', [
+        return view('pages.event.index', [
             'locale' => $locale,
             'events' => $events,
             'meta'   => $meta,
@@ -89,7 +89,7 @@ class EventController extends Controller
 
         $event = $response->json('data') ?? [];
 
-        return view('ticketing.event-detail', [
+        return view('pages.event.show', [
             'locale' => $locale,
             'event'  => $event,
         ]);
@@ -109,7 +109,7 @@ class EventController extends Controller
 
         $event = $response->json('data') ?? [];
 
-        return view('ticketing.event-detail', [
+        return view('pages.event.show', [
             'locale' => $locale,
             'event'  => $event,
         ]);
