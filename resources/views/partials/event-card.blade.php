@@ -6,6 +6,10 @@
     $city    = $event['city'] ?? null;
     $address = $event['address'] ?? null;
     $categoryName = $event['category']['name'] ?? null;
+    $status       = $event['status'] ?? null;
+    $likes        = $event['likes_count'] ?? null;
+    $views        = $event['nb_visites'] ?? null;
+    $isVerified   = (bool) ($event['is_verified'] ?? false);
     $currency = $event['currency'] ?? '';
     $displayCurrency = $currency === 'XOF' ? 'FCFA' : $currency;
     $fullAddress = trim(implode(', ', array_filter([$city, $address])));
@@ -19,20 +23,24 @@
         </a>
     </div>
     <div class="event-content">
-        <a href="{{ $eventUrl }}" class="event-title d-block">
+        {{-- Titre seul sur une ligne, coupé avec "..." si trop long --}}
+        <a href="{{ $eventUrl }}"
+           class="event-title d-block mb-0 fw-semibold text-truncate"
+           title="{{ $event['title'] ?? '—' }}">
             {{ $event['title'] ?? '—' }}
-            @if($categoryName)
-                <span class="text-muted small ms-1">
-                    &middot;
-                    <i class="fa-solid fa-tag ms-1 me-1"></i>{{ $categoryName }}
-                </span>
-            @endif
         </a>
 
+        {{-- Catégorie seule sur la 2ᵉ ligne --}}
+        @if($categoryName)
+            <div class="small text-muted mt-0">
+                <i class="fa-solid fa-tag me-1"></i>{{ $categoryName }}
+            </div>
+        @endif
+
         @if($fullAddress)
-            <div class="mt-1">
-                <span class="remaining d-block">
-                    <i class="fa-solid fa-location-dot me-1"></i>
+            <div class="mt-0 small text-muted">
+                <i class="fa-solid fa-location-dot me-1"></i>
+                <span class="remaining d-inline">
                     {{ $fullAddress }}
                 </span>
             </div>
@@ -41,12 +49,35 @@
         <div class="duration-price-remaining mt-1">
             @if($price !== null)
                 <span class="duration-price">
-                    <i class="fa-solid fa-money-bill me-1"></i>
-                    {{ __('À partir de') }}
+                    <i class="fa-solid fa-coins me-1"></i>
+                    {{ __('Min.') }}
                     {{ number_format((float) $price, 0, ',', ' ') }}
                     {{ $displayCurrency }}
                 </span>
             @endif
+        </div>
+
+        {{-- Ligne d'infos complémentaires : badge vérifié, likes, vues --}}
+        <div class="d-flex align-items-center justify-content-between mt-2 small text-muted">
+            <div class="d-flex align-items-center gap-2">
+                @if($isVerified)
+                    <span class="badge bg-success-subtle text-success border rounded-pill px-2 py-1">
+                        <i class="fa-solid fa-check-circle me-1"></i>{{ __('Vérifié') }}
+                    </span>
+                @endif
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                @if(is_numeric($views) && $views > 0)
+                    <span>
+                        <i class="fa-regular fa-eye me-1"></i>{{ $views }}
+                    </span>
+                @endif
+                @if(is_numeric($likes) && $likes > 0)
+                    <span>
+                        <i class="fa-regular fa-heart me-1"></i>{{ $likes }}
+                    </span>
+                @endif
+            </div>
         </div>
     </div>
 

@@ -94,7 +94,7 @@
 <script>
 (function() {
     var tickets = [];
-    var currency = 'XOF';
+    var currency = 'FCFA';
 
     function renderTicketCard(t, idx) {
         var price = parseFloat(t.price) === 0 ? '{{ __("Free") }}' : t.price + ' ' + currency;

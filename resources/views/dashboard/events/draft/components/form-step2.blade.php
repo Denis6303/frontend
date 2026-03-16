@@ -19,7 +19,7 @@
                         <div class="col-md-6">
                             <label class="form-label fs-6">Currency*</label>
                             <select class="selectpicker" name="currency" data-size="5">
-                                <option value="XOF">XOF</option>
+                                <option value="XOF">FCFA</option>
                                 <option value="EUR">EUR</option>
                                 <option value="USD">USD</option>
                             </select>
