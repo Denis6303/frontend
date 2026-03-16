@@ -29,9 +29,13 @@ class EventController extends Controller
 
         $this->rememberSlugMap($events);
 
+        // Récupère les catégories pour les filtres de la home
+        $categories = $this->apiService->getData('categories', [], true, 'items', true);
+
         return view('pages.home.index', [
-            'locale' => $locale,
-            'events' => $events,
+            'locale'      => $locale,
+            'events'      => $events,
+            'categories'  => is_array($categories) ? $categories : [],
         ]);
     }
 
@@ -56,10 +60,14 @@ class EventController extends Controller
 
         $this->rememberSlugMap($events);
 
+        // Catégories réelles pour les filtres de la page liste
+        $categories = $this->apiService->getData('categories', [], true, 'items', true);
+
         return view('pages.event.index', [
-            'locale' => $locale,
-            'events' => $events,
-            'meta'   => $meta,
+            'locale'     => $locale,
+            'events'     => $events,
+            'meta'       => $meta,
+            'categories' => is_array($categories) ? $categories : [],
             'filters'=> [
                 'query'        => $params['query'],
                 'location'     => $params['location'],

@@ -2,6 +2,13 @@
 
 @section('title', 'Événements - Votix')
 
+@push('styles')
+<style>
+.explore-events { margin-top: 2rem; }
+.event-content .event-title { font-size: 1.05rem; font-weight: 600; }
+</style>
+@endpush
+
 @section('content')
     <div class="wrapper">
         <div class="explore-events p-80">
@@ -17,59 +24,24 @@
                             <div class="featured-controls">
                                 <div class="controls">
                                     <button type="button" class="control" data-filter="all">All</button>
-                                    <button type="button" class="control" data-filter=".arts">Arts</button>
-                                    <button type="button" class="control" data-filter=".business">Business</button>
-                                    <button type="button" class="control" data-filter=".concert">Concert</button>
-                                    <button type="button" class="control" data-filter=".workshops">Workshops</button>
+                                    @foreach(($categories ?? []) as $cat)
+                                        @php
+                                            $slug = \Illuminate\Support\Str::slug($cat['name_en'] ?? $cat['name'] ?? '');
+                                        @endphp
+                                        <button type="button" class="control" data-filter=".{{ $slug }}">
+                                            {{ $cat['name'] ?? $cat['name_en'] ?? '' }}
+                                        </button>
+                                    @endforeach
                                 </div>
                                 <div class="row" data-ref="event-filter-content">
                                     @forelse($events as $event)
                                         @php
-                                            $cover = $event['cover_url'] ?? asset('images/event-imgs/img-1.jpg');
-                                            $occ   = $event['occurrences'][0] ?? null;
-                                            $start = $occ['start_date'] ?? null;
-                                            $price = $event['price_min'] ?? null;
-                                            $city  = $event['city'] ?? null;
+                                            $categorySlug = \Illuminate\Support\Str::slug($event['category']['name_en'] ?? $event['category']['name'] ?? '');
                                         @endphp
                                         <div
-                                            class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mix"
+                                            class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mix {{ $categorySlug ? $categorySlug : '' }}"
                                             data-ref="mixitup-target">
-                                            <div class="main-card mt-4">
-                                                <div class="event-thumbnail">
-                                                    <a href="{{ route('events.show', ['locale' => $locale ?? app()->getLocale(), 'slug' => $event['slug']]) }}"
-                                                       class="thumbnail-img">
-                                                        <img src="{{ $cover }}" alt="">
-                                                    </a>
-                                                </div>
-                                                <div class="event-content">
-                                                    <a href="{{ route('events.show', ['locale' => $locale ?? app()->getLocale(), 'slug' => $event['slug']]) }}"
-                                                       class="event-title">{{ $event['title'] ?? '—' }}</a>
-                                                    <div class="duration-price-remaining">
-                                                        @if($price !== null)
-                                                            <span class="duration-price">
-                                                                {{ $event['currency'] ?? '' }} {{ number_format((float) $price, 0, ',', ' ') }}
-                                                            </span>
-                                                        @endif
-                                                        @if($city)
-                                                            <span class="remaining">{{ $city }}</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="event-footer">
-                                                    <div class="event-timing">
-                                                        @if($start)
-                                                            <div class="publish-date">
-                                                                <span>
-                                                                    <i class="fa-solid fa-calendar-day me-2"></i>
-                                                                    {{ \Carbon\Carbon::parse($start)->translatedFormat('d M') }}
-                                                                </span>
-                                                                <span class="dot"><i class="fa-solid fa-circle"></i></span>
-                                                                <span>{{ \Carbon\Carbon::parse($start)->translatedFormat('D, H:i') }}</span>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @include('partials.event-card', ['event' => $event])
                                         </div>
                                     @empty
                                         <div class="col-12">
