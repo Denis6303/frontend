@@ -9,8 +9,8 @@
 .hero-slide-img { position: absolute; inset: 0; min-height: 380px; }
 .hero-slide-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 100%); }
 .hero-slide-content { position: absolute !important; z-index: 2; top: 50% !important; left: 50% !important; bottom: auto !important; right: auto !important; transform: translate(-50%, -50%); text-align: center; padding: 1rem; }
-.hero-slide-content h2 { font-size: 1.5rem; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-.hero-slide-content p { font-size: 1rem; margin-bottom: 0.75rem; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+.hero-slide-content h2 { font-size: 1.5rem; font-weight: 700; color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+.hero-slide-content p { font-size: 1rem; margin-bottom: 0.75rem; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 .hero-slide-content .main-btn { margin-top: 0.5rem; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; flex-wrap: nowrap; }
 .hero-slide-content .main-btn i { flex-shrink: 0; }
 @media (min-width: 768px) {
@@ -52,7 +52,7 @@
                         <div class="carousel-caption hero-slide-content">
                             <h2>Concert de l'année 2025</h2>
                             <p>L'événement le plus attendu de la saison</p>
-                            <a href="{{ route('ticketing.events.show', ['locale' => $locale ?? 'fr', 'id' => 1]) }}" class="main-btn btn-hover">
+                            <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => 'event-1']) }}" class="main-btn btn-hover">
                                 {{ __('Acheter tickets') }}
                                 <i class="fa-solid fa-arrow-right ms-3"></i>
                             </a>
@@ -66,7 +66,7 @@
                         <div class="carousel-caption hero-slide-content">
                             <h2>Festival électro Summer Vibes</h2>
                             <p>3 jours de musique en plein air</p>
-                            <a href="{{ route('ticketing.events.show', ['locale' => $locale ?? 'fr', 'id' => 2]) }}" class="main-btn btn-hover">
+                            <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => 'event-2']) }}" class="main-btn btn-hover">
                                 {{ __('Acheter tickets') }}
                                 <i class="fa-solid fa-arrow-right ms-3"></i>
                             </a>
@@ -80,7 +80,7 @@
                         <div class="carousel-caption hero-slide-content">
                             <h2>Concert acoustique intimiste</h2>
                             <p>Une soirée unique en petit comité</p>
-                            <a href="{{ route('ticketing.events.show', ['locale' => $locale ?? 'fr', 'id' => 3]) }}" class="main-btn btn-hover">
+                            <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => 'event-3']) }}" class="main-btn btn-hover">
                                 {{ __('Acheter tickets') }}
                                 <i class="fa-solid fa-arrow-right ms-3"></i>
                             </a>
@@ -129,41 +129,53 @@
                         <div class="event-filter-items">
                             <div class="featured-controls">
                                 <div class="row" data-ref="event-filter-content">
-                                    <div
-                                        class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mix arts concert workshops volunteer sports health_Wellness"
-                                        data-ref="mixitup-target">
-                                        <div class="main-card mt-4">
-                                            <div class="event-thumbnail">
-                                                <a href="{{ route('ticketing.events.show', ['locale' => $locale ?? 'fr', 'id' => 1]) }}"
-                                                    class="thumbnail-img">
-                                                    <img src="{{ asset('images/event-imgs/img-1.jpg') }}"
-                                                        alt="">
-                                                </a>
-                                                <span class="bookmark-icon" title="Bookmark"></span>
-                                            </div>
-                                            <div class="event-content">
-                                                <a href="{{ route('ticketing.events.show', ['locale' => $locale ?? 'fr', 'id' => 1]) }}"
-                                                    class="event-title">A New Way Of Life</a>
-                                                <div class="duration-price-remaining">
-                                                    <span class="duration-price">AUD $100.00*</span>
-                                                    <span class="remaining"></span>
+                                    @foreach($events as $event)
+                                        @php
+                                            $cover = $event['cover_url'] ?? asset('images/event-imgs/img-1.jpg');
+                                            $occ   = $event['occurrences'][0] ?? null;
+                                            $start = $occ['start_date'] ?? null;
+                                            $price = $event['price_min'] ?? null;
+                                            $city  = $event['city'] ?? null;
+                                        @endphp
+                                        <div
+                                            class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mix"
+                                            data-ref="mixitup-target">
+                                            <div class="main-card mt-4">
+                                                <div class="event-thumbnail">
+                                                    <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => $event['slug']]) }}"
+                                                        class="thumbnail-img">
+                                                        <img src="{{ $cover }}" alt="">
+                                                    </a>
                                                 </div>
-                                            </div>
-                                            <div class="event-footer">
-                                                <div class="event-timing">
-                                                    <div class="publish-date">
-                                                        <span><i
-                                                                class="fa-solid fa-calendar-day me-2"></i>15 Apr</span>
-                                                        <span class="dot"><i class="fa-solid fa-circle"></i></span>
-                                                        <span>Fri, 3.45 PM</span>
+                                                <div class="event-content">
+                                                    <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => $event['slug']]) }}"
+                                                        class="event-title">{{ $event['title'] ?? '—' }}</a>
+                                                    <div class="duration-price-remaining">
+                                                        @if($price !== null)
+                                                            <span class="duration-price">
+                                                                {{ $event['currency'] ?? '' }} {{ number_format((float) $price, 0, ',', ' ') }}
+                                                            </span>
+                                                        @endif
+                                                        @if($city)
+                                                            <span class="remaining">{{ $city }}</span>
+                                                        @endif
                                                     </div>
-                                                    <span class="publish-time"><i
-                                                            class="fa-solid fa-clock me-2"></i>1h</span>
+                                                </div>
+                                                <div class="event-footer">
+                                                    <div class="event-timing">
+                                                        @if($start)
+                                                            <div class="publish-date">
+                                                                <span><i
+                                                                        class="fa-solid fa-calendar-day me-2"></i>{{ \Carbon\Carbon::parse($start)->translatedFormat('d M') }}</span>
+                                                                <span class="dot"><i class="fa-solid fa-circle"></i></span>
+                                                                <span>{{ \Carbon\Carbon::parse($start)->translatedFormat('D, H:i') }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {{-- Autres cartes issues du backend plus tard --}}
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

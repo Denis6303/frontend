@@ -245,13 +245,10 @@ class EventDraftController extends Controller
         $json = $response->json() ?? [];
 
         if ($response->successful() && ($json['success'] ?? false)) {
-            $eventId = $json['data']['event']['id'] ?? null;
-
             Session::forget(['event_draft.current_id', 'event_draft.summary_data']);
 
-            $redirect = $eventId
-                ? route('ticketing.events.show', ['locale' => $locale, 'id' => $eventId])
-                : route('dashboard.events', ['locale' => $locale]);
+            // Après publication, rediriger vers la liste "À venir"
+            $redirect = route('dashboard.events', ['locale' => $locale, 'tab' => 'upcoming']);
 
             return redirect($redirect)
                 ->with('success', $json['message'] ?? __('Event created successfully.'));

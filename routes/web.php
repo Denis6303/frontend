@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\EventDraftController;
+use App\Http\Controllers\Dashboard\MyEventController;
+use App\Http\Controllers\Ticketing\EventController as PublicEventController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -25,10 +27,7 @@ Route::get('/email-verified', [AuthController::class, 'showEmailVerified'])->nam
 Route::get('/reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset.plain');
 
 Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])->group(function () {
-    Route::get('/', function (string $locale) {
-        App::setLocale($locale);
-        return view('ticketing.home');
-    })->name('home');
+    Route::get('/', [PublicEventController::class, 'home'])->name('home');
 
     // Auth
     Route::get('/login', fn (string $locale) => view('auth.login'))->name('login');
@@ -43,21 +42,19 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
     Route::get('/email-verified', [AuthController::class, 'showEmailVerified'])->name('email.verified');
     Route::post('/email/resend', [AuthController::class, 'resendVerification'])->name('verification.resend');
 
-    // Ticketing
+    // Ticketing (liste + ancien détail)
     Route::prefix('ticketing')->name('ticketing.')->group(function () {
-        Route::get('/', function (string $locale) {
-            return view('ticketing.home');
-        })->name('index');
-        Route::get('/events', function (string $locale) {
-            return view('ticketing.events');
-        })->name('events');
-        Route::get('/events/{id}', function (string $locale, $id) {
-            return view('ticketing.event-detail', ['id' => $id]);
-        })->name('events.show');
+        Route::get('/', [PublicEventController::class, 'home'])->name('index');
+        Route::get('/events', [PublicEventController::class, 'index'])->name('events');
+        Route::get('/events/{id}', [PublicEventController::class, 'showLegacy'])->name('events.show.legacy');
         Route::get('/cart', function (string $locale) {
             return view('ticketing.cart');
         })->name('cart');
     });
+
+    // Nouveau détail public : /{locale}/evenements/{slug}
+    Route::get('/evenements/{slug}', [PublicEventController::class, 'show'])
+        ->name('events.show');
 
     // Tableau de bord (protégé : redirection vers login si non connecté)
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
@@ -68,12 +65,7 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
             return view('dashboard.main.index', ['locale' => $locale]);
         })->name('index');
 
-        Route::get('/events', function (string $locale) {
-            if (!session(config('votix_api.session_access_token_key'))) {
-                return redirect()->route('login', ['locale' => $locale]);
-            }
-            return view('dashboard.main.events', ['locale' => $locale]);
-        })->name('events');
+        Route::get('/events', [MyEventController::class, 'index'])->name('events');
 
         Route::get('/about', function (string $locale) {
             if (!session(config('votix_api.session_access_token_key'))) {
