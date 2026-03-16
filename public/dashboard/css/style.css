@@ -739,7 +739,7 @@ body {
 }
 
 .hero-banner {
-	background-image: url(../images/banner.jpg);
+	background-image: url(../images/event-imgs/img-1.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1819,7 +1819,7 @@ body {
 /* --- Event Detail View Page --- */
 
 .breadcrumb-block {
-    background-image: url(../images/banner.jpg);
+    background-image: url(../images/event-imgs/img-1.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;

@@ -45,13 +45,6 @@
                             <li><a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
                         </ul>
                     </div>
-                    <div class="footer-content">
-                        <h4>Download Mobile App</h4>
-                        <div class="download-app-link">
-                            <a href="#" class="download-btn"><img src="{{ asset('images/app-store.html') }}" alt=""></a>
-                            <a href="#" class="download-btn"><img src="{{ asset('images/google-play.html') }}" alt=""></a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
