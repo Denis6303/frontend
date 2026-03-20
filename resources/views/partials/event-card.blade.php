@@ -16,7 +16,7 @@
     $eventUrl = route('events.show', ['locale' => $locale ?? 'fr', 'slug' => $event['slug']]);
 @endphp
 
-<div class="main-card mt-4 position-relative">
+<div class="main-card mt-4 position-relative event-card">
     <div class="event-thumbnail">
         <a href="{{ $eventUrl }}" class="thumbnail-img">
             <img src="{{ $cover }}" alt="">

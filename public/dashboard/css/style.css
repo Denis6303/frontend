@@ -927,6 +927,37 @@ body {
     border-radius: 5px;
 }
 
+/* Event listing cards – pure black text on pure white */
+.event-card {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.event-card * {
+    color: #000000;
+}
+
+.event-card .text-muted {
+    color: #000000 !important;
+}
+
+.event-card .event-footer {
+    background: #ffffff;
+}
+
+.event-card .badge {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+}
+
+/* Verified badge: keep its green color */
+.event-card .badge.bg-success-subtle.text-success {
+    background-color: #ffffff;
+    color: #198754;
+    border-color: #198754;
+}
+
 .event-thumbnail {
 	width: 100%;
     position: relative;

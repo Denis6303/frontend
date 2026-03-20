@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.no-header-footer')
 
 @section('title', ($event['title'] ?? 'Événement') . ' - Votix')
 
@@ -14,17 +14,15 @@
     }
 
     /* Mobile: mettre "Select Tickets" avant "Event Details"
-       et réduire les espaces verticaux */
+       et supprimer l'espace vertical entre les deux cartes */
     @media (max-width: 767.98px) {
         .main-event-dt {
-            margin-bottom: 1rem;
-        }
-        .main-card.event-right-dt {
-            margin-top: 0;
+            margin-bottom: 0 !important;
         }
         .event-right-dt {
             display: flex;
             flex-direction: column;
+            margin-top: 0 !important;
         }
         .event-right-dt .select-tickets-block {
             order: 1;
@@ -39,24 +37,7 @@
 @endpush
 
 @section('content')
-    <div class="wrapper">
-        <div class="breadcrumb-block">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 col-md-10">
-                        <div class="barren-breadcrumb">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.index', ['locale' => $locale ?? app()->getLocale()]) }}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.events', ['locale' => $locale ?? app()->getLocale()]) }}">Explore Events</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">{{ $event['title'] ?? 'Event' }}</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="wrapper event-details-page">
 
         @php
             $category    = $event['category'] ?? null;
@@ -82,8 +63,18 @@
                                 @endif
                             </div>
                             <div class="event-top-dt">
-                                <h3 class="event-main-title">{{ $event['title'] ?? '—' }}</h3>
-                                <div class="event-top-info-status">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h3 class="event-main-title mb-0">{{ $event['title'] ?? '—' }}</h3>
+                                    </div>
+                                    <div class="col-auto text-end">
+                                        <a class="sidebar-register-link"
+                                           href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
+                                            <i class="fa-regular fa-circle-left me-2"></i>{{ __("Retour à l'accueil") }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="event-top-info-status mt-2">
                                     @if(!empty($event['city']) || !empty($event['address']))
                                         <span class="event-type-name">
                                             <i class="fa-solid fa-location-dot"></i>
@@ -142,7 +133,7 @@
                             <div class="bp-title">
                                 <h4>Event Details</h4>
                             </div>
-                            <div class="event-dt-right-group mt-4">
+                            <div class="event-dt-right-group pt-4">
                                 <div class="event-dt-right-icon">
                                     <i class="fa-solid fa-calendar-day"></i>
                                 </div>
