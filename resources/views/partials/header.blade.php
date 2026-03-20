@@ -50,7 +50,7 @@
                         </div>
 
                         {{-- Bloc compte utilisateur (mobile) --}}
-                        <div class="offcanvas-user-block">
+                        <div class="offcanvas-user-block px-3">
                             @if(session(config('votix_api.session_access_token_key')))
                                 <div class="offcanvas-user-info">
                                     <span class="offcanvas-user-avatar">
@@ -91,7 +91,7 @@
                         </div>
 
                         {{-- Navigation principale --}}
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe_5">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 px-2">
                             <li class="nav-item">
                                 <a class="nav-link @if (request()->routeIs('home')) active @endif"
                                    aria-current="page"
@@ -255,7 +255,7 @@
                                               class="dropdown-item-form">
                                             @csrf
                                             <button type="submit"
-                                                    class="dropdown-item dropdown-item--danger w-100 border-0 bg-transparent">
+                                                class="dropdown-item dropdown-item--danger w-100 border-0 bg-transparent">
                                                 <span class="dropdown-item-icon" aria-hidden="true">
                                                     <i class="fa-solid fa-right-from-bracket"></i>
                                                 </span>
