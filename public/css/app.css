@@ -275,9 +275,15 @@
        padding: 0 1.25rem;
        display: inline-flex;
        align-items: center;
-       gap: 0.4rem;
+       gap: 0 !important;
        font-weight: 600;
        font-size: 1rem;
+   }
+
+   /* Hero/banner: don't show extra border around "Acheter tickets" */
+   .hero-slide-content .main-btn,
+   .hero-slide-content .main-btn.btn-hover {
+       border: none !important;
    }
    
    .header .night_mode_switch__btn {
@@ -597,6 +603,8 @@
    .offcanvas-create-btn--full {
        display: flex !important;
        justify-content: center;
+       align-items: center;
+       gap: 0.15rem !important;
        width: 100%;
    }
    
