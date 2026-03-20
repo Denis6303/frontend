@@ -9,7 +9,7 @@
                     data-bs-target="#offcanvasNavbar"
                     aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon">
-                        <i class="fa-solid fa-bars"></i>
+                        <i class="fa-solid fa-bars-staggered"></i>
                     </span>
                 </button>
 
@@ -95,22 +95,42 @@
                             <li class="nav-item">
                                 <a class="nav-link @if (request()->routeIs('home')) active @endif"
                                    aria-current="page"
-                                   href="{{ route('home', ['locale' => $locale ?? 'fr']) }}">{{ __('Home') }}</a>
+                                   href="{{ route('home', ['locale' => $locale ?? 'fr']) }}">
+                                    <i class="fa-solid fa-house me-2"></i>{{ __('Home') }}
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @if (request()->routeIs('ticketing.events*')) active @endif"
-                                   href="{{ route('ticketing.events', ['locale' => $locale ?? 'fr']) }}">{{ __('Events') }}</a>
+                                   href="{{ route('ticketing.events', ['locale' => $locale ?? 'fr']) }}">
+                                    <i class="fa-solid fa-calendar-days me-2"></i>{{ __('Events') }}
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">{{ __('Pricing') }}</a>
+                                <a class="nav-link" href="#">
+                                    <i class="fa-solid fa-tags me-2"></i>{{ __('Pricing') }}
+                                </a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">{{ __('Help') }}</a>
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-circle-question me-2"></i>{{ __('Help') }}
+                                </a>
                                 <ul class="dropdown-menu dropdown-submenu">
-                                    <li><a class="dropdown-item" href="#">{{ __('FAQ') }}</a></li>
-                                    <li><a class="dropdown-item" href="#">{{ __('Help Center') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('contact', ['locale' => $locale ?? 'fr']) }}">{{ __('Contact Us') }}</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa-solid fa-circle-question me-2"></i>{{ __('FAQ') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa-solid fa-life-ring me-2"></i>{{ __('Help Center') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('contact', ['locale' => $locale ?? 'fr']) }}">
+                                            <i class="fa-solid fa-envelope me-2"></i>{{ __('Contact Us') }}
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">

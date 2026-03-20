@@ -765,6 +765,15 @@
        color: #333 !important;
        font-size: 1.1rem !important;
        transition: background 0.18s, color 0.18s;
+       border: none !important;
+       border-bottom: none !important;
+       box-shadow: none !important;
+       text-decoration: none !important;
+   }
+   .header-search-trigger:focus,
+   .header-search-trigger:focus-visible {
+       outline: none !important;
+       box-shadow: none !important;
    }
    .header-search-trigger:hover { background: rgba(0,0,0,.06); color: #6ac045 !important; }
    .night-mode .header-search-trigger { color: #e2e8f0 !important; }
