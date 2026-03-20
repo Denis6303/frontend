@@ -953,9 +953,65 @@ body {
 
 /* Verified badge: keep its green color */
 .event-card .badge.bg-success-subtle.text-success {
-    background-color: #ffffff;
-    color: #198754;
-    border-color: #198754;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #198754 !important;
+    border-color: #198754 !important;
+    border: 1px solid #198754 !important;
+}
+
+.event-card .badge.bg-success-subtle.text-success i {
+    color: #198754 !important;
+}
+
+/* Ensure any icon inside the verified badge is green */
+.event-card .badge.bg-success-subtle.text-success svg {
+    fill: #198754 !important;
+}
+
+/* Address inside event cards (uses .remaining => was grey) */
+.event-card .remaining {
+    color: #000000 !important;
+}
+
+/* Event details: category ticket prices in pure black */
+.event-details-page .ticket-price {
+    color: #000000 !important;
+}
+
+/* Event details: keep the "Retour à l'accueil" at extreme right */
+.event-details-page .event-top-dt {
+    width: 100% !important;
+    margin-left: 0 !important;
+}
+
+.event-details-page .event-top-dt .row {
+    width: 100% !important;
+}
+
+.event-details-page .event-details-back-link {
+    margin-left: auto !important;
+}
+
+/* Event details page: force only text to pure black */
+.event-details-page .text-muted,
+.event-details-page .text-body-secondary {
+    color: #000000 !important;
+}
+
+.event-details-page p,
+.event-details-page span {
+    color: #000000 !important;
+}
+
+.event-details-page a {
+    color: #000000 !important;
+}
+
+.event-details-page .event-type-name,
+.event-details-page .event-dt-right-content h4,
+.event-details-page .breadcrumb-block .breadcrumb-item.active {
+    color: #000000 !important;
 }
 
 .event-thumbnail {
