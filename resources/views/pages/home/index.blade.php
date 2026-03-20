@@ -23,7 +23,48 @@
   .home-category-filters { justify-content: center; flex-wrap: wrap; overflow: visible; }
 }
 @media (max-width: 991.98px) {
-  .home-category-filters { margin-top: 1.5rem; padding-top: 1.25rem; }
+  .home-category-filters-scroll { position: relative; }
+  .home-category-filters-scroll .category-scroll-arrow {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    color: #000;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .home-category-filters-scroll .category-scroll-arrow.category-scroll-left { left: -10px; }
+  .home-category-filters-scroll .category-scroll-arrow.category-scroll-right { right: -10px; }
+
+  /* 2 lignes "visibles" + scroll horizontal (sans perdre l’UX) */
+  .home-category-filters {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    grid-auto-columns: max-content;
+    align-content: start;
+    justify-content: start;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+  .home-category-filters .control {
+    flex-shrink: 0;
+    justify-self: start;
+    white-space: nowrap;
+  }
   .home-explore-events { padding-top: 1.5rem !important; }
   .home-explore-events .event-filter-items .row { margin-top: 0.5rem; }
 }
@@ -100,16 +141,24 @@
 
         {{-- Filtres catégories (centrés, juste après la bannière) --}}
         <div class="container">
-            <div class="home-category-filters">
-                <button type="button" class="control" data-filter="all">{{ __('All') }}</button>
-                @foreach(($categories ?? []) as $cat)
-                    @php
-                        $slug = \Illuminate\Support\Str::slug($cat['name_en'] ?? $cat['name'] ?? '');
-                    @endphp
-                    <button type="button" class="control" data-filter=".{{ $slug }}">
-                        {{ $cat['name'] ?? $cat['name_en'] ?? '' }}
-                    </button>
-                @endforeach
+            <div class="home-category-filters-scroll">
+                <button type="button" class="category-scroll-arrow category-scroll-left" aria-label="Scroll categories left">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <div id="homeCategoryFilters" class="home-category-filters">
+                    <button type="button" class="control" data-filter="all">{{ __('All') }}</button>
+                    @foreach(($categories ?? []) as $cat)
+                        @php
+                            $slug = \Illuminate\Support\Str::slug($cat['name_en'] ?? $cat['name'] ?? '');
+                        @endphp
+                        <button type="button" class="control" data-filter=".{{ $slug }}">
+                            {{ $cat['name'] ?? $cat['name_en'] ?? '' }}
+                        </button>
+                    @endforeach
+                </div>
+                <button type="button" class="category-scroll-arrow category-scroll-right" aria-label="Scroll categories right">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
             </div>
         </div>
 
@@ -151,4 +200,37 @@
             </div>
         </div>
 @endsection
+
+@push('scripts')
+<script>
+    (function () {
+        const container = document.getElementById('homeCategoryFilters');
+        if (!container) return;
+
+        const leftBtn = document.querySelector('.home-category-filters-scroll .category-scroll-left');
+        const rightBtn = document.querySelector('.home-category-filters-scroll .category-scroll-right');
+        if (!leftBtn || !rightBtn) return;
+
+        const updateButtons = () => {
+            const maxLeft = container.scrollWidth - container.clientWidth;
+            const left = container.scrollLeft;
+
+            leftBtn.style.visibility = left <= 2 ? 'hidden' : 'visible';
+            rightBtn.style.visibility = left >= maxLeft - 2 ? 'hidden' : 'visible';
+        };
+
+        leftBtn.addEventListener('click', () => {
+            container.scrollBy({ left: -220, behavior: 'smooth' });
+        });
+
+        rightBtn.addEventListener('click', () => {
+            container.scrollBy({ left: 220, behavior: 'smooth' });
+        });
+
+        container.addEventListener('scroll', updateButtons, { passive: true });
+        window.addEventListener('resize', updateButtons);
+        updateButtons();
+    })();
+</script>
+@endpush
 
