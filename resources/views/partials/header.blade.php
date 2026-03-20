@@ -9,7 +9,7 @@
                     data-bs-target="#offcanvasNavbar"
                     aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon">
-                        <i class="fa-solid fa-bars-staggered"></i>
+                        <i class="fa-solid fa-bars"></i>
                     </span>
                 </button>
 
