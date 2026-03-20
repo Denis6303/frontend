@@ -42,7 +42,8 @@
 
                         {{-- Créer un événement – en premier dans le hamburger --}}
                         <div class="offcanvas-create-event-wrap">
-                            <a href="#" class="offcanvas-create-btn offcanvas-create-btn--full">
+                            <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? 'fr']) }}"
+                               class="offcanvas-create-btn offcanvas-create-btn--full">
                                 <i class="fa-solid fa-calendar-days pt-1"></i>
                                 <span>{{ __('Create Event') }}</span>
                             </a>
@@ -176,7 +177,8 @@
                         </li>
 
                         <li class="d-none d-lg-inline-block header-theme-sep">
-                            <a href="#" class="create-btn btn-hover">
+                            <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? 'fr']) }}"
+                               class="create-btn btn-hover">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>{{ __('Create Event') }}</span>
                             </a>

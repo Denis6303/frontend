@@ -182,6 +182,42 @@
        background: #f8f9fa !important;
        box-shadow: 0 1px 3px rgba(0,0,0,.08);
    }
+
+   /* ============================================================
+      GLOBAL – Boutons outline noir (fond blanc, texte noir, contour noir)
+      ============================================================ */
+   .main-btn,
+   .create-btn,
+   .offcanvas-create-btn {
+       background: #ffffff !important;
+       color: #000000 !important;
+       border: 1px solid #000000 !important;
+   }
+
+   .main-btn i,
+   .create-btn i,
+   .offcanvas-create-btn i {
+       color: #000000 !important;
+   }
+
+   .btn-hover:hover,
+   .main-btn:hover,
+   .create-btn:hover,
+   .offcanvas-create-btn:hover {
+       background: #ffffff !important;
+       color: #000000 !important;
+       border-color: #000000 !important;
+   }
+
+   /* Previously green outline buttons should be black too */
+   .offcanvas-create-btn--outline {
+       background: #ffffff !important;
+       border: 1px solid #000000 !important;
+       color: #000000 !important;
+   }
+   .offcanvas-create-btn--outline:hover {
+       background: #ffffff !important;
+   }
    
    /* ============================================================
       HEADER – Navbar

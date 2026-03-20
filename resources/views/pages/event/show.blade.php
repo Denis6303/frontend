@@ -48,7 +48,7 @@
             $displayCurrency = $currency === 'XOF' ? 'FCFA' : $currency;
         @endphp
 
-        <div class="event-dt-block">
+        <div class="event-dt-block py-3">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
@@ -62,7 +62,7 @@
                                     <span class="event-date">—</span>
                                 @endif
                             </div>
-                            <div class="event-top-dt">
+                            <div class="event-top-dt px-2">
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <h3 class="event-main-title mb-0">{{ $event['title'] ?? '—' }}</h3>
