@@ -130,5 +130,18 @@
     "Currency": "Devise",
     "Free event": "Événement gratuit",
     "Review your draft": "Résumé de votre brouillon",
-    "Complete the previous steps to see the summary here.": "Complétez les étapes précédentes pour afficher le résumé ici."
+    "Complete the previous steps to see the summary here.": "Complétez les étapes précédentes pour afficher le résumé ici.",
+    "Visibility": "Visibilité",
+    "Private": "Privé",
+    "Public": "Public",
+    "Views": "Vues",
+    "Categories": "Catégories",
+    "Status": "Statut",
+    "Start": "Début",
+    "Publish": "Publier",
+    "Unpublish": "Dépublier",
+    "Receipts": "Recettes",
+    "Edit": "Modifier",
+    "This feature is coming soon.": "Cette fonctionnalité arrive bientôt.",
+    "Are you sure you want to cancel this event?": "Annuler cet événement ? Cette action est irréversible."
 }

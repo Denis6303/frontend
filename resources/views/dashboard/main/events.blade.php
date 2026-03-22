@@ -50,3 +50,46 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    function tabFromPaneId(paneId) {
+        var map = { 'upcoming-tab': 'upcoming', 'past-tab': 'completed', 'draft-tab': 'saved' };
+        return map[paneId] || 'upcoming';
+    }
+    function syncTabQuery(tab) {
+        var u = new URL(window.location.href);
+        u.searchParams.set('tab', tab);
+        window.history.replaceState({}, '', u);
+        document.querySelectorAll('input[name="tab"]').forEach(function (inp) {
+            inp.value = tab;
+        });
+        document.querySelectorAll('.dashboard-event-action-link').forEach(function (a) {
+            try {
+                var href = a.getAttribute('href');
+                if (!href || href.indexOf('#') === 0) return;
+                var u2 = new URL(href, window.location.origin);
+                u2.searchParams.set('tab', tab);
+                a.setAttribute('href', u2.pathname + u2.search + u2.hash);
+            } catch (e) {}
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var u = new URL(window.location.href);
+        var initial = u.searchParams.get('tab');
+        if (initial) {
+            syncTabQuery(initial);
+        }
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (btn) {
+            btn.addEventListener('shown.bs.tab', function (e) {
+                var target = e.target.getAttribute('data-bs-target');
+                if (!target) return;
+                var paneId = target.replace('#', '');
+                syncTabQuery(tabFromPaneId(paneId));
+            });
+        });
+    });
+})();
+</script>
+@endpush

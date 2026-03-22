@@ -140,5 +140,18 @@
     "Currency": "Currency",
     "Free event": "Free event",
     "Review your draft": "Review your draft",
-    "Complete the previous steps to see the summary here.": "Complete the previous steps to see the summary here."
+    "Complete the previous steps to see the summary here.": "Complete the previous steps to see the summary here.",
+    "Visibility": "Visibility",
+    "Private": "Private",
+    "Public": "Public",
+    "Views": "Views",
+    "Categories": "Categories",
+    "Status": "Status",
+    "Start": "Start",
+    "Publish": "Publish",
+    "Unpublish": "Unpublish",
+    "Receipts": "Receipts",
+    "Edit": "Edit",
+    "This feature is coming soon.": "This feature is coming soon.",
+    "Are you sure you want to cancel this event?": "Are you sure you want to cancel this event?"
 }
