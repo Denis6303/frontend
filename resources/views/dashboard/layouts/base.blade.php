@@ -75,6 +75,62 @@
     @endif
 
     <script src="{{ asset('dashboard/js/vertical-responsive-menu.min.js') }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var nav = document.querySelector('.vertical_nav');
+        var wrapper = document.querySelector('.wrapper');
+        var overlay = document.querySelector('.header .overlay');
+        var toggleMenu = document.getElementById('toggleMenu');
+
+        function closeMobileNav() {
+            if (!nav || !wrapper) return;
+            nav.classList.remove('vertical_nav__opened');
+            wrapper.classList.remove('toggle-content');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', function () {
+                closeMobileNav();
+            });
+        }
+
+        document.addEventListener('click', function (e) {
+            if (window.matchMedia('(min-width: 992px)').matches) return;
+            if (!nav || !nav.classList.contains('vertical_nav__opened')) return;
+            if (nav.contains(e.target) || (toggleMenu && toggleMenu.contains(e.target))) return;
+            closeMobileNav();
+        });
+
+        if (nav && overlay) {
+            var syncOverlay = function () {
+                if (window.matchMedia('(min-width: 992px)').matches) {
+                    overlay.style.display = 'none';
+                    return;
+                }
+                overlay.style.display = nav.classList.contains('vertical_nav__opened') ? 'block' : 'none';
+            };
+            new MutationObserver(syncOverlay).observe(nav, { attributes: true, attributeFilter: ['class'] });
+            syncOverlay();
+        }
+
+        window.addEventListener('resize', function () {
+            if (window.matchMedia('(min-width: 992px)').matches) {
+                closeMobileNav();
+            }
+        });
+
+        document.querySelectorAll('#js-menu a.menu--link[href]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (!href || href === '#') return;
+            a.addEventListener('click', function () {
+                if (window.matchMedia('(max-width: 991.98px)').matches) {
+                    closeMobileNav();
+                }
+            });
+        });
+    });
+    </script>
     <script src="{{ asset('dashboard/js/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js" crossorigin="anonymous"></script>

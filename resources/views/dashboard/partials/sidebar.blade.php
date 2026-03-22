@@ -1,9 +1,37 @@
+@php
+    $dashLocale = $locale ?? app()->getLocale();
+@endphp
 <nav class="vertical_nav">
     <div class="left_section menu_left" id="js-menu">
         <div class="left_section">
             <ul>
+                {{-- Anciennement dans le menu offcanvas (droite) : regroupé ici --}}
+                <li class="menu--item menu-sidebar-cta d-lg-none">
+                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $dashLocale]) }}"
+                       class="menu--link menu--link--cta">
+                        <i class="fa-solid fa-calendar-days menu--icon"></i>
+                        <span class="menu--label">{{ __('Create Event') }}</span>
+                    </a>
+                </li>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.home', ['locale' => $locale ?? app()->getLocale()]) }}"
+                    <a href="{{ route('home', ['locale' => $dashLocale]) }}"
+                       class="menu--link {{ request()->routeIs('home') ? 'active' : '' }}"
+                       title="{{ __('Home') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa-solid fa-right-left menu--icon"></i>
+                        <span class="menu--label">{{ __('Home') }}</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="{{ route('ticketing.events', ['locale' => $dashLocale]) }}"
+                       class="menu--link {{ request()->routeIs('ticketing.events') ? 'active' : '' }}"
+                       title="{{ __('Explore Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa-solid fa-compass menu--icon"></i>
+                        <span class="menu--label">{{ __('Explore Events') }}</span>
+                    </a>
+                </li>
+                <li class="menu--item menu-sidebar-divider" aria-hidden="true"><span class="menu-sidebar-divider-line"></span></li>
+                <li class="menu--item">
+                    <a href="{{ route('dashboard.home', ['locale' => $dashLocale]) }}"
                        class="menu--link {{ request()->routeIs('dashboard.home') ? 'active' : '' }}"
                        title="{{ __('Dashboard') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-gauge menu--icon"></i>
@@ -11,7 +39,7 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.events.index', ['locale' => $locale ?? app()->getLocale()]) }}"
+                    <a href="{{ route('dashboard.events.index', ['locale' => $dashLocale]) }}"
                        class="menu--link {{ request()->routeIs('dashboard.events.*') ? 'active' : '' }}"
                        title="{{ __('Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-calendar-days menu--icon"></i>
@@ -25,7 +53,7 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="{{ route('dashboard.account', ['locale' => $locale ?? app()->getLocale()]) }}"
+                    <a href="{{ route('dashboard.account', ['locale' => $dashLocale]) }}"
                        class="menu--link {{ request()->routeIs('dashboard.account') ? 'active' : '' }}"
                        title="{{ __('About') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-user menu--icon"></i>
@@ -77,6 +105,16 @@
                 </li>
                 -->
             </ul>
+            <div class="menu-sidebar-extras menu-sidebar-mobile-only">
+                <p class="menu-social-title">{{ __('Follow Us') }}</p>
+                <ul class="menu-social-links">
+                    <li><a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-square"></i></a></li>
+                    <li><a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
+                    <li><a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
