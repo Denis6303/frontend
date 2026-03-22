@@ -68,6 +68,30 @@
         font-weight: 500;
         color: #212529;
     }
+    .event-top-info__datetime-inner {
+        display: inline-flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.35rem;
+    }
+    .event-top-info__datetime-icon {
+        color: #000 !important;
+        flex-shrink: 0;
+        margin-top: 0.15rem;
+        padding-right: 0.5rem;
+    }
+    .event-top-heading-row {
+        width: 100%;
+    }
+    .event-details-page .event-top-dt--main {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    .event-details-page .event-top-heading-row .sidebar-register-link.event-details-back-link {
+        margin-left: auto !important;
+        margin-right: 0 !important;
+        white-space: nowrap;
+    }
     .event-sessions-inline {
         flex: 1 1 100%;
         min-width: 0;
@@ -207,17 +231,13 @@
                                     <span class="event-date">—</span>
                                 @endif
                             </div>
-                            <div class="event-top-dt px-2">
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        <h3 class="event-main-title mb-0">{{ $event['title'] ?? '—' }}</h3>
-                                    </div>
-                                    <div class="col-auto text-end">
-                                        <a class="sidebar-register-link"
-                                           href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                            <i class="fa-regular fa-circle-left me-2"></i>{{ __("Retour à l'accueil") }}
-                                        </a>
-                                    </div>
+                            <div class="event-top-dt px-2 flex-grow-1 min-w-0 event-top-dt--main">
+                                <div class="d-flex align-items-start justify-content-between gap-3 event-top-heading-row">
+                                    <h3 class="event-main-title mb-0 flex-grow-1 min-w-0 pe-2">{{ $event['title'] ?? '—' }}</h3>
+                                    <a class="sidebar-register-link event-details-back-link flex-shrink-0 text-end"
+                                       href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
+                                        <i class="fa-regular fa-circle-left me-2"></i>{{ __("Retour à l'accueil") }}
+                                    </a>
                                 </div>
                                 @php
                                     $hasEventLocation = ! empty($event['city']) || ! empty($event['address']);
@@ -234,11 +254,16 @@
                                             $headerStartFormatted = \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('D, d M Y H:i');
                                         @endphp
                                         <span class="event-type-name event-top-info__datetime w-100 d-block @if(! $hasEventLocation) event-top-info__datetime--no-separator @endif">
-                                            @if($datesCount > 1)
-                                                {{ __('Starts on') }} <span class="ev-event-date">{{ $headerStartFormatted }}</span>
-                                            @else
-                                                <span class="ev-event-date">{{ $headerStartFormatted }}</span>
-                                            @endif
+                                            <span class="event-top-info__datetime-inner">
+                                                <i class="fa-regular fa-calendar-days event-top-info__datetime-icon" aria-hidden="true"></i>
+                                                <span class="event-top-info__datetime-text">
+                                                    @if($datesCount > 1)
+                                                        {{ __('Starts on') }} <span class="ev-event-date">{{ $headerStartFormatted }}</span>
+                                                    @else
+                                                        <span class="ev-event-date">{{ $headerStartFormatted }}</span>
+                                                    @endif
+                                                </span>
+                                            </span>
                                         </span>
                                     @endif
                                 </div>
