@@ -10,25 +10,25 @@
 
                 {{-- Stepper --}}
                 <div class="ef-stepper">
-                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step active">
                         <div class="ef-step-num">1</div>
                         <span class="ef-step-label">{{ __('Details') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">2</div>
                         <span class="ef-step-label">{{ __('Location & Dates') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">3</div>
                         <span class="ef-step-label">{{ __('Tickets') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">4</div>
                         <span class="ef-step-label">{{ __('Summary') }}</span>
@@ -54,7 +54,8 @@
                           action="{{ route('dashboard.events.draft.create.step1.store', ['locale' => $locale ?? app()->getLocale()]) }}"
                           enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="draft_id" value="{{ request('draft_id') }}">
+                        <input type="hidden" name="draft_id" value="{{ $draftId ?? request('draft_id') }}">
+                        <input type="hidden" name="image_url" value="{{ old_or_prefill('image_url', ($prefill['cover_url'] ?? '')) }}">
 
                         @include('dashboard.events.draft.components.form-step1')
 
@@ -88,7 +89,6 @@
 </div>
 
 @push('styles')
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('dashboard/css/form-step.css') }}">
 @endpush
@@ -97,6 +97,24 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+
+    // Bannière déjà renseignée côté serveur (URL API / storage) : masquer le placeholder
+    (function syncBannerFromServer() {
+        var img = document.getElementById('banner-preview');
+        var ph = document.getElementById('banner-placeholder');
+        if (!img || !ph) return;
+        var src = (img.getAttribute('src') || '').trim();
+        if (src && src.indexOf('data:') !== 0) {
+            img.classList.add('has-img');
+            ph.style.display = 'none';
+            img.addEventListener('error', function onBannerErr() {
+                img.removeEventListener('error', onBannerErr);
+                img.classList.remove('has-img');
+                ph.style.display = '';
+                img.removeAttribute('src');
+            });
+        }
+    })();
 
     // --- Banner image preview ---
     const bannerInput   = document.getElementById('thumb-img');
@@ -153,6 +171,16 @@ document.addEventListener('DOMContentLoaded', function () {
             card.querySelector('input[type="radio"]').checked = true;
         });
     });
+
+    // Bootstrap-select : init unique si besoin (ne jamais destroy → évite les selects « bruts » sans style)
+    if (typeof jQuery !== 'undefined' && jQuery.fn.selectpicker) {
+        jQuery('select.selectpicker').each(function () {
+            var $el = jQuery(this);
+            if (!$el.parent().hasClass('bootstrap-select')) {
+                $el.selectpicker();
+            }
+        });
+    }
 });
 </script>
 @endpush

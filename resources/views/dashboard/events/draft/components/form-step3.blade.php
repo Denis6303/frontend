@@ -1,3 +1,7 @@
+@php
+    $p = $prefill ?? [];
+    $freeFromDraft = $p['free_event_default'] ?? 'false';
+@endphp
 <div class="step-tab-panel step-tab-tickets active" id="tab_step3">
     <div class="tab-from-content">
         <div class="main-card">
@@ -13,12 +17,12 @@
                     <div class="mb-3">
                         <label class="form-label fs-6 d-block mb-2">{{ __('Is this a free event?') }}*</label>
                         <div class="ef-attendance">
-                            <label class="ef-att-card {{ old('free_event', 'false') === 'true' ? 'selected' : '' }}">
+                            <label class="ef-att-card {{ old_or_prefill('free_event', $freeFromDraft) === 'true' ? 'selected' : '' }}">
                                 <input
                                     type="radio"
                                     name="free_event"
                                     value="true"
-                                    {{ old('free_event', 'false') === 'true' ? 'checked' : '' }}
+                                    {{ old_or_prefill('free_event', $freeFromDraft) === 'true' ? 'checked' : '' }}
                                 >
                                 <div class="ef-att-icon">
                                     <i class="fa-solid fa-check"></i>
@@ -29,12 +33,12 @@
                                 </div>
                             </label>
 
-                            <label class="ef-att-card {{ old('free_event', 'false') !== 'true' ? 'selected' : '' }}">
+                            <label class="ef-att-card {{ old_or_prefill('free_event', $freeFromDraft) !== 'true' ? 'selected' : '' }}">
                                 <input
                                     type="radio"
                                     name="free_event"
                                     value="false"
-                                    {{ old('free_event', 'false') !== 'true' ? 'checked' : '' }}
+                                    {{ old_or_prefill('free_event', $freeFromDraft) !== 'true' ? 'checked' : '' }}
                                 >
                                 <div class="ef-att-icon">
                                     <i class="fa-solid fa-ticket"></i>

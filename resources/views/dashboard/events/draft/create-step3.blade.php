@@ -9,25 +9,25 @@
             <div class="ef-shell">
 
                 <div class="ef-stepper">
-                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">1</div>
                         <span class="ef-step-label">{{ __('Details') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">2</div>
                         <span class="ef-step-label">{{ __('Location & Dates') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step active">
                         <div class="ef-step-num">3</div>
                         <span class="ef-step-label">{{ __('Tickets') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">4</div>
                         <span class="ef-step-label">{{ __('Summary') }}</span>
@@ -50,7 +50,7 @@
                     <form method="POST"
                           action="{{ route('dashboard.events.draft.create.step3.store', ['locale' => $locale ?? app()->getLocale()]) }}">
                         @csrf
-                        <input type="hidden" name="draft_id" value="{{ request('draft_id') }}">
+                        <input type="hidden" name="draft_id" value="{{ $draftId ?? request('draft_id') }}">
 
                         <div class="ef-body">
                             <div class="ef-col" style="grid-column: 1 / -1;">
@@ -69,7 +69,7 @@
                                 <span class="ef-progress-text">{{ __('Step 3 of 4') }}</span>
                             </div>
                             <div>
-                                <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                                <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                                    class="btn btn-outline-dark me-2">
                                     <i class="fa-solid fa-arrow-left-long me-2"></i>{{ __('Previous') }}
                                 </a>
@@ -91,10 +91,15 @@
 @endpush
 
 @push('scripts')
+@php
+    $pCur = $prefill ?? [];
+    $curCode = $pCur['currency'] ?? data_get($draft, 'event.currency', 'XOF');
+    $curLabel = $curCode === 'EUR' ? 'EUR' : ($curCode === 'USD' ? 'USD' : 'FCFA');
+@endphp
 <script>
 (function() {
-    var tickets = [];
-    var currency = 'FCFA';
+    var tickets = @json($ticketsInitial ?? []);
+    var currency = @json($curLabel);
 
     function renderTicketCard(t, idx) {
         var price = parseFloat(t.price) === 0 ? '{{ __("Free") }}' : t.price + ' ' + currency;
@@ -160,7 +165,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         var modal = document.getElementById('addTicketModal');
         var addBtn = document.getElementById('ticket-modal-add');
-        if (!modal || !addBtn) return;
 
         function clearModal() {
             document.getElementById('ticket-name').value = '';
@@ -171,30 +175,32 @@
             document.getElementById('ticket-conditions').value = '';
         }
 
-        addBtn.addEventListener('click', function() {
-            var name = (document.getElementById('ticket-name').value || '').trim();
-            if (!name) { alert('{{ __("Ticket name is required") }}'); return; }
-            var freeEvent = document.querySelector('input[name="free_event"]:checked');
-            var isFree = freeEvent && freeEvent.value === 'true';
-            var price = parseFloat(document.getElementById('ticket-price').value) || 0;
-            if (!isFree && price < 0) price = 0;
-            if (isFree) price = 0;
+        if (modal && addBtn) {
+            addBtn.addEventListener('click', function() {
+                var name = (document.getElementById('ticket-name').value || '').trim();
+                if (!name) { alert('{{ __("Ticket name is required") }}'); return; }
+                var freeEvent = document.querySelector('input[name="free_event"]:checked');
+                var isFree = freeEvent && freeEvent.value === 'true';
+                var price = parseFloat(document.getElementById('ticket-price').value) || 0;
+                if (!isFree && price < 0) price = 0;
+                if (isFree) price = 0;
 
-            tickets.push({
-                name: name,
-                price: String(price),
-                online_quantity: parseInt(document.getElementById('ticket-online-qty').value, 10) || 1,
-                print_quantity: parseInt(document.getElementById('ticket-print-qty').value, 10) || 0,
-                description: (document.getElementById('ticket-description').value || '').trim(),
-                general_conditions: (document.getElementById('ticket-conditions').value || '').trim()
+                tickets.push({
+                    name: name,
+                    price: String(price),
+                    online_quantity: parseInt(document.getElementById('ticket-online-qty').value, 10) || 1,
+                    print_quantity: parseInt(document.getElementById('ticket-print-qty').value, 10) || 0,
+                    description: (document.getElementById('ticket-description').value || '').trim(),
+                    general_conditions: (document.getElementById('ticket-conditions').value || '').trim()
+                });
+                updateUI();
+                clearModal();
+                var bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) bsModal.hide();
             });
-            updateUI();
-            clearModal();
-            var bsModal = bootstrap.Modal.getInstance(modal);
-            if (bsModal) bsModal.hide();
-        });
 
-        modal.addEventListener('hidden.bs.modal', clearModal);
+            modal.addEventListener('hidden.bs.modal', clearModal);
+        }
         document.querySelector('form')?.addEventListener('submit', function(e) {
             if (tickets.length === 0) {
                 e.preventDefault();
@@ -203,21 +209,21 @@
             }
         });
 
-        updateUI();
-    });
-    // --- Card-style radio toggles (free_event, etc.) ---
-    document.querySelectorAll('.ef-attendance').forEach(function(group) {
-        group.querySelectorAll('.ef-att-card').forEach(function(card) {
-            card.addEventListener('click', function () {
-                var radio = card.querySelector('input[type="radio"]');
-                if (!radio) return;
-                group.querySelectorAll('.ef-att-card').forEach(function (c) {
-                    c.classList.remove('selected');
+        document.querySelectorAll('.ef-attendance').forEach(function(group) {
+            group.querySelectorAll('.ef-att-card').forEach(function(card) {
+                card.addEventListener('click', function () {
+                    var radio = card.querySelector('input[type="radio"]');
+                    if (!radio) return;
+                    group.querySelectorAll('.ef-att-card').forEach(function (c) {
+                        c.classList.remove('selected');
+                    });
+                    card.classList.add('selected');
+                    radio.checked = true;
                 });
-                card.classList.add('selected');
-                radio.checked = true;
             });
         });
+
+        updateUI();
     });
 })();
 </script>

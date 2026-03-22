@@ -16,7 +16,9 @@
                         $draft      = $draft ?? [];
                         $event      = $draft['event'] ?? [];
                         $data       = $draft['data'] ?? [];
-                        $tickets    = $data['tickets'] ?? [];
+                        $fromApi    = $data['tickets'] ?? [];
+                        $extracted  = $summaryTickets ?? [];
+                        $tickets    = ! empty($extracted) ? $extracted : (is_array($fromApi) ? $fromApi : []);
                         $startDates = $data['start_dates'] ?? [];
                         $endDates   = $data['end_dates'] ?? [];
                         $freeEvent  = filter_var($data['free_event'] ?? false, FILTER_VALIDATE_BOOLEAN);
@@ -65,8 +67,11 @@
                                     </div>
                                 </div>
                                 <div class="ef-summary-cover-col">
-                                    @if(!empty($draft['cover_url']))
-                                        <img src="{{ $draft['cover_url'] }}" alt="{{ $event['title'] ?? '' }}">
+                                    @php
+                                        $summaryCover = $coverDisplayUrl ?? $draft['cover_url'] ?? null;
+                                    @endphp
+                                    @if(!empty($summaryCover))
+                                        <img src="{{ $summaryCover }}" alt="{{ $event['title'] ?? '' }}">
                                     @else
                                         <div class="ef-summary-cover-placeholder">
                                             <i class="fa-regular fa-image fa-2x"></i>

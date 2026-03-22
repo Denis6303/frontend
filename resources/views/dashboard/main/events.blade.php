@@ -34,7 +34,7 @@
                                             type="search"
                                             name="query"
                                             value="{{ request('query') }}"
-                                            placeholder="{{ __('Search by event name') }}"
+                                            placeholder="{{ __('Rechercher') }}"
                                             autocomplete="off"
                                         >
                                     </div>

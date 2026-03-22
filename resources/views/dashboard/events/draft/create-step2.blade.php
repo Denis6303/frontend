@@ -10,25 +10,25 @@
 
                 {{-- Stepper --}}
                 <div class="ef-stepper">
-                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">1</div>
                         <span class="ef-step-label">{{ __('Details') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step active">
                         <div class="ef-step-num">2</div>
                         <span class="ef-step-label">{{ __('Location & Dates') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">3</div>
                         <span class="ef-step-label">{{ __('Tickets') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">4</div>
                         <span class="ef-step-label">{{ __('Summary') }}</span>
@@ -51,7 +51,7 @@
                     <form method="POST"
                           action="{{ route('dashboard.events.draft.create.step2.store', ['locale' => $locale ?? app()->getLocale()]) }}">
                         @csrf
-                        <input type="hidden" name="draft_id" value="{{ request('draft_id') }}">
+                        <input type="hidden" name="draft_id" value="{{ $draftId ?? request('draft_id') }}">
 
                         <div class="ef-body">
                             <div class="ef-col" style="grid-column: 1 / -1;">
@@ -70,7 +70,7 @@
                                 <span class="ef-progress-text">{{ __('Step 2 of 4') }}</span>
                             </div>
                             <div>
-                                <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                                <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                                    class="btn btn-outline-dark me-2">
                                     <i class="fa-solid fa-arrow-left-long me-2"></i>{{ __('Previous') }}
                                 </a>
@@ -99,15 +99,41 @@
 document.addEventListener('DOMContentLoaded', function() {
     var locale = document.documentElement.lang === 'fr' ? 'fr' : 'en';
     var fpConfig = { enableTime: true, time_24hr: true, dateFormat: 'Y-m-d H:i', locale: locale };
-    var startEl = document.getElementById('start_date_0');
-    var endEl = document.getElementById('end_date_0');
-    if (startEl) flatpickr(startEl, fpConfig);
-    if (endEl) flatpickr(endEl, fpConfig);
+    var removeLabel = {!! json_encode(__('Remove this date')) !!};
 
-    // Add more date rows
-    var addBtn = document.getElementById('add-date-row');
+    function bindFlatpickr(container) {
+        (container || document).querySelectorAll('.event-datetime-picker').forEach(function (el) {
+            if (el._flatpickr) return;
+            flatpickr(el, fpConfig);
+        });
+    }
+
     var datesContainer = document.getElementById('dates-container');
     var index = 1;
+    if (datesContainer) {
+        datesContainer.querySelectorAll('[id^="start_date_"]').forEach(function (el) {
+            var m = el.id.match(/^start_date_(\d+)$/);
+            if (m) index = Math.max(index, parseInt(m[1], 10) + 1);
+        });
+        bindFlatpickr(datesContainer);
+        datesContainer.querySelectorAll('.remove-date-row').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.closest('.row');
+                if (row) row.remove();
+            });
+        });
+    }
+
+    if (typeof jQuery !== 'undefined' && jQuery.fn.selectpicker) {
+        jQuery('select.selectpicker').each(function () {
+            var $el = jQuery(this);
+            if (!$el.parent().hasClass('bootstrap-select')) {
+                $el.selectpicker();
+            }
+        });
+    }
+
+    var addBtn = document.getElementById('add-date-row');
     if (addBtn && datesContainer) {
         addBtn.addEventListener('click', function () {
             var row = document.createElement('div');
@@ -131,16 +157,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 '</div>' +
                 '<div class="col-12 text-end mt-2">' +
                     '<button type="button" class="btn btn-link text-danger p-0 remove-date-row">' +
-                        '<i class="fa-solid fa-trash-can me-1"></i>Remove this date' +
+                        '<i class="fa-solid fa-trash-can me-1"></i>' + removeLabel +
                     '</button>' +
                 '</div>';
             datesContainer.appendChild(row);
-
-            var startNew = document.getElementById('start_date_' + index);
-            var endNew = document.getElementById('end_date_' + index);
-            if (startNew) flatpickr(startNew, fpConfig);
-            if (endNew) flatpickr(endNew, fpConfig);
-
+            bindFlatpickr(row);
             var removeBtn = row.querySelector('.remove-date-row');
             if (removeBtn) {
                 removeBtn.addEventListener('click', function () {

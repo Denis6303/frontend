@@ -72,10 +72,12 @@ class MyEventController extends Controller
         $pageUpcoming  = max(1, (int) $request->query('page_upcoming', 1));
         $pageCompleted = max(1, (int) $request->query('page_completed', 1));
 
+        $categoryMap = $this->buildCategoryIdToNameMap();
+
         $eventPaginators = [
             'upcoming'  => $this->paginateGroup($grouped['upcoming'], self::PER_PAGE, $pageUpcoming, 'page_upcoming', $request),
             'completed' => $this->paginateGroup($grouped['completed'], self::PER_PAGE, $pageCompleted, 'page_completed', $request),
-            'saved'     => $this->fetchDraftsPaginator($request),
+            'saved'     => $this->fetchDraftsPaginator($request, $categoryMap),
         ];
 
         return view('dashboard.main.events', [
@@ -129,15 +131,56 @@ class MyEventController extends Controller
     }
 
     /**
+     * id → libellé (nom) pour afficher la catégorie (GET categories).
+     *
+     * @return array<int, string>
+     */
+    private function buildCategoryIdToNameMap(): array
+    {
+        $items = $this->apiService->getData('categories', [], true, 'items', false);
+        if (! is_array($items)) {
+            return [];
+        }
+
+        $map = [];
+        foreach ($items as $cat) {
+            if (! is_array($cat)) {
+                continue;
+            }
+            $id = $cat['id'] ?? null;
+            if ($id === null) {
+                continue;
+            }
+            $name = $cat['name'] ?? $cat['name_en'] ?? $cat['name_fr'] ?? null;
+            if ($name !== null && $name !== '') {
+                $map[(int) $id] = (string) $name;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
      * Adapte la réponse GET event-drafts au format attendu par la carte événement.
      *
      * @param  array<string, mixed>  $draft
+     * @param  array<int, string>  $categoryMap
      * @return array<string, mixed>
      */
-    private function normalizeDraftForCard(array $draft): array
+    private function normalizeDraftForCard(array $draft, array $categoryMap): array
     {
         $event = $draft['event'] ?? [];
         $data  = $draft['data'] ?? [];
+
+        $categoryId = $draft['category_id'] ?? $event['category_id'] ?? null;
+        $categoryName = null;
+        if ($categoryId !== null && isset($categoryMap[(int) $categoryId])) {
+            $categoryName = $categoryMap[(int) $categoryId];
+        }
+
+        $categoryPayload = $categoryName !== null
+            ? ['name' => $categoryName, 'name_en' => $categoryName]
+            : null;
 
         return [
             'id'           => $draft['id'] ?? null,
@@ -147,7 +190,7 @@ class MyEventController extends Controller
             'cover_url'    => $draft['cover_url'] ?? null,
             'occurrences'  => $data['occurrences'] ?? [],
             'status'       => 'saved',
-            'category'     => null,
+            'category'     => $categoryPayload,
             'categories'   => [],
             'nb_visites'   => null,
             'is_private'   => false,
@@ -157,8 +200,10 @@ class MyEventController extends Controller
 
     /**
      * Brouillons depuis l’API (pagination réelle côté serveur).
+     *
+     * @param  array<int, string>  $categoryMap
      */
-    private function fetchDraftsPaginator(Request $request): LengthAwarePaginator
+    private function fetchDraftsPaginator(Request $request, array $categoryMap): LengthAwarePaginator
     {
         $page = max(1, (int) $request->query('page_saved', 1));
 
@@ -199,7 +244,7 @@ class MyEventController extends Controller
             $currentPage = (int) ($payload['current_page'] ?? $page);
         }
 
-        $mapped = array_map(fn (array $d) => $this->normalizeDraftForCard($d), $items);
+        $mapped = array_map(fn (array $d) => $this->normalizeDraftForCard($d, $categoryMap), $items);
 
         return (new LengthAwarePaginator(
             $mapped,

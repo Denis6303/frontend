@@ -19,6 +19,357 @@ class EventDraftController extends Controller
     }
 
     /**
+     * GET event-drafts/{id} — données complètes du brouillon pour préremplissage.
+     */
+    protected function fetchDraft(?string $draftId): ?array
+    {
+        if (! $draftId) {
+            return null;
+        }
+
+        $response = $this->apiService->makeApiRequest(
+            'GET',
+            "event-drafts/{$draftId}",
+            [
+                'headers' => ['Accept' => 'application/json'],
+            ],
+            false
+        );
+
+        if (! $response->successful()) {
+            return null;
+        }
+
+        $json = $response->json() ?? [];
+
+        if (array_key_exists('success', $json) && $json['success'] === false) {
+            return null;
+        }
+
+        $raw = $json['data'] ?? null;
+        if (! is_array($raw)) {
+            return null;
+        }
+
+        // Réponses possibles : { event, ... } ou { data: { event, ... } }
+        if (! isset($raw['event']) && isset($raw['data']) && is_array($raw['data'])) {
+            $inner = $raw['data'];
+            if (isset($inner['event']) || isset($inner['id']) || isset($inner['title'])) {
+                $raw = $inner;
+            }
+        }
+
+        return $raw;
+    }
+
+    /**
+     * URL absolue pour afficher une ressource API (couverture, etc.).
+     */
+    protected function resolvePublicUrl(?string $path): ?string
+    {
+        if ($path === null || $path === '') {
+            return null;
+        }
+
+        $path = trim($path);
+        if (preg_match('#^https?://#i', $path)) {
+            return $path;
+        }
+
+        if (str_starts_with($path, '//')) {
+            return 'https:' . $path;
+        }
+
+        // Fichiers publics du frontend Laravel (storage link)
+        if (str_starts_with($path, 'storage/')) {
+            return asset($path);
+        }
+
+        // Chemin absolu du site (ex. /storage/...)
+        if (str_starts_with($path, '/')) {
+            $appUrl = rtrim((string) config('app.url'), '/');
+
+            return $appUrl !== '' ? ($appUrl . $path) : (rtrim(config('votix_api.base_url'), '/') . $path);
+        }
+
+        return rtrim(config('votix_api.base_url'), '/') . '/' . ltrim($path, '/');
+    }
+
+    /**
+     * Liste brute de tickets / types de billets selon les formes possibles de l’API.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    protected function extractTicketsFromDraft(?array $draft): array
+    {
+        if (! is_array($draft)) {
+            return [];
+        }
+
+        $paths = [
+            'data.tickets',
+            'tickets',
+            'data.ticket_types',
+            'ticket_types',
+            'event.ticket_types',
+            'data.items',
+        ];
+
+        foreach ($paths as $path) {
+            $normalized = $this->normalizeTicketsList(data_get($draft, $path));
+            if ($normalized !== []) {
+                return $normalized;
+            }
+        }
+
+        $occurrences = data_get($draft, 'data.occurrences') ?? data_get($draft, 'occurrences');
+        if (is_array($occurrences)) {
+            foreach ($occurrences as $occ) {
+                if (! is_array($occ)) {
+                    continue;
+                }
+                foreach (['ticket_types', 'ticketTypes', 'tickets'] as $k) {
+                    $normalized = $this->normalizeTicketsList($occ[$k] ?? null);
+                    if ($normalized !== []) {
+                        return $normalized;
+                    }
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  mixed  $raw
+     * @return array<int, array<string, mixed>>
+     */
+    protected function normalizeTicketsList(mixed $raw): array
+    {
+        if (! is_array($raw) || $raw === []) {
+            return [];
+        }
+
+        if (! array_is_list($raw)) {
+            $raw = array_values($raw);
+        }
+
+        $out = [];
+        foreach ($raw as $row) {
+            if (is_array($row)) {
+                $out[] = $this->normalizeTicketRow($row);
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array{name: string, price: string, online_quantity: int, print_quantity: int, description: string, general_conditions: string}
+     */
+    protected function normalizeTicketRow(array $t): array
+    {
+        return [
+            'name'               => (string) ($t['name'] ?? $t['label'] ?? $t['title'] ?? $t['ticket_name'] ?? ''),
+            'price'              => (string) ($t['price'] ?? $t['amount'] ?? $t['unit_price'] ?? '0'),
+            'online_quantity'    => (int) ($t['online_quantity'] ?? $t['onlineQuantity'] ?? $t['quantity'] ?? $t['stock'] ?? 1),
+            'print_quantity'     => (int) ($t['print_quantity'] ?? $t['printQuantity'] ?? $t['printed_quantity'] ?? 0),
+            'description'        => (string) ($t['description'] ?? ''),
+            'general_conditions' => (string) ($t['general_conditions'] ?? $t['generalConditions'] ?? $t['conditions'] ?? ''),
+        ];
+    }
+
+    /**
+     * Tickets au format attendu par le JS de l'étape 3.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    protected function mapTicketsForJs(?array $draft): array
+    {
+        return $this->extractTicketsFromDraft($draft);
+    }
+
+    /**
+     * URL brute de couverture (avant resolvePublicUrl).
+     */
+    protected function extractRawCoverFromDraft(?array $draft): ?string
+    {
+        if (! is_array($draft)) {
+            return null;
+        }
+
+        $event = is_array($draft['event'] ?? null) ? $draft['event'] : [];
+        $data  = is_array($draft['data'] ?? null) ? $draft['data'] : [];
+
+        $candidates = [
+            data_get($draft, 'cover_url'),
+            data_get($event, 'cover_url'),
+            data_get($data, 'cover_url'),
+            is_string(data_get($draft, 'cover')) ? data_get($draft, 'cover') : data_get($draft, 'cover.url'),
+            is_string(data_get($event, 'cover')) ? data_get($event, 'cover') : data_get($event, 'cover.url'),
+            data_get($draft, 'cover.path'),
+            data_get($event, 'cover.path'),
+            data_get($event, 'coverUrl'),
+            data_get($draft, 'image_url'),
+            data_get($event, 'image_url'),
+            data_get($event, 'banner_url'),
+            data_get($draft, 'media.0.url'),
+            data_get($event, 'media.0.url'),
+            data_get($draft, 'cover.full_url'),
+            data_get($data, 'cover.full_url'),
+        ];
+
+        foreach ($candidates as $v) {
+            if (is_string($v) && trim($v) !== '') {
+                return trim($v);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Valeurs formulaire (étapes 1–3) avec chemins alternatifs selon la réponse API.
+     *
+     * @return array<string, mixed>
+     */
+    protected function draftFormPrefill(?array $draft): array
+    {
+        $empty = [
+            'title'               => null,
+            'description'         => null,
+            'category_id'         => null,
+            'attendance_type'     => 'in_person',
+            'cover_url'           => null,
+            'country_code'        => null,
+            'currency'            => null,
+            'city'                => null,
+            'address'             => null,
+            'free_event_default'  => 'false',
+        ];
+
+        if (! is_array($draft)) {
+            return $empty;
+        }
+
+        $event = is_array($draft['event'] ?? null) ? $draft['event'] : [];
+        $data  = is_array($draft['data'] ?? null) ? $draft['data'] : [];
+
+        $title = data_get($event, 'title')
+            ?? data_get($event, 'name')
+            ?? data_get($draft, 'title')
+            ?? data_get($draft, 'name')
+            ?? data_get($data, 'title')
+            ?? data_get($data, 'event.title')
+            ?? data_get($draft, 'event_name');
+        if (is_string($title)) {
+            $title = trim($title);
+        }
+        if ($title === '') {
+            $title = null;
+        }
+
+        $coverUrl = $this->resolvePublicUrl($this->extractRawCoverFromDraft($draft));
+
+        $ccRaw = $event['country_code'] ?? $data['country_code'] ?? null;
+        $countryCode = ($ccRaw !== null && $ccRaw !== '') ? strtolower((string) $ccRaw) : null;
+
+        $curRaw = $event['currency'] ?? $data['currency'] ?? null;
+        $currencyCode = ($curRaw !== null && $curRaw !== '') ? strtoupper((string) $curRaw) : null;
+
+        $freeDefault = 'false';
+        $fv          = data_get($draft, 'data.free_event', data_get($draft, 'free_event'));
+        if ($fv !== null && $fv !== '') {
+            $freeDefault = filter_var($fv, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+        } else {
+            $tks = $this->extractTicketsFromDraft($draft);
+            $freeDefault = (count($tks) && collect($tks)->every(fn ($t) => (float) ($t['price'] ?? 0) <= 0))
+                ? 'true'
+                : 'false';
+        }
+
+        return [
+            'title' => $title,
+            'description' => $event['description'] ?? $draft['description'] ?? null,
+            'category_id' => $draft['category_id'] ?? $event['category_id'] ?? data_get($data, 'category_id'),
+            'attendance_type' => $event['attendance_type'] ?? data_get($data, 'attendance_type') ?? 'in_person',
+            'cover_url' => $coverUrl,
+            'country_code' => $countryCode,
+            'currency' => $currencyCode,
+            'city' => $event['city'] ?? $data['city'] ?? data_get($data, 'location.city'),
+            'address' => $event['address'] ?? $data['address'] ?? data_get($data, 'location.address'),
+            'free_event_default' => $freeDefault,
+        ];
+    }
+
+    public function showStep1(Request $request, string $locale)
+    {
+        if (! session(config('votix_api.session_access_token_key'))) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $draftId = $request->query('draft_id') ?: Session::get('event_draft.current_id');
+        if ($draftId) {
+            Session::put('event_draft.current_id', $draftId);
+        }
+
+        $draft   = $this->fetchDraft($draftId);
+        $prefill = $this->draftFormPrefill($draft);
+
+        return view('dashboard.events.draft.create-step1', [
+            'locale'  => $locale,
+            'draft'   => $draft,
+            'prefill' => $prefill,
+            'draftId' => $draftId,
+        ]);
+    }
+
+    public function showStep2(Request $request, string $locale)
+    {
+        if (! session(config('votix_api.session_access_token_key'))) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $draftId = $request->query('draft_id') ?: Session::get('event_draft.current_id');
+        if ($draftId) {
+            Session::put('event_draft.current_id', $draftId);
+        }
+
+        $draft   = $this->fetchDraft($draftId);
+        $prefill = $this->draftFormPrefill($draft);
+
+        return view('dashboard.events.draft.create-step2', [
+            'locale'  => $locale,
+            'draft'   => $draft,
+            'prefill' => $prefill,
+            'draftId' => $draftId,
+        ]);
+    }
+
+    public function showStep3(Request $request, string $locale)
+    {
+        if (! session(config('votix_api.session_access_token_key'))) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $draftId = $request->query('draft_id') ?: Session::get('event_draft.current_id');
+        if ($draftId) {
+            Session::put('event_draft.current_id', $draftId);
+        }
+
+        $draft   = $this->fetchDraft($draftId);
+        $prefill = $this->draftFormPrefill($draft);
+
+        return view('dashboard.events.draft.create-step3', [
+            'locale'           => $locale,
+            'draft'            => $draft,
+            'prefill'          => $prefill,
+            'draftId'          => $draftId,
+            'ticketsInitial'   => $this->mapTicketsForJs($draft),
+        ]);
+    }
+
+    /**
      * Étape 1 : création / mise à jour du brouillon.
      * Endpoint backend : POST /api/v1/event-drafts/step1
      */
@@ -190,26 +541,23 @@ class EventDraftController extends Controller
             return redirect()->route('dashboard.events.draft.create.step1', ['locale' => $locale]);
         }
 
+        Session::put('event_draft.current_id', $draftId);
+
         $draft = Session::get('event_draft.summary_data', []);
 
         if (empty($draft)) {
-            $response = $this->apiService->makeApiRequest(
-                'GET',
-                "event-drafts/{$draftId}",
-                ['headers' => ['Accept' => 'application/json']],
-                false
-            );
-            if ($response->successful()) {
-                $json = $response->json() ?? [];
-                if ($json['success'] ?? false) {
-                    $draft = $json['data'] ?? [];
-                }
-            }
+            $draft = $this->fetchDraft($draftId) ?? [];
         }
 
+        $draftArray = is_array($draft) ? $draft : [];
+        $prefill    = $this->draftFormPrefill($draftArray);
+
         return view('dashboard.events.draft.create-step4', [
-            'locale' => $locale,
-            'draft'  => $draft,
+            'locale'          => $locale,
+            'draft'           => $draft,
+            'draftId'         => $draftId,
+            'coverDisplayUrl' => $prefill['cover_url'],
+            'summaryTickets'  => $this->extractTicketsFromDraft($draftArray),
         ]);
     }
 

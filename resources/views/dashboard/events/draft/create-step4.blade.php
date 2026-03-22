@@ -9,25 +9,25 @@
             <div class="ef-shell">
 
                 <div class="ef-stepper">
-                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">1</div>
                         <span class="ef-step-label">{{ __('Details') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step2', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">2</div>
                         <span class="ef-step-label">{{ __('Location & Dates') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step">
                         <div class="ef-step-num">3</div>
                         <span class="ef-step-label">{{ __('Tickets') }}</span>
                         <span class="ef-step-line"></span>
                     </a>
-                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                    <a href="{{ route('dashboard.events.draft.create.step4', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                        class="ef-step active">
                         <div class="ef-step-num">4</div>
                         <span class="ef-step-label">{{ __('Summary') }}</span>
@@ -50,7 +50,7 @@
                     <form method="POST"
                           action="{{ route('dashboard.events.draft.create.step4.finalize', ['locale' => $locale ?? app()->getLocale()]) }}">
                         @csrf
-                        <input type="hidden" name="draft_id" value="{{ request('draft_id') ?? ($draft['id'] ?? '') }}">
+                        <input type="hidden" name="draft_id" value="{{ $draftId ?? request('draft_id') ?? data_get($draft, 'id') }}">
 
                         <div class="ef-body">
                             <div class="ef-col" style="grid-column: 1 / -1;">
@@ -69,7 +69,7 @@
                                 <span class="ef-progress-text">{{ __('Step 4 of 4') }}</span>
                             </div>
                             <div>
-                                <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => request('draft_id')]) }}"
+                                <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
                                    class="btn btn-outline-dark me-2">
                                     <i class="fa-solid fa-arrow-left-long me-2"></i>{{ __('Previous') }}
                                 </a>

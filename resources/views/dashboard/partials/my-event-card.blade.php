@@ -65,17 +65,19 @@
                             <div class="dashboard-event-meta-value" title="{{ $address }}">{{ $address !== null && $address !== '' ? $address : '—' }}</div>
                         </div>
                         <div class="dashboard-event-meta-item">
-                            <div class="dashboard-event-meta-label">{{ __('Categories') }}</div>
+                            <div class="dashboard-event-meta-label">{{ __('Categorie') }}</div>
                             <div class="dashboard-event-meta-value" title="{{ $categoriesDisplay }}">{{ $categoriesDisplay !== null && $categoriesDisplay !== '' ? $categoriesDisplay : '—' }}</div>
                         </div>
                         <div class="dashboard-event-meta-item">
                             <div class="dashboard-event-meta-label">{{ __('Visibility') }}</div>
                             <div class="dashboard-event-meta-value">{{ $isPrivate ? __('Private') : __('Public') }}</div>
                         </div>
-                        <div class="dashboard-event-meta-item">
-                            <div class="dashboard-event-meta-label">{{ __('Views') }}</div>
-                            <div class="dashboard-event-meta-value">{{ is_numeric($views) ? number_format((int) $views, 0, ',', ' ') : '—' }}</div>
-                        </div>
+                        @if($cardContext !== 'draft')
+                            <div class="dashboard-event-meta-item">
+                                <div class="dashboard-event-meta-label">{{ __('Views') }}</div>
+                                <div class="dashboard-event-meta-value">{{ is_numeric($views) ? number_format((int) $views, 0, ',', ' ') : '—' }}</div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -1,3 +1,6 @@
+@php
+    $p = $prefill ?? [];
+@endphp
 <div class="ef-body">
 
     {{-- LEFT COLUMN --}}
@@ -15,7 +18,7 @@
                 type="text"
                 name="title"
                 placeholder="{{ __('Enter event name') }}"
-                value="{{ old('title') }}"
+                value="{{ old_or_prefill('title', $p['title'] ?? '') }}"
             >
             @error('title')
             <p class="ef-error">{{ $message }}</p>
@@ -38,7 +41,7 @@
                 @forelse($categories ?? [] as $cat)
                     <option
                         value="{{ $cat['id'] }}"
-                        {{ old('category_id') == $cat['id'] ? 'selected' : '' }}
+                        {{ (string) old_or_prefill('category_id', $p['category_id'] ?? '') === (string) $cat['id'] ? 'selected' : '' }}
                     >
                         {{ app()->getLocale() === 'fr'
                             ? ($cat['name'] ?? $cat['name_en'])
@@ -67,7 +70,7 @@
                 <textarea
                     name="description"
                     id="pd_editor"
-                >{{ old('description') }}</textarea>
+                >{{ old_or_prefill('description', $p['description'] ?? '') }}</textarea>
             </div>
             @error('description')
             <p class="ef-error">{{ $message }}</p>
@@ -87,14 +90,14 @@
                 <input type="file" id="thumb-img" name="image"
                        accept="image/png,image/jpeg,image/jpg" style="display:none">
                 <img id="banner-preview"
-                     src="{{ old('image_url') ?? '' }}"
-                     class="{{ old('image_url') ? 'has-img' : '' }}"
+                     src="{{ old_or_prefill('image_url', $p['cover_url'] ?? '') ?? '' }}"
+                     class="{{ old_or_prefill('image_url', $p['cover_url'] ?? '') ? 'has-img' : '' }}"
                      alt="{{ __('Banner preview') }}">
                 <div class="ef-banner-overlay">
                     <span>{{ __('Change image') }}</span>
                 </div>
                 <div class="ef-banner-placeholder" id="banner-placeholder"
-                     style="{{ old('image_url') ? 'display:none' : '' }}">
+                     style="{{ old_or_prefill('image_url', $p['cover_url'] ?? '') ? 'display:none' : '' }}">
                     <p><strong>{{ __('Click to upload') }}</strong><br>PNG / JPG, max 5 MB</p>
                 </div>
             </div>
@@ -114,9 +117,9 @@
             </p>
             <div class="ef-attendance" id="ef-attendance">
 
-                <label class="ef-att-card {{ old('attendance_type', 'in_person') === 'in_person' ? 'selected' : '' }}">
+                <label class="ef-att-card {{ old_or_prefill('attendance_type', $p['attendance_type'] ?? 'in_person') === 'in_person' ? 'selected' : '' }}">
                     <input type="radio" name="attendance_type" value="in_person"
-                        {{ old('attendance_type', 'in_person') === 'in_person' ? 'checked' : '' }}>
+                        {{ old_or_prefill('attendance_type', $p['attendance_type'] ?? 'in_person') === 'in_person' ? 'checked' : '' }}>
                     <div class="ef-att-icon">
                         <i class="fa-solid fa-location-dot"></i>
                     </div>
@@ -126,9 +129,9 @@
                     </div>
                 </label>
 
-                <label class="ef-att-card {{ old('attendance_type') === 'online' ? 'selected' : '' }}">
+                <label class="ef-att-card {{ old_or_prefill('attendance_type', $p['attendance_type'] ?? 'in_person') === 'online' ? 'selected' : '' }}">
                     <input type="radio" name="attendance_type" value="online"
-                        {{ old('attendance_type') === 'online' ? 'checked' : '' }}>
+                        {{ old_or_prefill('attendance_type', $p['attendance_type'] ?? 'in_person') === 'online' ? 'checked' : '' }}>
                     <div class="ef-att-icon">
                         <i class="fa-solid fa-video"></i>
                     </div>
