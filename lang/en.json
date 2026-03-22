@@ -153,5 +153,12 @@
     "Receipts": "Receipts",
     "Edit": "Edit",
     "This feature is coming soon.": "This feature is coming soon.",
-    "Are you sure you want to cancel this event?": "Are you sure you want to cancel this event?"
+    "Are you sure you want to cancel this event?": "Are you sure you want to cancel this event?",
+    "Search by event name": "Search by event name",
+    "Continue": "Continue",
+    "Delete draft": "Delete draft",
+    "Are you sure you want to delete this draft?": "Are you sure you want to delete this draft?",
+    "Draft deleted successfully.": "Draft deleted successfully.",
+    "Draft could not be deleted.": "Draft could not be deleted.",
+    "Delete": "Delete"
 }

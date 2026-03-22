@@ -9,10 +9,12 @@ Route::get('/', [MyEventController::class, 'index'])->name('index');
 
 // Actions sur un événement (id numérique)
 Route::get('{event}/modifier', [MyEventController::class, 'edit'])->whereNumber('event')->name('edit');
+Route::get('{event}/poursuivre', [MyEventController::class, 'resumeDraft'])->whereNumber('event')->name('resume-draft');
 Route::get('{event}/recettes', [MyEventController::class, 'revenues'])->whereNumber('event')->name('revenues');
 Route::post('{event}/publier', [MyEventController::class, 'publish'])->whereNumber('event')->name('publish');
 Route::post('{event}/depublier', [MyEventController::class, 'unpublish'])->whereNumber('event')->name('unpublish');
 Route::post('{event}/annuler', [MyEventController::class, 'cancel'])->whereNumber('event')->name('cancel');
+Route::post('{event}/brouillon/supprimer', [EventDraftController::class, 'destroy'])->whereNumber('event')->name('destroy-draft');
 
 // Création d'événement (brouillon) - 4 étapes (affichage formulaires)
 Route::prefix('brouillon/creer')->name('draft.create.')->group(function () {

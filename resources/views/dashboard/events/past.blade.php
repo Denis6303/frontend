@@ -1,9 +1,10 @@
 <div class="tab-pane fade @if(($activeTab ?? request('tab', 'upcoming')) === 'completed') show active @endif" id="past-tab" role="tabpanel">
     <div class="row g-3 g-lg-4">
-        @forelse($eventsByStatus['completed'] ?? [] as $event)
+        @forelse($eventPaginators['completed'] ?? [] as $event)
             <div class="col-12 col-lg-6">
                 @include('dashboard.partials.my-event-card', [
                     'event' => $event,
+                    'cardContext' => 'past',
                     'defaultCover' => asset('images/event-imgs/img-2.jpg'),
                 ])
             </div>
@@ -13,4 +14,9 @@
             </div>
         @endforelse
     </div>
+    @if(isset($eventPaginators['completed']) && $eventPaginators['completed']->hasPages())
+        <div class="d-flex justify-content-center mt-4 px-2">
+            {{ $eventPaginators['completed']->withQueryString()->links('pagination.dashboard-events') }}
+        </div>
+    @endif
 </div>

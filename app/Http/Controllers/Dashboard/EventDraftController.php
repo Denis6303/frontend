@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ApiResponseHandler;
 use App\Services\ApiService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -255,6 +256,51 @@ class EventDraftController extends Controller
         }
 
         return $this->handleApiResponse($response);
+    }
+
+    /**
+     * Supprime un brouillon (API DELETE event-drafts/{id}).
+     */
+    public function destroy(Request $request, string $locale, string $event): RedirectResponse
+    {
+        if (! session(config('votix_api.session_access_token_key'))) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $response = $this->apiService->makeApiRequest(
+            'DELETE',
+            "event-drafts/{$event}",
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ],
+            false
+        );
+
+        $pageSaved = max(1, (int) $request->input('page_saved', $request->query('page_saved', 1)));
+
+        $indexQuery = [
+            'locale'     => $locale,
+            'tab'        => 'saved',
+            'page_saved' => $pageSaved,
+        ];
+        if ($request->filled('query')) {
+            $indexQuery['query'] = $request->query('query');
+        }
+
+        if ($response->successful()) {
+            $json = $response->json() ?? [];
+            if ($json['success'] ?? true) {
+                Session::forget(['event_draft.current_id', 'event_draft.summary_data']);
+
+                return redirect()->route('dashboard.events.index', $indexQuery)
+                    ->with('success', $json['message'] ?? __('Draft deleted successfully.'));
+            }
+        }
+
+        return redirect()->route('dashboard.events.index', $indexQuery)
+            ->with('error', __('Draft could not be deleted.'));
     }
 }
 

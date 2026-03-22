@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Services\ApiService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class MyEventController extends Controller
 {
+    private const PER_PAGE = 8;
+
     public function __construct(
         protected ApiService $apiService
     ) {}
 
     /**
-     * Liste "Mes événements" (brouillons, à venir, passés, annulés).
+     * Liste "Mes événements" (brouillons, à venir, passés) avec pagination par onglet.
      */
-    public function index(Request $request, string $locale): View
+    public function index(Request $request, string $locale): View|RedirectResponse
     {
         if (! session(config('votix_api.session_access_token_key'))) {
             return redirect()->route('login', ['locale' => $locale]);
@@ -34,8 +37,8 @@ class MyEventController extends Controller
                     'Authorization' => 'Bearer ' . $token,
                 ],
                 'query' => [
-                    'page'     => $request->query('page', 1),
-                    'per_page' => $request->query('per_page', 20),
+                    'page'     => 1,
+                    'per_page' => 500,
                     'query'    => $request->query('query'),
                 ],
             ],
@@ -43,7 +46,7 @@ class MyEventController extends Controller
         );
 
         $json   = $response->json() ?? [];
-        $events = is_array($json['data'] ?? null) ? $json['data'] : [];
+        $events = $this->extractEventsList($json);
 
         $grouped = [
             'saved'     => [],
@@ -54,6 +57,10 @@ class MyEventController extends Controller
 
         foreach ($events as $event) {
             $status = $event['status'] ?? 'saved';
+            // Les brouillons sont chargés via GET event-drafts (liste dédiée).
+            if ($status === 'saved') {
+                continue;
+            }
             if (! isset($grouped[$status])) {
                 $grouped[$status] = [];
             }
@@ -62,15 +69,203 @@ class MyEventController extends Controller
 
         $activeTab = $request->query('tab', 'upcoming');
 
+        $pageUpcoming  = max(1, (int) $request->query('page_upcoming', 1));
+        $pageCompleted = max(1, (int) $request->query('page_completed', 1));
+
+        $eventPaginators = [
+            'upcoming'  => $this->paginateGroup($grouped['upcoming'], self::PER_PAGE, $pageUpcoming, 'page_upcoming', $request),
+            'completed' => $this->paginateGroup($grouped['completed'], self::PER_PAGE, $pageCompleted, 'page_completed', $request),
+            'saved'     => $this->fetchDraftsPaginator($request),
+        ];
+
         return view('dashboard.main.events', [
-            'locale'     => $locale,
-            'eventsByStatus' => $grouped,
-            'activeTab'  => $activeTab,
+            'locale'          => $locale,
+            'eventPaginators' => $eventPaginators,
+            'activeTab'       => $activeTab,
         ]);
     }
 
     /**
-     * Redirige vers l’édition du brouillon (même flux que la création).
+     * @param  array<string, mixed>  $json
+     * @return array<int, array<string, mixed>>
+     */
+    private function extractEventsList(array $json): array
+    {
+        $data = $json['data'] ?? [];
+        if (! is_array($data)) {
+            return [];
+        }
+        if (isset($data['items']) && is_array($data['items'])) {
+            return $data['items'];
+        }
+        if (isset($data['data']) && is_array($data['data'])) {
+            return $data['data'];
+        }
+        if ($data === [] || array_key_exists(0, $data)) {
+            return $data;
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $items
+     */
+    private function paginateGroup(array $items, int $perPage, int $page, string $pageName, Request $request): LengthAwarePaginator
+    {
+        $total = count($items);
+        $slice = array_slice($items, ($page - 1) * $perPage, $perPage);
+
+        return (new LengthAwarePaginator(
+            $slice,
+            $total,
+            $perPage,
+            $page,
+            [
+                'path'     => $request->url(),
+                'pageName' => $pageName,
+            ]
+        ))->withQueryString();
+    }
+
+    /**
+     * Adapte la réponse GET event-drafts au format attendu par la carte événement.
+     *
+     * @param  array<string, mixed>  $draft
+     * @return array<string, mixed>
+     */
+    private function normalizeDraftForCard(array $draft): array
+    {
+        $event = $draft['event'] ?? [];
+        $data  = $draft['data'] ?? [];
+
+        return [
+            'id'           => $draft['id'] ?? null,
+            'title'        => $event['title'] ?? '—',
+            'city'         => $event['city'] ?? null,
+            'address'      => $event['address'] ?? null,
+            'cover_url'    => $draft['cover_url'] ?? null,
+            'occurrences'  => $data['occurrences'] ?? [],
+            'status'       => 'saved',
+            'category'     => null,
+            'categories'   => [],
+            'nb_visites'   => null,
+            'is_private'   => false,
+            'current_step' => $draft['current_step'] ?? 1,
+        ];
+    }
+
+    /**
+     * Brouillons depuis l’API (pagination réelle côté serveur).
+     */
+    private function fetchDraftsPaginator(Request $request): LengthAwarePaginator
+    {
+        $page = max(1, (int) $request->query('page_saved', 1));
+
+        $query = array_filter([
+            'page'     => $page,
+            'per_page' => self::PER_PAGE,
+            'query'    => $request->query('query'),
+        ], static fn ($v) => $v !== null && $v !== '');
+
+        $response = $this->apiService->makeApiRequest(
+            'GET',
+            'event-drafts',
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'query' => $query,
+            ],
+            false
+        );
+
+        $json    = $response->json() ?? [];
+        $payload = $json['data'] ?? [];
+
+        $items        = [];
+        $total        = 0;
+        $perPage      = self::PER_PAGE;
+        $currentPage  = $page;
+
+        if ($response->successful() && ($json['success'] ?? true) && is_array($payload)) {
+            $rawItems = $payload['data'] ?? [];
+            $items    = is_array($rawItems) ? array_values(array_filter($rawItems, 'is_array')) : [];
+            $total    = (int) ($payload['total'] ?? count($items));
+            $perPage  = (int) ($payload['per_page'] ?? self::PER_PAGE);
+            if ($perPage < 1) {
+                $perPage = self::PER_PAGE;
+            }
+            $currentPage = (int) ($payload['current_page'] ?? $page);
+        }
+
+        $mapped = array_map(fn (array $d) => $this->normalizeDraftForCard($d), $items);
+
+        return (new LengthAwarePaginator(
+            $mapped,
+            $total,
+            $perPage,
+            $currentPage,
+            [
+                'path'     => $request->url(),
+                'pageName' => 'page_saved',
+            ]
+        ))->withQueryString();
+    }
+
+    /**
+     * Reprendre un brouillon à l'étape enregistrée côté API.
+     */
+    public function resumeDraft(Request $request, string $locale, string $event): RedirectResponse
+    {
+        if (! session(config('votix_api.session_access_token_key'))) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $response = $this->apiService->makeApiRequest(
+            'GET',
+            "event-drafts/{$event}",
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ],
+            false
+        );
+
+        $step = 1;
+        if ($response->successful()) {
+            $json = $response->json() ?? [];
+            $data = $json['data'] ?? [];
+            if (is_array($data)) {
+                $step = (int) ($data['current_step'] ?? $data['draft_step'] ?? $data['step'] ?? $data['resume_step'] ?? 1);
+                if ($step < 1) {
+                    $step = 1;
+                }
+                if ($step > 4) {
+                    $step = 4;
+                }
+            }
+        }
+
+        $routes = [
+            1 => 'dashboard.events.draft.create.step1',
+            2 => 'dashboard.events.draft.create.step2',
+            3 => 'dashboard.events.draft.create.step3',
+            4 => 'dashboard.events.draft.create.step4',
+        ];
+
+        $routeName = $routes[$step] ?? 'dashboard.events.draft.create.step1';
+
+        return redirect()->route($routeName, [
+            'locale'   => $locale,
+            'draft_id' => $event,
+            'tab'      => $request->query('tab'),
+        ]);
+    }
+
+    /**
+     * Redirige vers l’édition du brouillon (étape 1).
      */
     public function edit(Request $request, string $locale, string $event): RedirectResponse
     {
@@ -108,7 +303,6 @@ class MyEventController extends Controller
             return redirect()->route('login', ['locale' => $locale]);
         }
 
-        // TODO: appeler l’API pour publier l’événement $event
         $tab = $request->input('tab', $request->query('tab', 'upcoming'));
 
         return redirect()
@@ -125,7 +319,6 @@ class MyEventController extends Controller
             return redirect()->route('login', ['locale' => $locale]);
         }
 
-        // TODO: appeler l’API pour dépublier l’événement $event
         $tab = $request->input('tab', $request->query('tab', 'upcoming'));
 
         return redirect()
@@ -142,7 +335,6 @@ class MyEventController extends Controller
             return redirect()->route('login', ['locale' => $locale]);
         }
 
-        // TODO: appeler l’API pour annuler l’événement $event
         $tab = $request->input('tab', $request->query('tab', 'upcoming'));
 
         return redirect()
@@ -153,4 +345,3 @@ class MyEventController extends Controller
             ->with('info', __('This feature is coming soon.'));
     }
 }
-

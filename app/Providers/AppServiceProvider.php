@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ApiService;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Paginator::useBootstrapFive();
+
         View::composer('*', function ($view) {
             $locale = request()->route('locale') ?? config('app.locale', 'fr');
             $view->with('locale', $locale);

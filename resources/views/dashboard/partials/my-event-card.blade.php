@@ -11,6 +11,7 @@
     $activeTab = $activeTab ?? request('tab', 'upcoming');
     $eventId = $event['id'] ?? null;
     $status = $event['status'] ?? '';
+    $cardContext = $cardContext ?? 'upcoming';
 
     $categoryLabels = [];
     if (! empty($event['categories']) && is_array($event['categories'])) {
@@ -30,9 +31,8 @@
         $categoriesDisplay = $event['category']['name'] ?? $event['category']['name_en'] ?? null;
     }
 
-    $canPublish = $status === 'saved' && $eventId;
-    $canUnpublish = $status === 'upcoming' && $eventId;
-    $canCancel = in_array($status, ['saved', 'upcoming'], true) && $eventId;
+    $canUnpublish = $cardContext === 'upcoming' && $status === 'upcoming' && $eventId;
+    $canCancel = $cardContext === 'upcoming' && $status === 'upcoming' && $eventId;
 @endphp
 
 <div class="main-card dashboard-my-event-card h-100 d-flex flex-column">
@@ -45,7 +45,6 @@
                 <div class="card-event-dt flex-grow-1 min-w-0 ps-md-3 mt-3 mt-md-0">
                     <h5 class="mb-0">{{ $event['title'] ?? '—' }}</h5>
 
-                    {{-- Une seule ligne : début, ville, adresse, catégories, visibilité, vues — espacement uniforme --}}
                     <div class="dashboard-event-meta-row small mt-3">
                         <div class="dashboard-event-meta-item">
                             <div class="dashboard-event-meta-label">{{ __('Start') }}</div>
@@ -82,36 +81,55 @@
             </div>
         </div>
 
-        {{-- Actions --}}
         <div class="bottom dashboard-event-actions p-4 d-flex flex-wrap align-items-center gap-2 mt-auto">
-            @if($canPublish)
-                <form method="post" action="{{ route('dashboard.events.publish', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="d-inline">
-                    @csrf
-                    <input type="hidden" name="tab" value="{{ $activeTab }}">
-                    <button type="submit" class="btn btn-sm btn-outline-dark dashboard-event-action-btn">{{ __('Publish') }}</button>
-                </form>
-            @elseif($canUnpublish)
-                <form method="post" action="{{ route('dashboard.events.unpublish', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="d-inline">
-                    @csrf
-                    <input type="hidden" name="tab" value="{{ $activeTab }}">
-                    <button type="submit" class="btn btn-sm btn-outline-dark dashboard-event-action-btn">{{ __('Unpublish') }}</button>
-                </form>
-            @endif
-
-            @if($eventId)
-                <a href="{{ route('dashboard.events.revenues', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="btn btn-sm btn-outline-dark dashboard-event-action-link dashboard-event-action-btn">{{ __('Receipts') }}</a>
-                <a href="{{ route('dashboard.events.edit', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="btn btn-sm btn-outline-dark dashboard-event-action-link dashboard-event-action-btn">{{ __('Edit') }}</a>
+            @if($cardContext === 'past')
+                @if($eventId)
+                    <a href="{{ route('dashboard.events.revenues', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab, 'page_completed' => request('page_completed')]) }}" class="btn btn-sm btn-outline-dark dashboard-event-action-link dashboard-event-action-btn">{{ __('Receipts') }}</a>
+                @else
+                    <span class="btn btn-sm btn-outline-secondary disabled">{{ __('Receipts') }}</span>
+                @endif
+            @elseif($cardContext === 'draft')
+                @if($eventId)
+                    <a href="{{ route('dashboard.events.resume-draft', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab, 'page_saved' => request('page_saved')]) }}" class="btn btn-sm btn-outline-dark dashboard-event-action-link dashboard-event-action-btn">{{ __('Continue') }}</a>
+                    <form method="post" action="{{ route('dashboard.events.destroy-draft', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab, 'page_saved' => request('page_saved')]) }}" class="d-inline" onsubmit="return confirm(@json(__('Are you sure you want to delete this draft?')));">
+                        @csrf
+                        <input type="hidden" name="tab" value="{{ $activeTab }}">
+                        <input type="hidden" name="page_saved" value="{{ request('page_saved', 1) }}">
+                        <input type="hidden" name="query" value="{{ request('query') }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                    </form>
+                @else
+                    <span class="btn btn-sm btn-outline-secondary disabled">{{ __('Continue') }}</span>
+                @endif
             @else
-                <span class="btn btn-sm btn-outline-secondary disabled">{{ __('Receipts') }}</span>
-                <span class="btn btn-sm btn-outline-secondary disabled">{{ __('Edit') }}</span>
-            @endif
+                {{-- À venir --}}
+                @if($canUnpublish)
+                    <form method="post" action="{{ route('dashboard.events.unpublish', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="d-inline">
+                        @csrf
+                        <input type="hidden" name="tab" value="{{ $activeTab }}">
+                        <input type="hidden" name="page_upcoming" value="{{ request('page_upcoming', 1) }}">
+                        <input type="hidden" name="query" value="{{ request('query') }}">
+                        <button type="submit" class="btn btn-sm btn-outline-dark dashboard-event-action-btn">{{ __('Unpublish') }}</button>
+                    </form>
+                @endif
 
-            @if($canCancel)
-                <form method="post" action="{{ route('dashboard.events.cancel', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="d-inline" onsubmit="return confirm(@json(__('Are you sure you want to cancel this event?')));">
-                    @csrf
-                    <input type="hidden" name="tab" value="{{ $activeTab }}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Cancel') }}</button>
-                </form>
+                @if($eventId)
+                    <a href="{{ route('dashboard.events.revenues', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab, 'page_upcoming' => request('page_upcoming')]) }}" class="btn btn-sm btn-outline-dark dashboard-event-action-link dashboard-event-action-btn">{{ __('Receipts') }}</a>
+                    <a href="{{ route('dashboard.events.edit', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab, 'page_upcoming' => request('page_upcoming')]) }}" class="btn btn-sm btn-outline-dark dashboard-event-action-link dashboard-event-action-btn">{{ __('Edit') }}</a>
+                @else
+                    <span class="btn btn-sm btn-outline-secondary disabled">{{ __('Receipts') }}</span>
+                    <span class="btn btn-sm btn-outline-secondary disabled">{{ __('Edit') }}</span>
+                @endif
+
+                @if($canCancel)
+                    <form method="post" action="{{ route('dashboard.events.cancel', ['locale' => $locale, 'event' => $eventId, 'tab' => $activeTab]) }}" class="d-inline" onsubmit="return confirm(@json(__('Are you sure you want to cancel this event?')));">
+                        @csrf
+                        <input type="hidden" name="tab" value="{{ $activeTab }}">
+                        <input type="hidden" name="page_upcoming" value="{{ request('page_upcoming', 1) }}">
+                        <input type="hidden" name="query" value="{{ request('query') }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Cancel') }}</button>
+                    </form>
+                @endif
             @endif
         </div>
     </div>
