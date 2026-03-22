@@ -55,7 +55,7 @@
                           enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="draft_id" value="{{ $draftId ?? request('draft_id') }}">
-                        <input type="hidden" name="image_url" value="{{ old_or_prefill('image_url', ($prefill['cover_url'] ?? '')) }}">
+                        <input type="hidden" name="image_url" value="{{ banner_display_url_for_draft($prefill ?? []) }}">
 
                         @include('dashboard.events.draft.components.form-step1')
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 img.removeEventListener('error', onBannerErr);
                 img.classList.remove('has-img');
                 ph.style.display = '';
-                img.removeAttribute('src');
+                // Ne pas vider src : évite de masquer une URL valide (CORS / timing) ; recharger la page peut suffire.
             });
         }
     })();

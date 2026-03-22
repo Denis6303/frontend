@@ -100,10 +100,17 @@ class EventDraftController extends Controller
             }
         }
 
-        // Enveloppe : { data: { event, cover_url, ... } } sans event à la racine
+        // Enveloppe : GET event-drafts/:id → { id, cover_url, category_id, data: { event, tickets, … } }
+        // sans clé `event` à la racine : on « aplatit » vers l’objet interne mais on conserve les champs API racine.
         if (! isset($raw['event']) && isset($raw['data']) && is_array($raw['data']) && ! array_is_list($raw['data'])) {
             $inner = $raw['data'];
             if (isset($inner['event']) || isset($inner['cover_url']) || isset($inner['id'])) {
+                foreach (['cover_url', 'category_id', 'id', 'current_step', 'event_id', 'user_id'] as $k) {
+                    if (array_key_exists($k, $raw) && ! array_key_exists($k, $inner)) {
+                        $inner[$k] = $raw[$k];
+                    }
+                }
+
                 return $inner;
             }
         }
@@ -221,7 +228,7 @@ class EventDraftController extends Controller
         return [
             'name'               => (string) ($t['name'] ?? $t['label'] ?? $t['title'] ?? $t['ticket_name'] ?? ''),
             'price'              => (string) ($t['price'] ?? $t['amount'] ?? $t['unit_price'] ?? '0'),
-            'online_quantity'    => (int) ($t['online_quantity'] ?? $t['onlineQuantity'] ?? $t['quantity'] ?? $t['stock'] ?? 1),
+            'online_quantity'    => (int) ($t['online_quantity'] ?? $t['onlineQuantity'] ?? $t['total_quantity'] ?? $t['remaining_quantity'] ?? $t['quantity'] ?? $t['stock'] ?? 1),
             'print_quantity'     => (int) ($t['print_quantity'] ?? $t['printQuantity'] ?? $t['printed_quantity'] ?? 0),
             'description'        => (string) ($t['description'] ?? ''),
             'general_conditions' => (string) ($t['general_conditions'] ?? $t['generalConditions'] ?? $t['conditions'] ?? ''),
@@ -248,7 +255,10 @@ class EventDraftController extends Controller
         }
 
         $event = is_array($draft['event'] ?? null) ? $draft['event'] : [];
-        $data  = is_array($draft['data'] ?? null) ? $draft['data'] : [];
+        if ($event === [] && is_array(data_get($draft, 'data.event'))) {
+            $event = $draft['data']['event'];
+        }
+        $data = is_array($draft['data'] ?? null) ? $draft['data'] : [];
 
         $candidates = [
             data_get($draft, 'cover_url'),
@@ -302,7 +312,10 @@ class EventDraftController extends Controller
         }
 
         $event = is_array($draft['event'] ?? null) ? $draft['event'] : [];
-        $data  = is_array($draft['data'] ?? null) ? $draft['data'] : [];
+        if ($event === [] && is_array(data_get($draft, 'data.event'))) {
+            $event = $draft['data']['event'];
+        }
+        $data = is_array($draft['data'] ?? null) ? $draft['data'] : [];
 
         $title = data_get($event, 'title')
             ?? data_get($event, 'name')

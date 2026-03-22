@@ -1,5 +1,6 @@
 @php
     $p = $prefill ?? [];
+    $bannerUrl = banner_display_url_for_draft($p);
 @endphp
 <div class="ef-body">
 
@@ -90,14 +91,16 @@
                 <input type="file" id="thumb-img" name="image"
                        accept="image/png,image/jpeg,image/jpg" style="display:none">
                 <img id="banner-preview"
-                     src="{{ old_or_prefill('image_url', $p['cover_url'] ?? '') ?? '' }}"
-                     class="{{ old_or_prefill('image_url', $p['cover_url'] ?? '') ? 'has-img' : '' }}"
-                     alt="{{ __('Banner preview') }}">
+                     src="{{ $bannerUrl }}"
+                     class="{{ $bannerUrl !== '' ? 'has-img' : '' }}"
+                     alt="{{ __('Banner preview') }}"
+                     loading="lazy"
+                     decoding="async">
                 <div class="ef-banner-overlay">
                     <span>{{ __('Change image') }}</span>
                 </div>
                 <div class="ef-banner-placeholder" id="banner-placeholder"
-                     style="{{ old_or_prefill('image_url', $p['cover_url'] ?? '') ? 'display:none' : '' }}">
+                     style="{{ $bannerUrl !== '' ? 'display:none' : '' }}">
                     <p><strong>{{ __('Click to upload') }}</strong><br>PNG / JPG, max 5 MB</p>
                 </div>
             </div>
