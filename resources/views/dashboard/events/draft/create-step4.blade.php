@@ -70,7 +70,7 @@
                             </div>
                             <div>
                                 <a href="{{ route('dashboard.events.draft.create.step3', ['locale' => $locale ?? app()->getLocale(), 'draft_id' => $draftId ?? request('draft_id')]) }}"
-                                   class="btn btn-outline-dark me-2">
+                                   class="ef-btn-prev me-2">
                                     <i class="fa-solid fa-arrow-left-long me-2"></i>{{ __('Previous') }}
                                 </a>
                                 <button type="submit" class="ef-btn-next">

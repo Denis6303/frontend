@@ -22,6 +22,8 @@
                         $startDates = $data['start_dates'] ?? [];
                         $endDates   = $data['end_dates'] ?? [];
                         $freeEvent  = filter_var($data['free_event'] ?? false, FILTER_VALIDATE_BOOLEAN);
+                        $summaryCurrencyCode  = $event['currency'] ?? $data['currency'] ?? '';
+                        $summaryCurrencyLabel = display_currency_label($summaryCurrencyCode);
                     @endphp
 
                     @if(!empty($event) || !empty($tickets))
@@ -41,16 +43,22 @@
                                     </div>
                                     <div class="ef-event-meta">
                                         @if(!empty($startDates))
-                                            <span class="ef-meta-pill">
-                                                <i class="fa-regular fa-calendar"></i>
+                                            <div class="ef-summary-dates-stack" role="list">
                                                 @foreach($startDates as $i => $start)
-                                                    {{ \Carbon\Carbon::parse($start)->translatedFormat('d M Y · H:i') }}
-                                                    @if(isset($endDates[$i]))
-                                                        → {{ \Carbon\Carbon::parse($endDates[$i])->translatedFormat('H:i') }}
-                                                    @endif
-                                                    @if($i < count($startDates) - 1) &nbsp;·&nbsp; @endif
+                                                    <div class="ef-meta-pill ef-meta-pill--date-row" role="listitem">
+                                                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                                                        @if(count($startDates) > 1)
+                                                            <span class="ef-date-row-label">{{ __('Date :number', ['number' => $i + 1]) }}</span>
+                                                        @endif
+                                                        <span class="ef-date-row-range">
+                                                            {{ \Carbon\Carbon::parse($start)->translatedFormat('d M Y · H:i') }}
+                                                            @if(isset($endDates[$i]))
+                                                                → {{ \Carbon\Carbon::parse($endDates[$i])->translatedFormat('H:i') }}
+                                                            @endif
+                                                        </span>
+                                                    </div>
                                                 @endforeach
-                                            </span>
+                                            </div>
                                         @endif
                                         @if(!empty($event['city']) || !empty($event['address']))
                                             <span class="ef-meta-pill">
@@ -58,10 +66,10 @@
                                                 {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) }}
                                             </span>
                                         @endif
-                                        @if(!empty($event['currency']))
+                                        @if(!empty($summaryCurrencyLabel))
                                             <span class="ef-meta-pill">
                                                 <i class="fa-solid fa-coins"></i>
-                                                {{ $event['currency'] }} &nbsp;·&nbsp; {{ $freeEvent ? __('Free') : __('Paid') }}
+                                                {{ $summaryCurrencyLabel }} &nbsp;·&nbsp; {{ $freeEvent ? __('Free') : __('Currency') }}
                                             </span>
                                         @endif
                                     </div>
@@ -87,10 +95,10 @@
 
                             {{-- Statistiques rapides --}}
                             <div class="ef-stats-grid">
-                                @if(!empty($event['currency']))
+                                @if(!empty($summaryCurrencyLabel))
                                     <div class="ef-stat-card">
                                         <div class="ef-stat-label">{{ __('Currency') }}</div>
-                                        <div class="ef-stat-value">{{ $event['currency'] }}</div>
+                                        <div class="ef-stat-value">{{ $summaryCurrencyLabel }}</div>
                                     </div>
                                 @endif
                                 <div class="ef-stat-card">
@@ -111,7 +119,7 @@
                                 @endif
                             </div>
 
-                            {{-- Liste des tickets (3 par ligne) --}}
+                            {{-- Liste des tickets (empilés) --}}
                             @if(!empty($tickets))
                                 <p class="ef-tickets-heading">{{ __('Tickets') }}</p>
                                 <div class="ef-tickets-grid">
@@ -124,7 +132,7 @@
                                                     {{ __('Free') }}
                                                 @else
                                                     {{ number_format((float) ($t['price'] ?? 0), 0, ',', ' ') }}
-                                                    {{ $event['currency'] ?? '' }}
+                                                    {{ $summaryCurrencyLabel }}
                                                 @endif
                                             </div>
                                         </div>

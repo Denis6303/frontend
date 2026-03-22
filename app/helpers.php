@@ -51,3 +51,18 @@ if (! function_exists('banner_display_url_for_draft')) {
         return $flashed !== '' ? $flashed : $fromApi;
     }
 }
+
+if (! function_exists('display_currency_label')) {
+    /**
+     * Libellé affiché pour la devise (API souvent en XOF, affichage utilisateur en FCFA).
+     */
+    function display_currency_label(?string $code): string
+    {
+        $code = strtoupper(trim((string) $code));
+        if ($code === '') {
+            return '';
+        }
+
+        return $code === 'XOF' ? 'FCFA' : $code;
+    }
+}

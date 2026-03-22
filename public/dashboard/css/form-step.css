@@ -556,6 +556,36 @@
 .ef-btn-secondary:active,
 .ef-btn-modal:active { transform: scale(0.98); }
 
+a.ef-btn-prev,
+a.ef-btn-next {
+    text-decoration: none;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+/* Liens : éviter le bleu Bootstrap au survol / focus / visited */
+a.ef-btn-prev:visited,
+a.ef-btn-next:visited {
+    color: #fff !important;
+}
+
+a.ef-btn-prev:hover,
+a.ef-btn-prev:focus,
+a.ef-btn-prev:focus-visible,
+a.ef-btn-next:hover,
+a.ef-btn-next:focus,
+a.ef-btn-next:focus-visible {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #1a1a1a !important;
+}
+
+a.ef-btn-prev:active,
+a.ef-btn-next:active {
+    color: #fff !important;
+    background-color: #1a1a1a !important;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .ef-body { grid-template-columns: 1fr; }
@@ -757,6 +787,34 @@
     color: #9ca3af;
 }
 
+/* Résumé : une ligne par occurrence (multi-dates) */
+.ef-summary-dates-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    flex-basis: 100%;
+}
+
+.ef-meta-pill.ef-meta-pill--date-row {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.ef-meta-pill--date-row .ef-date-row-label {
+    font-weight: 600;
+    color: #374151;
+    margin-right: 4px;
+}
+
+.ef-meta-pill--date-row .ef-date-row-range {
+    flex: 1;
+    min-width: 0;
+}
+
 /* Bannière résumé (moitié droite de la ligne) */
 .ef-summary-cover-col {
     overflow: hidden;
@@ -825,7 +883,7 @@
     color: #111827;
 }
 
-/* Tickets : grille 3 colonnes */
+/* Tickets résumé : une carte par ligne */
 .ef-tickets-heading {
     font-size: 11px;
     font-weight: 600;
@@ -837,20 +895,8 @@
 
 .ef-tickets-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 12px;
-}
-
-@media (max-width: 991px) {
-    .ef-tickets-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 575px) {
-    .ef-tickets-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 .ef-ticket-item {
@@ -1064,10 +1110,6 @@
     .ef-stats-grid {
         grid-template-columns: repeat(2, 1fr);
         margin-bottom: 1rem;
-    }
-
-    .ef-tickets-grid {
-        grid-template-columns: 1fr;
     }
 
     .ef-summary-desc-bottom {
