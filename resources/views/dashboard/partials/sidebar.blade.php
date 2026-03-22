@@ -5,31 +5,14 @@
     <div class="left_section menu_left" id="js-menu">
         <div class="left_section">
             <ul>
-                {{-- Anciennement dans le menu offcanvas (droite) : regroupé ici --}}
-                <li class="menu--item menu-sidebar-cta d-lg-none">
+                {{-- Même bouton que le header (desktop) --}}
+                <li class="menu--item menu-sidebar-create-wrap d-lg-none">
                     <a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $dashLocale]) }}"
-                       class="menu--link menu--link--cta">
-                        <i class="fa-solid fa-calendar-days menu--icon"></i>
-                        <span class="menu--label">{{ __('Create Event') }}</span>
+                       class="create-btn btn-hover menu-sidebar-create-btn">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>{{ __('Create Event') }}</span>
                     </a>
                 </li>
-                <li class="menu--item">
-                    <a href="{{ route('home', ['locale' => $dashLocale]) }}"
-                       class="menu--link {{ request()->routeIs('home') ? 'active' : '' }}"
-                       title="{{ __('Home') }}" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <i class="fa-solid fa-right-left menu--icon"></i>
-                        <span class="menu--label">{{ __('Home') }}</span>
-                    </a>
-                </li>
-                <li class="menu--item">
-                    <a href="{{ route('ticketing.events', ['locale' => $dashLocale]) }}"
-                       class="menu--link {{ request()->routeIs('ticketing.events') ? 'active' : '' }}"
-                       title="{{ __('Explore Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <i class="fa-solid fa-compass menu--icon"></i>
-                        <span class="menu--label">{{ __('Explore Events') }}</span>
-                    </a>
-                </li>
-                <li class="menu--item menu-sidebar-divider" aria-hidden="true"><span class="menu-sidebar-divider-line"></span></li>
                 <li class="menu--item">
                     <a href="{{ route('dashboard.home', ['locale' => $dashLocale]) }}"
                        class="menu--link {{ request()->routeIs('dashboard.home') ? 'active' : '' }}"
@@ -58,6 +41,23 @@
                        title="{{ __('About') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-user menu--icon"></i>
                         <span class="menu--label">{{ __('My Account') }}</span>
+                    </a>
+                </li>
+                <li class="menu--item menu-sidebar-divider" aria-hidden="true"><span class="menu-sidebar-divider-line"></span></li>
+                <li class="menu--item">
+                    <a href="{{ route('home', ['locale' => $dashLocale]) }}"
+                       class="menu--link {{ request()->routeIs('home') ? 'active' : '' }}"
+                       title="{{ __('Home') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa-solid fa-right-left menu--icon"></i>
+                        <span class="menu--label">{{ __('Home') }}</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="{{ route('ticketing.events', ['locale' => $dashLocale]) }}"
+                       class="menu--link {{ request()->routeIs('ticketing.events') ? 'active' : '' }}"
+                       title="{{ __('Explore Events') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa-solid fa-compass menu--icon"></i>
+                        <span class="menu--label">{{ __('Explore Events') }}</span>
                     </a>
                 </li>
                  <!--

@@ -120,8 +120,8 @@
             }
         });
 
-        document.querySelectorAll('#js-menu a.menu--link[href]').forEach(function (a) {
-            var href = a.getAttribute('href');
+        document.querySelectorAll('#js-menu a[href]').forEach(function (a) {
+            var href = (a.getAttribute('href') || '').trim();
             if (!href || href === '#') return;
             a.addEventListener('click', function () {
                 if (window.matchMedia('(max-width: 991.98px)').matches) {

@@ -1309,12 +1309,33 @@
 	}
 }
 
-.menu-sidebar-cta .menu--link--cta {
-	font-weight: 600;
-	background: #f3f4f6;
-	border-radius: 6px;
-	margin: 4px 8px 0;
-	width: calc(100% - 16px);
+/* Bouton « Créer un événement » dans le menu latéral mobile : même style que .create-btn du header */
+.vertical_nav .menu-sidebar-create-wrap {
+	min-height: auto;
+	line-height: normal;
+	padding: 10px 0 12px;
+}
+
+.vertical_nav .menu-sidebar-create-wrap .menu-sidebar-create-btn.create-btn {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: calc(100% - 24px) !important;
+	min-height: 40px;
+	height: auto !important;
+	margin: 0 12px;
+	padding: 8px 22px !important;
+	border-radius: 999px !important;
+	box-sizing: border-box;
+	text-decoration: none;
+}
+
+.vertical_nav .menu-sidebar-create-wrap .create-btn span {
+	display: inline !important;
+}
+
+.vertical_nav .menu-sidebar-create-wrap .create-btn i {
+	margin-right: 10px !important;
 }
 
 .menu-sidebar-divider {
