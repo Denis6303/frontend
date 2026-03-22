@@ -13,6 +13,74 @@
         text-decoration: none;
     }
 
+    .event-top-date--multi {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 6px;
+        line-height: 1.2;
+    }
+    .event-top-date--multi .event-dates-count-icon {
+        color: #717171;
+        font-size: 22px;
+        margin-bottom: 6px;
+    }
+    .event-top-date--multi .event-dates-count-num {
+        font-size: 26px;
+        font-weight: 600;
+        color: #000;
+        line-height: 1;
+    }
+    .event-top-date--multi .event-dates-count-label {
+        font-size: 10px;
+        font-weight: 500;
+        color: #717171;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-top: 6px;
+        padding: 0 4px;
+        text-align: center;
+        line-height: 1.25;
+    }
+
+    .event-top-info-status {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 0.35rem 1rem;
+    }
+    .event-sessions-inline {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .occ-date-tabs-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        margin-bottom: 0.5rem;
+        padding-bottom: 2px;
+    }
+    .occ-date-tabs {
+        min-height: 42px;
+        align-items: center;
+    }
+    .occ-date-tab {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        border-radius: 999px !important;
+        padding-inline: 1rem !important;
+    }
+    .occ-date-tab.active {
+        background-color: #000 !important;
+        border-color: #000 !important;
+        color: #fff !important;
+    }
+    .occ-ticket-panel .ticket-qty-input {
+        min-width: 2rem;
+    }
+
     /* Mobile: mettre "Select Tickets" avant "Event Details"
        et supprimer l'espace vertical entre les deux cartes */
     @media (max-width: 767.98px) {
@@ -42,8 +110,36 @@
         @php
             $category    = $event['category'] ?? null;
             $occurrences = is_array($event['occurrences'] ?? null) ? $event['occurrences'] : [];
-            $firstOcc    = $occurrences[0] ?? null;
-            $ticketTypes = ($firstOcc && is_array($firstOcc['ticket_types'] ?? null)) ? $firstOcc['ticket_types'] : [];
+            $datesCount  = public_event_dates_count($event);
+            $occurrencesForDisplay = array_values(array_filter($occurrences, static function ($o) {
+                return is_array($o) && ! empty($o['start_date'] ?? null);
+            }));
+            if ($occurrencesForDisplay === [] && ! empty($event['start_dates']) && is_array($event['start_dates'])) {
+                $ends = is_array($event['end_dates'] ?? null) ? $event['end_dates'] : [];
+                foreach ($event['start_dates'] as $i => $sd) {
+                    if ($sd !== null && $sd !== '') {
+                        $occurrencesForDisplay[] = [
+                            'start_date' => $sd,
+                            'end_date'   => $ends[$i] ?? null,
+                        ];
+                    }
+                }
+            }
+            $firstOcc    = $occurrencesForDisplay[0] ?? ($occurrences[0] ?? null);
+            $baseTicketTypes = ($firstOcc && is_array($firstOcc['ticket_types'] ?? null)) ? $firstOcc['ticket_types'] : [];
+            $occurrencesForTickets = [];
+            foreach ($occurrencesForDisplay as $idx => $occRow) {
+                $types = $occRow['ticket_types'] ?? null;
+                if (! is_array($types) || $types === []) {
+                    $types = $baseTicketTypes;
+                }
+                $occurrencesForTickets[] = [
+                    'occurrence'    => $occRow,
+                    'index'         => $idx,
+                    'key'           => isset($occRow['id']) ? (string) $occRow['id'] : 'occ_'.$idx,
+                    'ticket_types'  => $types,
+                ];
+            }
             $currency    = $event['currency'] ?? '';
             $displayCurrency = $currency === 'XOF' ? 'FCFA' : $currency;
         @endphp
@@ -53,10 +149,14 @@
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="event-top-dts">
-                            <div class="event-top-date">
-                                @if($firstOcc && !empty($firstOcc['start_date']))
+                            <div class="event-top-date @if($datesCount > 1) event-top-date--multi @endif">
+                                @if($datesCount <= 1 && $firstOcc && !empty($firstOcc['start_date']))
                                     <span class="event-month">{{ \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('M') }}</span>
                                     <span class="event-date">{{ \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('d') }}</span>
+                                @elseif($datesCount > 1)
+                                    <span class="event-dates-count-icon"><i class="fa-solid fa-calendar-days"></i></span>
+                                    <span class="event-dates-count-num">{{ $datesCount }}</span>
+                                    <span class="event-dates-count-label">{{ trans_choice('event_dates_short_label', $datesCount) }}</span>
                                 @else
                                     <span class="event-month">—</span>
                                     <span class="event-date">—</span>
@@ -81,8 +181,8 @@
                                             {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) }}
                                         </span>
                                     @endif
-                                    @if($firstOcc && !empty($firstOcc['start_date']))
-                                        <span class="event-type-name details-hr">Starts on
+                                    @if($datesCount >= 1 && $firstOcc && !empty($firstOcc['start_date']))
+                                        <span class="event-type-name details-hr">{{ __('Starts on') }}
                                             <span class="ev-event-date">
                                                 {{ \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('D, d M Y H:i') }}
                                             </span>
@@ -131,21 +231,38 @@
                         {{-- Extra padding-bottom on mobile so sticky bar doesn't overlap content --}}
                         <div class="main-card event-right-dt pb-5 pb-md-0">
                             <div class="bp-title">
-                                <h4>Event Details</h4>
+                                <h4>{{ __('Event details') }}</h4>
                             </div>
                             <div class="event-dt-right-group pt-4">
                                 <div class="event-dt-right-icon">
                                     <i class="fa-solid fa-calendar-day"></i>
                                 </div>
                                 <div class="event-dt-right-content">
-                                    <h4>Date and Time</h4>
-                                    <h5>
-                                        @if($firstOcc && !empty($firstOcc['start_date']))
+                                    <h4>{{ $datesCount > 1 ? __('Dates and times') : __('Date and time') }}</h4>
+                                    @if($datesCount === 0)
+                                        <h5>—</h5>
+                                    @elseif($datesCount === 1 && $firstOcc && !empty($firstOcc['start_date']))
+                                        <h5 class="mb-0">
                                             {{ \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('D, d M Y H:i') }}
-                                        @else
-                                            —
-                                        @endif
-                                    </h5>
+                                            @if(!empty($firstOcc['end_date']))
+                                                <span class="text-muted fw-normal"> → {{ \Carbon\Carbon::parse($firstOcc['end_date'])->translatedFormat('H:i') }}</span>
+                                            @endif
+                                        </h5>
+                                    @else
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach($occurrencesForDisplay as $idx => $occ)
+                                                <li class="mb-2 pb-2 @if(!$loop->last) border-bottom border-light @endif">
+                                                    <span class="text-muted small d-block">{{ __('Date :number', ['number' => $idx + 1]) }}</span>
+                                                    <h5 class="mb-0 fs-6 fw-semibold">
+                                                        {{ \Carbon\Carbon::parse($occ['start_date'])->translatedFormat('D, d M Y H:i') }}
+                                                        @if(!empty($occ['end_date']))
+                                                            <span class="text-muted fw-normal"> → {{ \Carbon\Carbon::parse($occ['end_date'])->translatedFormat('H:i') }}</span>
+                                                        @endif
+                                                    </h5>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 </div>
                             </div>
                             <div class="event-dt-right-group">
@@ -153,7 +270,7 @@
                                     <i class="fa-solid fa-location-dot"></i>
                                 </div>
                                 <div class="event-dt-right-content">
-                                    <h4>Location</h4>
+                                    <h4>{{ __('Location') }}</h4>
                                     <h5 class="mb-0">
                                         {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) ?: '—' }}
                                     </h5>
@@ -175,66 +292,129 @@
                             <div class="select-tickets-block">
                                 <h6 class="mt-2">{{ __('Select Tickets') }}</h6>
 
-                                @if(empty($ticketTypes))
+                                @php
+                                    $hasMultiOcc = count($occurrencesForTickets) > 1;
+                                    $anyTickets = false;
+                                    foreach ($occurrencesForTickets as $row) {
+                                        if (! empty($row['ticket_types'])) {
+                                            $anyTickets = true;
+                                            break;
+                                        }
+                                    }
+                                @endphp
+
+                                @if($hasMultiOcc)
+                                    <p class="small text-muted mb-2">{{ __('Select a date for tickets') }}</p>
+                                    <div class="occ-date-tabs-wrapper mb-3">
+                                        <div class="occ-date-tabs d-flex flex-nowrap gap-2 pb-1" role="tablist" aria-label="{{ __('Event dates') }}">
+                                            @foreach($occurrencesForTickets as $ot)
+                                                @php
+                                                    $oi = $ot['index'];
+                                                    $sd = $ot['occurrence']['start_date'] ?? null;
+                                                @endphp
+                                                <button type="button"
+                                                        class="occ-date-tab btn btn-sm @if($oi === 0) btn-dark active @else btn-outline-dark @endif"
+                                                        data-occ-panel="{{ $oi }}"
+                                                        role="tab"
+                                                        aria-selected="{{ $oi === 0 ? 'true' : 'false' }}"
+                                                        id="occ-date-tab-{{ $oi }}"
+                                                        aria-controls="occ-ticket-panel-{{ $oi }}">
+                                                    <span class="fw-semibold">{{ __('Date :number', ['number' => $oi + 1]) }}</span>
+                                                    @if($sd)
+                                                        <span class="d-none d-sm-inline text-opacity-75"> · {{ \Carbon\Carbon::parse($sd)->translatedFormat('d M') }}</span>
+                                                    @endif
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if(! $anyTickets)
                                     <p class="text-muted mb-0">{{ __('No tickets available.') }}</p>
                                 @else
-                                    @foreach($ticketTypes as $tt)
+                                    @foreach($occurrencesForTickets as $ot)
                                         @php
-                                            $ttId        = $tt['id'] ?? null;
-                                            $ttName      = $tt['name'] ?? '—';
-                                            $ttPrice     = (float) ($tt['price'] ?? 0);
-                                            $ttRemaining = (int) ($tt['remaining_quantity'] ?? 0);
-                                            // ID unique pour le bloc "More details"
-                                            $collapseId  = 'ticketMore' . ($ttId ?? $loop->index);
+                                            $oi = $ot['index'];
+                                            $occKey = $ot['key'];
+                                            $ticketTypesPanel = $ot['ticket_types'];
+                                            $panelVisible = ! $hasMultiOcc || $oi === 0;
                                         @endphp
-                                        <div class="border rounded-3 p-3 mb-2">
-                                            <div class="fw-semibold" style="font-size: 1.05rem;">{{ $ttName }}</div>
+                                        <div class="occ-ticket-panel @if(! $panelVisible) d-none @endif"
+                                             id="occ-ticket-panel-{{ $oi }}"
+                                             role="tabpanel"
+                                             aria-labelledby="occ-date-tab-{{ $oi }}"
+                                             data-occurrence-key="{{ $occKey }}"
+                                             @if($hasMultiOcc) data-occ-index="{{ $oi }}" @endif>
+                                            @if($hasMultiOcc && !empty($ot['occurrence']['start_date']))
+                                                <p class="small text-muted mb-3 mb-md-2">
+                                                    <i class="fa-regular fa-calendar me-1"></i>
+                                                    {{ \Carbon\Carbon::parse($ot['occurrence']['start_date'])->translatedFormat('l d M Y, H:i') }}
+                                                    @if(!empty($ot['occurrence']['end_date']))
+                                                        <span class="text-muted">→ {{ \Carbon\Carbon::parse($ot['occurrence']['end_date'])->translatedFormat('H:i') }}</span>
+                                                    @endif
+                                                </p>
+                                            @endif
 
-                                            <div class="select-ticket-action mt-2">
-                                                <div class="ticket-price">
-                                                    {{ number_format($ttPrice, 0, ',', ' ') }} {{ $displayCurrency }}
-                                                </div>
-                                                <div class="quantity">
-                                                    <div class="counter">
-                                                        <span class="down" onClick="decreaseCount(event, this)">-</span>
-                                                        <input type="text"
-                                                               inputmode="numeric"
-                                                               name="tickets[{{ $ttId }}][quantity]"
-                                                               value="0"
-                                                               data-max="{{ $ttRemaining }}"
-                                                               data-ticket-id="{{ $ttId }}"
-                                                               data-ticket-name="{{ $ttName }}"
-                                                               data-ticket-price="{{ $ttPrice }}"
-                                                               data-currency="{{ $displayCurrency }}"
-                                                               class="ticket-qty-input">
-                                                        <span class="up" onClick="increaseCount(event, this)">+</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @foreach($ticketTypesPanel as $tt)
+                                                @php
+                                                    $ttId        = $tt['id'] ?? null;
+                                                    $ttName      = $tt['name'] ?? '—';
+                                                    $ttPrice     = (float) ($tt['price'] ?? 0);
+                                                    $ttRemaining = (int) ($tt['remaining_quantity'] ?? 0);
+                                                    $collapseId  = 'ticketMore-'.$oi.'-'.($ttId ?? $loop->index);
+                                                @endphp
+                                                <div class="border rounded-3 p-3 mb-2">
+                                                    <div class="fw-semibold" style="font-size: 1.05rem;">{{ $ttName }}</div>
 
-                                            @if(!empty($tt['description']) || !empty($tt['general_conditions']))
-                                                <div class="mt-2">
-                                                    <a href="#{{ $collapseId }}"
-                                                       class="event-toggle-link d-inline-flex align-items-center fw-normal small"
-                                                       data-bs-toggle="collapse"
-                                                       role="button"
-                                                       aria-expanded="false"
-                                                       aria-controls="{{ $collapseId }}">
-                                                        {{ __('More details') }}
-                                                        <i class="fa-solid fa-arrow-right ms-2"></i>
-                                                    </a>
-                                                    <div class="collapse mt-2" id="{{ $collapseId }}">
-                                                        <div class="fs-6 text-body-secondary lh-lg">
-                                                            @if(!empty($tt['description']))
-                                                                <div><strong>{{ __('Description') }}:</strong> {{ $tt['description'] }}</div>
-                                                            @endif
-                                                            @if(!empty($tt['general_conditions']))
-                                                                <div><strong>{{ __("Conditions d'accès") }}:</strong> {{ $tt['general_conditions'] }}</div>
-                                                            @endif
+                                                    <div class="select-ticket-action mt-2">
+                                                        <div class="ticket-price">
+                                                            {{ number_format($ttPrice, 0, ',', ' ') }} {{ $displayCurrency }}
+                                                        </div>
+                                                        <div class="quantity">
+                                                            <div class="counter">
+                                                                <span class="down" onClick="decreaseCount(event, this)">-</span>
+                                                                <input type="text"
+                                                                       inputmode="numeric"
+                                                                       name="tickets[{{ $occKey }}][{{ $ttId }}][quantity]"
+                                                                       value="0"
+                                                                       data-max="{{ $ttRemaining }}"
+                                                                       data-occurrence-key="{{ $occKey }}"
+                                                                       data-date-label="{{ $hasMultiOcc ? __('Date :number', ['number' => $oi + 1]) : '' }}"
+                                                                       data-ticket-id="{{ $ttId }}"
+                                                                       data-ticket-name="{{ $ttName }}"
+                                                                       data-ticket-price="{{ $ttPrice }}"
+                                                                       data-currency="{{ $displayCurrency }}"
+                                                                       class="ticket-qty-input">
+                                                                <span class="up" onClick="increaseCount(event, this)">+</span>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    @if(!empty($tt['description']) || !empty($tt['general_conditions']))
+                                                        <div class="mt-2">
+                                                            <a href="#{{ $collapseId }}"
+                                                               class="event-toggle-link d-inline-flex align-items-center fw-normal small"
+                                                               data-bs-toggle="collapse"
+                                                               role="button"
+                                                               aria-expanded="false"
+                                                               aria-controls="{{ $collapseId }}">
+                                                                {{ __('More details') }}
+                                                                <i class="fa-solid fa-arrow-right ms-2"></i>
+                                                            </a>
+                                                            <div class="collapse mt-2" id="{{ $collapseId }}">
+                                                                <div class="fs-6 text-body-secondary lh-lg">
+                                                                    @if(!empty($tt['description']))
+                                                                        <div><strong>{{ __('Description') }}:</strong> {{ $tt['description'] }}</div>
+                                                                    @endif
+                                                                    @if(!empty($tt['general_conditions']))
+                                                                        <div><strong>{{ __("Conditions d'accès") }}:</strong> {{ $tt['general_conditions'] }}</div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            @endif
+                                            @endforeach
                                         </div>
                                     @endforeach
                                 @endif
@@ -346,11 +526,12 @@
             const price    = parseFloat(input.dataset.ticketPrice) || 0;
             const name     = input.dataset.ticketName || '—';
             const currency = input.dataset.currency || '';
+            const dateLbl  = (input.dataset.dateLabel || '').trim();
             if (qty > 0) {
                 const subtotal = qty * price;
                 grandTotal += subtotal;
                 totalTickets += qty;
-                lines.push({ qty, name, subtotal, currency });
+                lines.push({ qty, name, subtotal, currency, dateLbl });
             }
         });
 
@@ -373,12 +554,13 @@
 
         // Build list
         summaryEl.classList.remove('d-none');
-        listEl.innerHTML = lines.map(l =>
-            `<li class="d-flex justify-content-between">
-                <span>${l.qty} × ${escHtml(l.name)}</span>
+        listEl.innerHTML = lines.map(l => {
+            const prefix = l.dateLbl ? `<span class="text-muted small me-1">${escHtml(l.dateLbl)} — </span>` : '';
+            return `<li class="d-flex justify-content-between flex-wrap gap-1">
+                <span>${prefix}${l.qty} × ${escHtml(l.name)}</span>
                 <span>${escHtml(l.currency)} ${formatNum(l.subtotal)}</span>
-            </li>`
-        ).join('');
+            </li>`;
+        }).join('');
 
         totalEl.textContent = `${anyCurrency} ${formatNum(grandTotal)}`;
 
@@ -398,5 +580,29 @@
     function escHtml(str) {
         return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.occ-date-tab').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var idx = this.getAttribute('data-occ-panel');
+                document.querySelectorAll('.occ-date-tab').forEach(function (b) {
+                    b.classList.remove('btn-dark', 'active');
+                    b.classList.add('btn-outline-dark');
+                    b.setAttribute('aria-selected', 'false');
+                });
+                this.classList.remove('btn-outline-dark');
+                this.classList.add('btn-dark', 'active');
+                this.setAttribute('aria-selected', 'true');
+                document.querySelectorAll('.occ-ticket-panel').forEach(function (p) {
+                    p.classList.add('d-none');
+                });
+                var panel = document.getElementById('occ-ticket-panel-' + idx);
+                if (panel) {
+                    panel.classList.remove('d-none');
+                }
+                updateSummary();
+            });
+        });
+    });
 </script>
 @endpush

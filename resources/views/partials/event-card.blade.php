@@ -1,7 +1,9 @@
 @php
     $cover   = $event['cover_url'] ?? asset('images/event-imgs/img-1.jpg');
-    $occ     = $event['occurrences'][0] ?? null;
-    $start   = $occ['start_date'] ?? null;
+    $datesCount = public_event_dates_count($event);
+    $occList = is_array($event['occurrences'] ?? null) ? $event['occurrences'] : [];
+    $firstOccForCard = $occList[0] ?? null;
+    $firstStart = $firstOccForCard['start_date'] ?? (is_array($event['start_dates'] ?? null) ? ($event['start_dates'][0] ?? null) : null);
     $price   = $event['price_min'] ?? null;
     $city    = $event['city'] ?? null;
     $address = $event['address'] ?? null;
@@ -85,14 +87,21 @@
 
     <div class="event-footer">
         <div class="event-timing">
-            @if($start)
+            @if($datesCount === 1 && $firstStart)
                 <div class="publish-date">
                     <span>
                         <i class="fa-solid fa-calendar-day me-2"></i>
-                        {{ \Carbon\Carbon::parse($start)->translatedFormat('d M') }}
+                        {{ \Carbon\Carbon::parse($firstStart)->translatedFormat('d M') }}
                     </span>
                     <span class="dot"><i class="fa-solid fa-circle"></i></span>
-                    <span>{{ \Carbon\Carbon::parse($start)->translatedFormat('D, H:i') }}</span>
+                    <span>{{ \Carbon\Carbon::parse($firstStart)->translatedFormat('D, H:i') }}</span>
+                </div>
+            @elseif($datesCount > 1)
+                <div class="publish-date event-card-dates-count">
+                    <span>
+                        <i class="fa-solid fa-calendar-days me-2"></i>
+                        {{ trans_choice('event_dates_badge', $datesCount) }}
+                    </span>
                 </div>
             @endif
         </div>

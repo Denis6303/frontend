@@ -66,3 +66,41 @@ if (! function_exists('display_currency_label')) {
         return $code === 'XOF' ? 'FCFA' : $code;
     }
 }
+
+if (! function_exists('public_event_dates_count')) {
+    /**
+     * Nombre de dates / sessions d’un événement public (liste, carte, détail).
+     * S’appuie sur occurrences[].start_date ou start_dates[].
+     */
+    function public_event_dates_count(array $event): int
+    {
+        $occ = $event['occurrences'] ?? null;
+        if (is_array($occ) && $occ !== []) {
+            if (array_is_list($occ)) {
+                $n = count(array_filter($occ, static function ($o) {
+                    return is_array($o) && ! empty($o['start_date'] ?? null);
+                }));
+                if ($n > 0) {
+                    return $n;
+                }
+            }
+        }
+
+        $starts = $event['start_dates'] ?? null;
+        if (is_array($starts) && $starts !== []) {
+            return count(array_filter($starts, static function ($d) {
+                return $d !== null && $d !== '';
+            }));
+        }
+
+        if (! empty($event['occurrences'][0]['start_date'] ?? null)) {
+            return 1;
+        }
+
+        if (! empty($event['start_date'] ?? null)) {
+            return 1;
+        }
+
+        return 0;
+    }
+}

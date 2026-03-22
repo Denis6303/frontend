@@ -155,5 +155,14 @@
     "Are you sure you want to delete this draft?": "Supprimer ce brouillon ?",
     "Draft deleted successfully.": "Brouillon supprimé.",
     "Draft could not be deleted.": "Le brouillon n'a pas pu être supprimé.",
-    "Delete": "Supprimer"
+    "Delete": "Supprimer",
+    "event_dates_badge": "{1} :count date|[2,*] :count dates",
+    "event_dates_short_label": "{1} date|[2,*] dates",
+    "Starts on": "Commence le",
+    "Event details": "Détails de l'événement",
+    "Date and time": "Date et heure",
+    "Dates and times": "Dates et horaires",
+    "Tickets first session note": "Les billets affichés correspondent à la première session. La disponibilité peut varier pour les autres dates.",
+    "Select a date for tickets": "Choisissez une date pour voir les billets disponibles.",
+    "Event dates": "Dates de l'événement"
 }
