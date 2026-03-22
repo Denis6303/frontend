@@ -116,29 +116,28 @@
                                 <p class="ef-tickets-heading">{{ __('Tickets') }}</p>
                                 <div class="ef-tickets-grid">
                                 @foreach($tickets as $t)
-                                    <div class="ef-ticket-item">
-                                        <div>
+                                    <div class="ef-ticket-item ef-ticket-item--summary">
+                                        <div class="ef-ticket-item-top">
                                             <div class="ef-ticket-name">{{ $t['name'] ?? '—' }}</div>
-                                            <div class="ef-ticket-detail">
-                                                {{ __('Online quantity') }}: {{ $t['online_quantity'] ?? 0 }}
-                                                @if(!empty($t['print_quantity']))
-                                                    &nbsp;·&nbsp; {{ __('Printed quantity') }}: {{ $t['print_quantity'] }}
+                                            <div class="ef-ticket-price">
+                                                @if($freeEvent)
+                                                    {{ __('Free') }}
+                                                @else
+                                                    {{ number_format((float) ($t['price'] ?? 0), 0, ',', ' ') }}
+                                                    {{ $event['currency'] ?? '' }}
                                                 @endif
                                             </div>
-                                            @if(!empty($t['description']))
-                                                <div class="ef-ticket-desc">
-                                                    {{ Str::limit(strip_tags($t['description']), 90) }}
-                                                </div>
-                                            @endif
                                         </div>
-                                        <div class="ef-ticket-price">
-                                            @if($freeEvent)
-                                                {{ __('Free') }}
-                                            @else
-                                                {{ number_format($t['price'] ?? 0, 0, ',', ' ') }}
-                                                {{ $event['currency'] ?? '' }}
-                                            @endif
+                                        <div class="ef-ticket-row">
+                                            <span class="ef-ticket-row-label">{{ __('Qté en ligne') }}</span>
+                                            <span class="ef-ticket-row-value">{{ (int) ($t['online_quantity'] ?? 0) }}</span>
                                         </div>
+                                        @if(!empty($t['description']))
+                                            <div class="ef-ticket-row">
+                                                <span class="ef-ticket-row-label">{{ __('Description') }}</span>
+                                                <span class="ef-ticket-row-value ef-ticket-row-value--muted">{{ Str::limit(strip_tags($t['description']), 120) }}</span>
+                                            </div>
+                                        @endif
                                     </div>
                                 @endforeach
                                 </div>

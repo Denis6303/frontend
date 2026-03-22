@@ -51,11 +51,60 @@ class EventDraftController extends Controller
             return null;
         }
 
-        // Réponses possibles : { event, ... } ou { data: { event, ... } }
-        if (! isset($raw['event']) && isset($raw['data']) && is_array($raw['data'])) {
+        $raw = $this->unwrapDraftPayload($raw, $draftId);
+
+        return $raw;
+    }
+
+    /**
+     * Ramène toujours un tableau brouillon plat (event, cover_url, data, id, …).
+     * Gère : objet seul, enveloppe { data: { event } }, liste paginée Laravel { current_page, data: [ {...} ] }.
+     *
+     * @param  array<string, mixed>  $raw
+     * @return array<string, mixed>
+     */
+    protected function unwrapDraftPayload(array $raw, ?string $draftId): array
+    {
+        $pickDraftFromList = static function (array $items, ?string $id): ?array {
+            if ($items === [] || ! array_is_list($items)) {
+                return null;
+            }
+            $first = $items[0] ?? null;
+            if (! is_array($first) || (! isset($first['event']) && ! isset($first['cover_url']))) {
+                return null;
+            }
+            if ($id !== null && $id !== '') {
+                foreach ($items as $item) {
+                    if (is_array($item) && (string) ($item['id'] ?? '') === (string) $id) {
+                        return $item;
+                    }
+                }
+            }
+
+            return $first;
+        };
+
+        // GET event-drafts : { current_page, data: [ { id, event, cover_url, data }, ... ], ... }
+        if (isset($raw['current_page'], $raw['data']) && is_array($raw['data'])) {
+            $picked = $pickDraftFromList($raw['data'], $draftId);
+            if ($picked !== null) {
+                return $picked;
+            }
+        }
+
+        // Racine : data = liste de brouillons (sans métadonnées de pagination)
+        if (isset($raw['data']) && is_array($raw['data']) && array_is_list($raw['data'])) {
+            $picked = $pickDraftFromList($raw['data'], $draftId);
+            if ($picked !== null) {
+                return $picked;
+            }
+        }
+
+        // Enveloppe : { data: { event, cover_url, ... } } sans event à la racine
+        if (! isset($raw['event']) && isset($raw['data']) && is_array($raw['data']) && ! array_is_list($raw['data'])) {
             $inner = $raw['data'];
-            if (isset($inner['event']) || isset($inner['id']) || isset($inner['title'])) {
-                $raw = $inner;
+            if (isset($inner['event']) || isset($inner['cover_url']) || isset($inner['id'])) {
+                return $inner;
             }
         }
 
@@ -308,12 +357,16 @@ class EventDraftController extends Controller
             return redirect()->route('login', ['locale' => $locale]);
         }
 
-        $draftId = $request->query('draft_id') ?: Session::get('event_draft.current_id');
-        if ($draftId) {
+        // Nouveau formulaire : pas de ?draft_id= → ne pas réutiliser le brouillon en session (sinon données du dernier brouillon).
+        if ($request->filled('draft_id')) {
+            $draftId = (string) $request->query('draft_id');
             Session::put('event_draft.current_id', $draftId);
+        } else {
+            Session::forget('event_draft.current_id');
+            $draftId = null;
         }
 
-        $draft   = $this->fetchDraft($draftId);
+        $draft   = $draftId !== null ? $this->fetchDraft($draftId) : null;
         $prefill = $this->draftFormPrefill($draft);
 
         return view('dashboard.events.draft.create-step1', [
