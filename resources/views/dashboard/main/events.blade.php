@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="event-list">
+            <div class="event-list dashboard-events-list">
                 <div class="tab-content">
                     @include('dashboard.events.upcoming')
                     @include('dashboard.events.past')
