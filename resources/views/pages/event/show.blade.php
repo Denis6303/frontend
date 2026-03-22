@@ -46,9 +46,27 @@
 
     .event-top-info-status {
         display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        gap: 0.35rem 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+    .event-top-info__location {
+        padding-left: 0 !important;
+    }
+    .event-top-info__datetime {
+        padding-left: 0 !important;
+        margin-top: 0.35rem;
+        border-top: 1px solid #efefef;
+        padding-top: 0.5rem !important;
+    }
+    .event-top-info__datetime--no-separator {
+        border-top: none;
+        padding-top: 0 !important;
+        margin-top: 0.25rem;
+    }
+    .event-top-info__datetime .ev-event-date {
+        font-weight: 500;
+        color: #212529;
     }
     .event-sessions-inline {
         flex: 1 1 100%;
@@ -69,13 +87,40 @@
     .occ-date-tab {
         flex: 0 0 auto;
         white-space: nowrap;
-        border-radius: 999px !important;
-        padding-inline: 1rem !important;
+        border-radius: 999px;
+        padding: 0.4rem 1rem;
+        font-size: 0.8125rem;
+        line-height: 1.35;
+        cursor: pointer;
+        border: 1px solid #dee2e6;
+        background-color: #fff;
+        color: #212529;
+        font-weight: 500;
+        font-family: inherit;
+        transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+    }
+    .occ-date-tab:focus-visible {
+        outline: 2px solid #212529;
+        outline-offset: 2px;
+    }
+    .occ-date-tab:hover {
+        border-color: #adb5bd;
+        background-color: #f8f9fa;
+        color: #000;
     }
     .occ-date-tab.active {
-        background-color: #000 !important;
-        border-color: #000 !important;
-        color: #fff !important;
+        border-color: #212529;
+        background-color: #f3f4f6;
+        color: #000;
+        font-weight: 600;
+        box-shadow: inset 0 0 0 1px #212529;
+    }
+    .occ-date-tab .occ-date-tab-sub {
+        font-weight: 400;
+        opacity: 0.75;
+    }
+    .occ-date-tab.active .occ-date-tab-sub {
+        opacity: 0.85;
     }
     .occ-ticket-panel .ticket-qty-input {
         min-width: 2rem;
@@ -174,18 +219,26 @@
                                         </a>
                                     </div>
                                 </div>
+                                @php
+                                    $hasEventLocation = ! empty($event['city']) || ! empty($event['address']);
+                                @endphp
                                 <div class="event-top-info-status mt-2">
-                                    @if(!empty($event['city']) || !empty($event['address']))
-                                        <span class="event-type-name">
+                                    @if($hasEventLocation)
+                                        <span class="event-type-name event-top-info__location w-100 d-block">
                                             <i class="fa-solid fa-location-dot"></i>
                                             {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) }}
                                         </span>
                                     @endif
                                     @if($datesCount >= 1 && $firstOcc && !empty($firstOcc['start_date']))
-                                        <span class="event-type-name details-hr">{{ __('Starts on') }}
-                                            <span class="ev-event-date">
-                                                {{ \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('D, d M Y H:i') }}
-                                            </span>
+                                        @php
+                                            $headerStartFormatted = \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('D, d M Y H:i');
+                                        @endphp
+                                        <span class="event-type-name event-top-info__datetime w-100 d-block @if(! $hasEventLocation) event-top-info__datetime--no-separator @endif">
+                                            @if($datesCount > 1)
+                                                {{ __('Starts on') }} <span class="ev-event-date">{{ $headerStartFormatted }}</span>
+                                            @else
+                                                <span class="ev-event-date">{{ $headerStartFormatted }}</span>
+                                            @endif
                                         </span>
                                     @endif
                                 </div>
@@ -313,15 +366,15 @@
                                                     $sd = $ot['occurrence']['start_date'] ?? null;
                                                 @endphp
                                                 <button type="button"
-                                                        class="occ-date-tab btn btn-sm @if($oi === 0) btn-dark active @else btn-outline-dark @endif"
+                                                        class="occ-date-tab @if($oi === 0) active @endif"
                                                         data-occ-panel="{{ $oi }}"
                                                         role="tab"
                                                         aria-selected="{{ $oi === 0 ? 'true' : 'false' }}"
                                                         id="occ-date-tab-{{ $oi }}"
                                                         aria-controls="occ-ticket-panel-{{ $oi }}">
-                                                    <span class="fw-semibold">{{ __('Date :number', ['number' => $oi + 1]) }}</span>
+                                                    <span>{{ __('Date :number', ['number' => $oi + 1]) }}</span>
                                                     @if($sd)
-                                                        <span class="d-none d-sm-inline text-opacity-75"> · {{ \Carbon\Carbon::parse($sd)->translatedFormat('d M') }}</span>
+                                                        <span class="d-none d-sm-inline occ-date-tab-sub"> · {{ \Carbon\Carbon::parse($sd)->translatedFormat('d M') }}</span>
                                                     @endif
                                                 </button>
                                             @endforeach
@@ -586,12 +639,10 @@
             btn.addEventListener('click', function () {
                 var idx = this.getAttribute('data-occ-panel');
                 document.querySelectorAll('.occ-date-tab').forEach(function (b) {
-                    b.classList.remove('btn-dark', 'active');
-                    b.classList.add('btn-outline-dark');
+                    b.classList.remove('active');
                     b.setAttribute('aria-selected', 'false');
                 });
-                this.classList.remove('btn-outline-dark');
-                this.classList.add('btn-dark', 'active');
+                this.classList.add('active');
                 this.setAttribute('aria-selected', 'true');
                 document.querySelectorAll('.occ-ticket-panel').forEach(function (p) {
                     p.classList.add('d-none');
