@@ -1013,6 +1013,24 @@ body {
     color: #000000 !important;
 }
 
+/* Calendar month strip: must stay white on black (global span rule above would make text invisible) */
+.event-details-page .event-month {
+    color: #ffffff !important;
+}
+
+/* Ticket +/- controls: hover needs white text on black (span rule would keep text black on hover) */
+.event-details-page .counter span {
+    color: #000000 !important;
+    background: #ffffff;
+    border: 2px solid #bbbbbb;
+}
+
+.event-details-page .counter span:hover {
+    color: #ffffff !important;
+    background: #000000;
+    border: 2px solid #000000;
+}
+
 .event-details-page a {
     color: #000000 !important;
 }
