@@ -6715,33 +6715,55 @@ input[type=number]::-webkit-inner-spin-button {
     /* border-top: 1px solid #e8e8e8; */
 }
 
-/* Dashboard — mes événements : métadonnées sur une seule ligne + séparateurs verticaux */
+/* Dashboard — métadonnées : < lg = 3 par ligne (grille 2 rangées) ; ≥ lg = 1 ligne (inchangé) */
 .dashboard-my-event-card .dashboard-event-meta-row {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
     width: 100%;
     min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: visible;
     padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
 }
 .dashboard-my-event-card .dashboard-event-meta-item {
-    flex: 1 1 0;
-    min-width: 4.25rem;
-    padding: 0 0.75rem;
+    min-width: 0;
+    padding: 0.5rem 0.65rem;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
 }
-.dashboard-my-event-card .dashboard-event-meta-item:first-child {
-    padding-left: 0;
+.dashboard-my-event-card .dashboard-event-meta-item:nth-child(3n) {
+    border-right: 0;
 }
-.dashboard-my-event-card .dashboard-event-meta-item:last-child {
-    padding-right: 0;
+.dashboard-my-event-card .dashboard-event-meta-item:nth-child(n + 4) {
+    border-bottom: 0;
 }
-.dashboard-my-event-card .dashboard-event-meta-item:not(:first-child) {
-    border-left: 1px solid #e0e0e0;
+
+@media (min-width: 992px) {
+    .dashboard-my-event-card .dashboard-event-meta-row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    .dashboard-my-event-card .dashboard-event-meta-item {
+        flex: 1 1 0;
+        min-width: 4.25rem;
+        padding: 0 0.75rem;
+        border: none;
+    }
+    .dashboard-my-event-card .dashboard-event-meta-item:first-child {
+        padding-left: 0;
+    }
+    .dashboard-my-event-card .dashboard-event-meta-item:last-child {
+        padding-right: 0;
+    }
+    .dashboard-my-event-card .dashboard-event-meta-item:not(:first-child) {
+        border-left: 1px solid #e0e0e0;
+    }
 }
 .dashboard-my-event-card .dashboard-event-meta-label {
     font-size: 10px;
