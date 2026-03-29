@@ -4,6 +4,9 @@
 /public/hot
 /public/storage
 /storage/*.key
+# Fichiers de session (générés à la volée) — le dossier conserve .gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
 /vendor
 .env
 .env.backup
