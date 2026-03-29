@@ -1,0 +1,311 @@
+.vx-page {
+  padding: 2rem 1rem;
+}
+.vx-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Back button */
+.vx-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  padding: 4px 4px;
+  cursor: pointer;
+}
+.vx-back:hover {
+  color: #000 !important;
+}
+.vx-back svg {
+  flex-shrink: 0;
+}
+
+/* Error alert */
+.vx-alert {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-top: 1.25rem;
+  font-size: 14px;
+  background: #fff;
+}
+.vx-alert ul {
+  padding-left: 1.25rem;
+}
+
+/* Grid */
+.vx-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+@media (max-width: 640px) {
+  .vx-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card */
+.vx-card {
+  border: 1px solid #000;
+  border-radius: 14px;
+  background: #fff;
+  padding: 1.5rem;
+}
+
+.vx-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.vx-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+}
+
+/* Countdown badge */
+.vx-countdown {
+  font-size: 12px;
+  color: #555;
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+.vx-countdown.is-urgent {
+  color: #c00;
+}
+
+/* Section label */
+.vx-section-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888;
+  margin-bottom: 0.75rem;
+}
+
+/* Meta rows */
+.vx-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.vx-meta-row:last-of-type {
+  border-bottom: none;
+}
+.vx-meta-label {
+  font-size: 13px;
+  color: #666;
+}
+.vx-meta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #000;
+}
+
+/* Divider */
+.vx-divider {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 1.25rem 0;
+}
+
+/* Ticket rows */
+.vx-ticket-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+.vx-ticket-name {
+  font-size: 14px;
+  color: #333;
+}
+.vx-ticket-price {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+/* Total */
+.vx-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.vx-total-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+.vx-total-amount {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* Payment method grid */
+.vx-pm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.vx-pm-card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vx-pm-card--image {
+  padding: 0;
+  min-height: 68px;
+  overflow: hidden;
+  gap: 0;
+}
+.vx-pm-card:hover {
+  border-color: #888;
+}
+.vx-pm-card input[type="radio"] {
+  display: none;
+}
+.vx-pm-card.is-selected {
+  border-color: #9be7a6;
+  box-shadow: 0 0 0 2px rgba(155, 231, 166, 0.9);
+}
+.vx-pm-logo {
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+}
+.vx-pm-logo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.vx-pm-sub {
+  font-size: 11px;
+  color: #888;
+}
+
+/* Option wrapper: label under the card */
+.vx-pm-option {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vx-pm-label {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.2;
+}
+.vx-pm-card--image .vx-pm-logo-img {
+  height: 100%;
+  padding: 1px 2px;
+  background: #fff;
+}
+
+/* Terms */
+.vx-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.vx-terms input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #000;
+  flex-shrink: 0;
+  margin-top: 3px;
+  cursor: pointer;
+}
+.vx-terms label {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+/* Buttons */
+.vx-btn-pay {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.15s;
+  margin-bottom: 10px;
+}
+.vx-btn-pay:hover {
+  opacity: 0.8;
+}
+.vx-btn-pay:active {
+  transform: scale(0.98);
+}
+
+.vx-btn-cancel {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.vx-btn-cancel:hover {
+  border-color: #000;
+  background: #fafafa;
+}
+
+/* Read-only state */
+.vx-readonly-msg {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 1rem;
+}
+.vx-btn-events {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #000;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.vx-btn-events:hover {
+  opacity: 0.8;
+  color: #fff;
+}

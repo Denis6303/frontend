@@ -682,15 +682,15 @@
             const prefix = l.dateLbl ? `<span class="text-muted small me-1">${escHtml(l.dateLbl)} — </span>` : '';
             return `<li class="d-flex justify-content-between flex-wrap gap-1">
                 <span>${prefix}${l.qty} × ${escHtml(l.name)}</span>
-                <span>${escHtml(l.currency)} ${formatNum(l.subtotal)}</span>
+                <span>${formatNum(l.subtotal)} ${escHtml(l.currency)}</span>
             </li>`;
         }).join('');
 
-        totalEl.textContent = `${anyCurrency} ${formatNum(grandTotal)}`;
+        totalEl.textContent = `${formatNum(grandTotal)} ${anyCurrency}`;
 
         // Sticky bar
         stickyText.textContent = `${totalTickets} billet${totalTickets > 1 ? 's' : ''} sélectionné${totalTickets > 1 ? 's' : ''}`;
-        stickyTotal.textContent = `${anyCurrency} ${formatNum(grandTotal)}`;
+        stickyTotal.textContent = `${formatNum(grandTotal)} ${anyCurrency}`;
         if (stickyBtn) {
             stickyBtn.classList.remove('disabled');
             stickyBtn.setAttribute('aria-disabled', 'false');
