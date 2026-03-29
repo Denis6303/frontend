@@ -19,7 +19,7 @@
                 </div>
             @endif
 
-            <div class="main-card mt-5">
+            <div class="main-card">
                 <div class="dashboard-wrap-content p-4">
                     <h5 class="mb-4">{{ __('Events') }}</h5>
                     <div class="d-md-flex flex-wrap align-items-center gap-3">

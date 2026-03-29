@@ -284,7 +284,7 @@
             </div> -->
             <div class="col-lg-6 col-md-12">
                 <div class="conversion-setup">
-                    <div class="main-card mt-5">
+                    <div class="main-card">
                         <div class="bp-title position-relative">
                             <h4>Profile</h4>
                             <div class="profile-edit-btn">
