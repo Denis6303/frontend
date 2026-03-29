@@ -4,7 +4,7 @@
     letter-spacing: -0.02em;
 }
 
-/* Ombre portée sur l’enveloppe : le clip-path du billet coupe la box-shadow */
+/* Ombre portée sur l'enveloppe : le clip-path du billet coupe la box-shadow */
 .vtx-pass-shell {
     filter: drop-shadow(0 10px 28px rgba(15, 23, 42, 0.1)) drop-shadow(0 2px 6px rgba(15, 23, 42, 0.06));
 }
@@ -128,6 +128,7 @@
     gap: 0.5rem;
     margin-top: auto;
     padding-top: 0.75rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.12);
 }
 
 .vtx-pass__btn {
@@ -225,14 +226,13 @@
     border-radius: 4px;
 }
 
-/* ── Verso (stub sombre) : QR + catégorie + prix ; perforation = ::before sur le bord (zigzag), sans colonne séparée ── */
+/* ── Verso (stub sombre) : QR + catégorie + prix ── */
 .vtx-pass__verso {
     --vtx-perf-dot: #ffffff;
     --vtx-perf-dot-r: 2.75px;
     --vtx-perf-step: 12px;
     --vtx-verso-fill: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
     --vtx-perf-w: 14px;
-    /* Épaisseur bande côté recto (blanc → gris carte) */
     --vtx-perf-recto-w: 6px;
     flex: 1 1 36%;
     min-width: 0;
@@ -256,7 +256,7 @@
     z-index: 3;
 }
 
-/* Bande perforée : côté recto blanc / clair, côté verso pastilles + fond sombre ; zigzag côté recto */
+/* Bande perforée : pastilles uniquement, clip-path zigzag retiré */
 .vtx-pass__verso::before {
     content: "";
     position: absolute;
@@ -267,7 +267,6 @@
     pointer-events: none;
     z-index: 2;
     background-color: #0f172a;
-    /* Calques : 1 = pastilles, 2 = bande recto, 3 = fond verso */
     background-image:
         radial-gradient(
             circle at 50% 50%,
@@ -290,45 +289,6 @@
         center calc(var(--vtx-perf-step) * 0.5),
         center,
         center;
-    /* Zigzag côté recto (bord gauche de la bande) */
-    clip-path: polygon(
-        0% 0%,
-        0% 6%,
-        32% 6%,
-        32% 12%,
-        0% 12%,
-        0% 18%,
-        32% 18%,
-        32% 24%,
-        0% 24%,
-        0% 30%,
-        32% 30%,
-        32% 36%,
-        0% 36%,
-        0% 42%,
-        32% 42%,
-        32% 48%,
-        0% 48%,
-        0% 54%,
-        32% 54%,
-        32% 60%,
-        0% 60%,
-        0% 66%,
-        32% 66%,
-        32% 72%,
-        0% 72%,
-        0% 78%,
-        32% 78%,
-        32% 84%,
-        0% 84%,
-        0% 90%,
-        32% 90%,
-        32% 96%,
-        0% 96%,
-        0% 100%,
-        100% 100%,
-        100% 0%
-    );
 }
 
 @media (max-width: 767.98px) {
@@ -340,9 +300,11 @@
         flex: 1 1 auto;
         width: 100%;
         min-width: 0;
+        margin-top: -1px;
         padding: calc(var(--vtx-perf-w) + 0.6rem) 1rem 1.15rem 1rem;
     }
 
+    /* Pas de bande claire en dur (évitait la ligne horizontale au-dessus des pastilles) */
     .vtx-pass__verso::before {
         left: 0;
         right: 0;
@@ -351,67 +313,20 @@
         width: 100%;
         height: var(--vtx-perf-w);
         min-height: var(--vtx-perf-w);
-        /* Bande recto en haut (côté contenu au-dessus) */
         background-image:
             radial-gradient(
                 circle at 50% 50%,
                 var(--vtx-perf-dot) var(--vtx-perf-dot-r),
                 transparent calc(var(--vtx-perf-dot-r) + 0.5px)
             ),
-            linear-gradient(
-                to bottom,
-                #ffffff 0%,
-                #f4f6f8 var(--vtx-perf-recto-w),
-                transparent var(--vtx-perf-recto-w)
-            ),
             var(--vtx-verso-fill);
         background-size:
             var(--vtx-perf-step) var(--vtx-perf-w),
-            100% 100%,
             100% 100%;
-        background-repeat: repeat-x, no-repeat, no-repeat;
+        background-repeat: repeat-x, no-repeat;
         background-position:
             calc(var(--vtx-perf-step) * 0.5) center,
-            center,
             center;
-        /* Zigzag côté recto = bord supérieur de la bande ; ferme en (100% 0) */
-        clip-path: polygon(
-            0% 0%,
-            6.25% 0%,
-            6.25% 48%,
-            12.5% 48%,
-            12.5% 0%,
-            18.75% 0%,
-            18.75% 48%,
-            25% 48%,
-            25% 0%,
-            31.25% 0%,
-            31.25% 48%,
-            37.5% 48%,
-            37.5% 0%,
-            43.75% 0%,
-            43.75% 48%,
-            50% 48%,
-            50% 0%,
-            56.25% 0%,
-            56.25% 48%,
-            62.5% 48%,
-            62.5% 0%,
-            68.75% 0%,
-            68.75% 48%,
-            75% 48%,
-            75% 0%,
-            81.25% 0%,
-            81.25% 48%,
-            87.5% 48%,
-            87.5% 0%,
-            93.75% 0%,
-            93.75% 48%,
-            100% 48%,
-            100% 0%,
-            100% 100%,
-            0% 100%
-        );
     }
 }
 
