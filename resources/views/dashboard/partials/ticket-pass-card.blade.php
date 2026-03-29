@@ -69,11 +69,7 @@
             </div>
         </div>
 
-        {{-- Perforation --}}
-        <div class="vtx-pass__perforation d-none d-md-flex align-self-stretch flex-shrink-0" aria-hidden="true"></div>
-        <div class="vtx-pass__perforation vtx-pass__perforation--mobile d-md-none w-100" aria-hidden="true"></div>
-
-        {{-- Verso --}}
+        {{-- Verso (perforation = bord zigzag uniquement, via ::before en CSS) --}}
         <div class="vtx-pass__verso flex-grow-1 min-w-0">
             <div class="vtx-pass__qr">
                 <img src="{{ $qrUrl }}" width="132" height="132" alt="{{ __('QR code') }}">

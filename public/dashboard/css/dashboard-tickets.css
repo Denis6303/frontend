@@ -68,123 +68,9 @@
     min-height: 220px;
 }
 
-/*
- * Séparateur : même tons que le verso + pastilles blanches pleine hauteur
- */
-.vtx-pass__perforation {
-    --vtx-perf-dot: #ffffff;
-    --vtx-perf-dot-r: 2.75px;
-    --vtx-perf-step: 12px;
-    /* Aligné sur .vtx-pass__verso */
-    --vtx-verso-fill: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
-    flex: 0 0 14px;
-    width: 14px;
-    min-width: 14px;
-    align-self: stretch;
-    margin: 0;
-    padding: 0;
-    border: none;
-    position: relative;
-    z-index: 2;
-    background-color: #0f172a;
-    background-image:
-        radial-gradient(
-            circle at 50% 50%,
-            var(--vtx-perf-dot) var(--vtx-perf-dot-r),
-            transparent calc(var(--vtx-perf-dot-r) + 0.5px)
-        ),
-        var(--vtx-verso-fill);
-    background-size:
-        14px var(--vtx-perf-step),
-        100% 100%;
-    background-repeat: repeat-y, no-repeat;
-    background-position:
-        center calc(var(--vtx-perf-step) * 0.5),
-        center;
-}
-
-/* Encoches semi-circulaires haut / bas (desktop uniquement) */
-.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::before,
-.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 5px;
-    background: linear-gradient(145deg, #ffffff 0%, #f4f6f8 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::before {
-    top: 0;
-    border-radius: 0 0 50% 50%;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
-}
-
-.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::after {
-    bottom: 0;
-    border-radius: 50% 50% 0 0;
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04);
-}
-
-.vtx-pass__perforation--mobile {
-    flex: 0 0 14px !important;
-    width: 100% !important;
-    height: 14px;
-    min-height: 14px !important;
-    margin: 0;
-    padding: 0;
-    border: none;
-    position: relative;
-    z-index: 2;
-    background-color: #0f172a;
-    background-image:
-        radial-gradient(
-            circle at 50% 50%,
-            var(--vtx-perf-dot) var(--vtx-perf-dot-r),
-            transparent calc(var(--vtx-perf-dot-r) + 0.5px)
-        ),
-        var(--vtx-verso-fill);
-    background-size:
-        var(--vtx-perf-step) 14px,
-        100% 100%;
-    background-repeat: repeat-x, no-repeat;
-    background-position:
-        calc(var(--vtx-perf-step) * 0.5) center,
-        center;
-}
-
-/* Encoches gauche / droite (mobile : séparateur horizontal) */
-.vtx-pass__perforation--mobile::before,
-.vtx-pass__perforation--mobile::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 5px;
-    height: 10px;
-    background: linear-gradient(145deg, #ffffff 0%, #f4f6f8 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.vtx-pass__perforation--mobile::before {
-    left: 0;
-    border-radius: 0 50% 50% 0;
-    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.04);
-}
-
-.vtx-pass__perforation--mobile::after {
-    right: 0;
-    border-radius: 50% 0 0 50%;
-    box-shadow: -1px 0 0 rgba(0, 0, 0, 0.04);
-}
-
 /* ── Recto ── */
 .vtx-pass__recto {
-    flex: 1 1 58%;
+    flex: 1 1 62%;
     min-width: 0;
     padding: 1rem 1rem 1rem 1.1rem;
     display: flex;
@@ -339,12 +225,21 @@
     border-radius: 4px;
 }
 
-/* ── Verso (stub sombre) : QR + catégorie + prix uniquement ── */
+/* ── Verso (stub sombre) : QR + catégorie + prix ; perforation = ::before sur le bord (zigzag), sans colonne séparée ── */
 .vtx-pass__verso {
-    flex: 1 1 42%;
+    --vtx-perf-dot: #ffffff;
+    --vtx-perf-dot-r: 2.75px;
+    --vtx-perf-step: 12px;
+    --vtx-verso-fill: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
+    --vtx-perf-w: 14px;
+    /* Épaisseur bande côté recto (blanc → gris carte) */
+    --vtx-perf-recto-w: 6px;
+    flex: 1 1 36%;
     min-width: 0;
-    padding: 1.15rem 1.1rem 1.25rem;
-    background: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
+    position: relative;
+    isolation: isolate;
+    padding: 1.15rem 1.1rem 1.25rem calc(var(--vtx-perf-w) + 0.45rem);
+    background: var(--vtx-verso-fill);
     color: #e2e8f0;
     display: flex;
     flex-direction: column;
@@ -353,6 +248,171 @@
     text-align: center;
     gap: 0.85rem;
     z-index: 1;
+}
+
+/* Contenu au-dessus de la bande perforée */
+.vtx-pass__verso > * {
+    position: relative;
+    z-index: 3;
+}
+
+/* Bande perforée : côté recto blanc / clair, côté verso pastilles + fond sombre ; zigzag côté recto */
+.vtx-pass__verso::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--vtx-perf-w);
+    pointer-events: none;
+    z-index: 2;
+    background-color: #0f172a;
+    /* Calques : 1 = pastilles, 2 = bande recto, 3 = fond verso */
+    background-image:
+        radial-gradient(
+            circle at 50% 50%,
+            var(--vtx-perf-dot) var(--vtx-perf-dot-r),
+            transparent calc(var(--vtx-perf-dot-r) + 0.5px)
+        ),
+        linear-gradient(
+            to right,
+            #ffffff 0%,
+            #f4f6f8 var(--vtx-perf-recto-w),
+            transparent var(--vtx-perf-recto-w)
+        ),
+        var(--vtx-verso-fill);
+    background-size:
+        var(--vtx-perf-w) var(--vtx-perf-step),
+        100% 100%,
+        100% 100%;
+    background-repeat: repeat-y, no-repeat, no-repeat;
+    background-position:
+        center calc(var(--vtx-perf-step) * 0.5),
+        center,
+        center;
+    /* Zigzag côté recto (bord gauche de la bande) */
+    clip-path: polygon(
+        0% 0%,
+        0% 6%,
+        32% 6%,
+        32% 12%,
+        0% 12%,
+        0% 18%,
+        32% 18%,
+        32% 24%,
+        0% 24%,
+        0% 30%,
+        32% 30%,
+        32% 36%,
+        0% 36%,
+        0% 42%,
+        32% 42%,
+        32% 48%,
+        0% 48%,
+        0% 54%,
+        32% 54%,
+        32% 60%,
+        0% 60%,
+        0% 66%,
+        32% 66%,
+        32% 72%,
+        0% 72%,
+        0% 78%,
+        32% 78%,
+        32% 84%,
+        0% 84%,
+        0% 90%,
+        32% 90%,
+        32% 96%,
+        0% 96%,
+        0% 100%,
+        100% 100%,
+        100% 0%
+    );
+}
+
+@media (max-width: 767.98px) {
+    .vtx-pass__body {
+        min-height: 0;
+    }
+
+    .vtx-pass__verso {
+        flex: 1 1 auto;
+        width: 100%;
+        min-width: 0;
+        padding: calc(var(--vtx-perf-w) + 0.6rem) 1rem 1.15rem 1rem;
+    }
+
+    .vtx-pass__verso::before {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: auto;
+        width: 100%;
+        height: var(--vtx-perf-w);
+        min-height: var(--vtx-perf-w);
+        /* Bande recto en haut (côté contenu au-dessus) */
+        background-image:
+            radial-gradient(
+                circle at 50% 50%,
+                var(--vtx-perf-dot) var(--vtx-perf-dot-r),
+                transparent calc(var(--vtx-perf-dot-r) + 0.5px)
+            ),
+            linear-gradient(
+                to bottom,
+                #ffffff 0%,
+                #f4f6f8 var(--vtx-perf-recto-w),
+                transparent var(--vtx-perf-recto-w)
+            ),
+            var(--vtx-verso-fill);
+        background-size:
+            var(--vtx-perf-step) var(--vtx-perf-w),
+            100% 100%,
+            100% 100%;
+        background-repeat: repeat-x, no-repeat, no-repeat;
+        background-position:
+            calc(var(--vtx-perf-step) * 0.5) center,
+            center,
+            center;
+        /* Zigzag côté recto = bord supérieur de la bande ; ferme en (100% 0) */
+        clip-path: polygon(
+            0% 0%,
+            6.25% 0%,
+            6.25% 48%,
+            12.5% 48%,
+            12.5% 0%,
+            18.75% 0%,
+            18.75% 48%,
+            25% 48%,
+            25% 0%,
+            31.25% 0%,
+            31.25% 48%,
+            37.5% 48%,
+            37.5% 0%,
+            43.75% 0%,
+            43.75% 48%,
+            50% 48%,
+            50% 0%,
+            56.25% 0%,
+            56.25% 48%,
+            62.5% 48%,
+            62.5% 0%,
+            68.75% 0%,
+            68.75% 48%,
+            75% 48%,
+            75% 0%,
+            81.25% 0%,
+            81.25% 48%,
+            87.5% 48%,
+            87.5% 0%,
+            93.75% 0%,
+            93.75% 48%,
+            100% 48%,
+            100% 0%,
+            100% 100%,
+            0% 100%
+        );
+    }
 }
 
 .vtx-pass__qr {
