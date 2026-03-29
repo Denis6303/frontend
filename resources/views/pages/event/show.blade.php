@@ -416,12 +416,18 @@
                                             $occKey = $ot['key'];
                                             $ticketTypesPanel = $ot['ticket_types'];
                                             $panelVisible = ! $hasMultiOcc || $oi === 0;
+                                            $occApiId = $ot['occurrence']['id'] ?? null;
+                                            if ($occApiId === null && ctype_digit((string) $occKey)) {
+                                                $occApiId = (int) $occKey;
+                                            }
                                         @endphp
                                         <div class="occ-ticket-panel @if(! $panelVisible) d-none @endif"
                                              id="occ-ticket-panel-{{ $oi }}"
                                              role="tabpanel"
                                              aria-labelledby="occ-date-tab-{{ $oi }}"
                                              data-occurrence-key="{{ $occKey }}"
+                                             data-occurrence-api-id="{{ $occApiId !== null ? $occApiId : '' }}"
+                                             data-occurrence-start-date="{{ $ot['occurrence']['start_date'] ?? '' }}"
                                              @if($hasMultiOcc) data-occ-index="{{ $oi }}" @endif>
                                             @if($hasMultiOcc && !empty($ot['occurrence']['start_date']))
                                                 <p class="small text-muted mb-3 mb-md-2">
@@ -507,13 +513,45 @@
                                     </div>
                                 </div>
 
+                                {{-- ── Coupon ── --}}
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-outline-secondary w-100" id="coupon-toggle-btn">
+                                        {{ __('Code coupon') }}
+                                    </button>
+                                    <div class="mt-2 d-none" id="coupon-field-wrap">
+                                        <input type="text" class="form-control" id="coupon-code-input" placeholder="{{ __('Enter coupon code') }}">
+                                    </div>
+                                </div>
+
+                                @if (session(config('votix_api.session_access_token_key')))
+                                    <form id="checkout-prepare-form" method="post"
+                                          action="{{ route('ticketing.checkout.prepare', ['locale' => $locale ?? app()->getLocale()]) }}"
+                                          class="d-none">
+                                        @csrf
+                                        <input type="hidden" name="event_occurrence_id" id="prepare-event-occurrence-id" value="">
+                                        <input type="hidden" name="tickets_json" id="prepare-tickets-json" value="">
+                                        <input type="hidden" name="event_title" id="prepare-event-title" value="">
+                                        <input type="hidden" name="occurrence_start_date" id="prepare-occurrence-start-date" value="">
+                                        <input type="hidden" name="tickets_ui_json" id="prepare-tickets-ui-json" value="">
+                                        <input type="hidden" name="coupon_code" id="prepare-coupon-code" value="">
+                                        <input type="hidden" name="return_url" id="prepare-return-url" value="">
+                                    </form>
+                                @endif
+
                                 {{-- Desktop button (hidden on mobile) --}}
                                 <div class="booking-btn mt-4 d-none d-md-block">
-                                    <a href="{{ route('ticketing.cart', ['locale' => $locale ?? app()->getLocale()]) }}"
-                                       class="main-btn btn-hover w-100">
-                                        {{ __('Acheter') }}
-                                        <i class="fa-solid fa-arrow-right ms-2"></i>
-                                    </a>
+                                    @if (session(config('votix_api.session_access_token_key')))
+                                        <button type="button" class="main-btn btn-hover w-100" id="desktop-checkout-btn">
+                                            {{ __('Acheter') }}
+                                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                                        </button>
+                                    @else
+                                        <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"
+                                           class="main-btn btn-hover w-100">
+                                            {{ __('Acheter') }}
+                                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -531,13 +569,21 @@
                     <div id="sticky-summary-text" class="small text-muted">{{ __('Aucun billet sélectionné') }}</div>
                     <div id="sticky-total" class="fw-bold fs-5"></div>
                 </div>
-                <a href="{{ route('ticketing.cart', ['locale' => $locale ?? app()->getLocale()]) }}"
-                   class="main-btn btn-hover flex-shrink-0 disabled"
-                   id="sticky-book-btn"
-                   aria-disabled="true">
-                    {{ __('Acheter') }}
-                    <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
+                @if (session(config('votix_api.session_access_token_key')))
+                    <button type="button"
+                            class="main-btn btn-hover flex-shrink-0 disabled"
+                            id="sticky-book-btn"
+                            aria-disabled="true">
+                        {{ __('Acheter') }}
+                        <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </button>
+                @else
+                    <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"
+                       class="main-btn btn-hover flex-shrink-0">
+                        {{ __('Acheter') }}
+                        <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -659,7 +705,86 @@
         return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
+    function submitCheckoutPrepare() {
+        const form = document.getElementById('checkout-prepare-form');
+        if (!form) return;
+        const panel = document.querySelector('.occ-ticket-panel:not(.d-none)');
+        if (!panel) {
+            alert('{{ __("Please select a date.") }}');
+            return;
+        }
+        const occId = panel.getAttribute('data-occurrence-api-id');
+        if (!occId || !/^\d+$/.test(String(occId).trim())) {
+            alert('{{ __("This session cannot be booked online.") }}');
+            return;
+        }
+        const eventTitleEl = document.querySelector('.event-main-title');
+        const eventTitle = eventTitleEl ? eventTitleEl.textContent.trim() : '';
+        const occStartDate = panel.getAttribute('data-occurrence-start-date') || '';
+
+        const tickets = {};
+        const ticketsUi = {};
+        panel.querySelectorAll('.ticket-qty-input').forEach(function (input) {
+            const qty = parseInt(input.value, 10) || 0;
+            const tid = input.getAttribute('data-ticket-id');
+            const tname = input.getAttribute('data-ticket-name');
+            const tprice = parseFloat(input.getAttribute('data-ticket-price') || '0') || 0;
+            if (qty > 0 && tid) {
+                tickets[String(tid)] = qty;
+                ticketsUi[String(tid)] = { qty: qty, name: tname || '', unit_price: tprice };
+            }
+        });
+        if (Object.keys(tickets).length === 0) {
+            alert('{{ __("Please select at least one ticket.") }}');
+            return;
+        }
+        document.getElementById('prepare-event-occurrence-id').value = String(occId).trim();
+        document.getElementById('prepare-tickets-json').value = JSON.stringify(tickets);
+        const titleInput = document.getElementById('prepare-event-title');
+        if (titleInput) titleInput.value = eventTitle;
+        const occDateInput = document.getElementById('prepare-occurrence-start-date');
+        if (occDateInput) occDateInput.value = String(occStartDate);
+        const uiInput = document.getElementById('prepare-tickets-ui-json');
+        if (uiInput) uiInput.value = JSON.stringify(ticketsUi);
+
+        const couponInput = document.getElementById('coupon-code-input');
+        const couponHidden = document.getElementById('prepare-coupon-code');
+        if (couponHidden) couponHidden.value = couponInput ? String(couponInput.value || '').trim() : '';
+
+        const returnHidden = document.getElementById('prepare-return-url');
+        if (returnHidden) returnHidden.value = window.location.href;
+        form.submit();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
+        const couponBtn = document.getElementById('coupon-toggle-btn');
+        const couponWrap = document.getElementById('coupon-field-wrap');
+        if (couponBtn && couponWrap) {
+            couponBtn.addEventListener('click', function () {
+                couponWrap.classList.toggle('d-none');
+                const inp = document.getElementById('coupon-code-input');
+                if (inp && !couponWrap.classList.contains('d-none')) inp.focus();
+            });
+        }
+
+        const desktopBtn = document.getElementById('desktop-checkout-btn');
+        if (desktopBtn) {
+            desktopBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                submitCheckoutPrepare();
+            });
+        }
+        const stickyBtn = document.getElementById('sticky-book-btn');
+        if (stickyBtn) {
+            stickyBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (stickyBtn.classList.contains('disabled') || stickyBtn.getAttribute('aria-disabled') === 'true') {
+                    return;
+                }
+                submitCheckoutPrepare();
+            });
+        }
+
         document.querySelectorAll('.occ-date-tab').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 var idx = this.getAttribute('data-occ-panel');
