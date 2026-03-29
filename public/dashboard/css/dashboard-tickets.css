@@ -68,26 +68,118 @@
     min-height: 220px;
 }
 
-/* Séparateur recto | verso : simple ligne pointillée noire */
+/*
+ * Séparateur : même tons que le verso + pastilles blanches pleine hauteur
+ */
 .vtx-pass__perforation {
-    flex: 0 0 0;
-    width: 0;
+    --vtx-perf-dot: #ffffff;
+    --vtx-perf-dot-r: 2.75px;
+    --vtx-perf-step: 12px;
+    /* Aligné sur .vtx-pass__verso */
+    --vtx-verso-fill: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #0f172a 100%);
+    flex: 0 0 14px;
+    width: 14px;
+    min-width: 14px;
     align-self: stretch;
-    margin: 10px 0;
+    margin: 0;
+    padding: 0;
     border: none;
-    border-left: 1px dashed #000;
-    background: none;
+    position: relative;
+    z-index: 2;
+    background-color: #0f172a;
+    background-image:
+        radial-gradient(
+            circle at 50% 50%,
+            var(--vtx-perf-dot) var(--vtx-perf-dot-r),
+            transparent calc(var(--vtx-perf-dot-r) + 0.5px)
+        ),
+        var(--vtx-verso-fill);
+    background-size:
+        14px var(--vtx-perf-step),
+        100% 100%;
+    background-repeat: repeat-y, no-repeat;
+    background-position:
+        center calc(var(--vtx-perf-step) * 0.5),
+        center;
+}
+
+/* Encoches semi-circulaires haut / bas (desktop uniquement) */
+.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::before,
+.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 5px;
+    background: linear-gradient(145deg, #ffffff 0%, #f4f6f8 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::before {
+    top: 0;
+    border-radius: 0 0 50% 50%;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.vtx-pass__perforation:not(.vtx-pass__perforation--mobile)::after {
+    bottom: 0;
+    border-radius: 50% 50% 0 0;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04);
 }
 
 .vtx-pass__perforation--mobile {
-    flex: 0 0 auto !important;
+    flex: 0 0 14px !important;
     width: 100% !important;
-    height: 0;
-    min-height: 0 !important;
-    margin: 0 10px;
+    height: 14px;
+    min-height: 14px !important;
+    margin: 0;
+    padding: 0;
     border: none;
-    border-top: 1px dashed #000;
-    background: none;
+    position: relative;
+    z-index: 2;
+    background-color: #0f172a;
+    background-image:
+        radial-gradient(
+            circle at 50% 50%,
+            var(--vtx-perf-dot) var(--vtx-perf-dot-r),
+            transparent calc(var(--vtx-perf-dot-r) + 0.5px)
+        ),
+        var(--vtx-verso-fill);
+    background-size:
+        var(--vtx-perf-step) 14px,
+        100% 100%;
+    background-repeat: repeat-x, no-repeat;
+    background-position:
+        calc(var(--vtx-perf-step) * 0.5) center,
+        center;
+}
+
+/* Encoches gauche / droite (mobile : séparateur horizontal) */
+.vtx-pass__perforation--mobile::before,
+.vtx-pass__perforation--mobile::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 10px;
+    background: linear-gradient(145deg, #ffffff 0%, #f4f6f8 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.vtx-pass__perforation--mobile::before {
+    left: 0;
+    border-radius: 0 50% 50% 0;
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.04);
+}
+
+.vtx-pass__perforation--mobile::after {
+    right: 0;
+    border-radius: 50% 0 0 50%;
+    box-shadow: -1px 0 0 rgba(0, 0, 0, 0.04);
 }
 
 /* ── Recto ── */
