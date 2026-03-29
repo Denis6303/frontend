@@ -40,6 +40,30 @@
     <link href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.css" rel="stylesheet" crossorigin="anonymous">
 
+    {{-- Force the same font as the public site (dashboard CSS sets Roboto with !important) --}}
+    <style>
+        html,
+        body,
+        a,
+        button,
+        input,
+        textarea,
+        select,
+        label,
+        p,
+        span,
+        div,
+        li,
+        ul,
+        ol,
+        small,
+        strong,
+        em,
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+    </style>
+
     @stack('styles')
 </head>
 <body class="d-flex flex-column h-100">
