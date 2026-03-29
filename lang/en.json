@@ -173,5 +173,21 @@
     "Dates and times": "Dates and times",
     "Tickets first session note": "Ticket availability shown here is for the first session. Other dates may have different availability.",
     "Select a date for tickets": "Choose a session to see ticket availability.",
-    "Event dates": "Event dates"
+    "Event dates": "Event dates",
+    "No upcoming tickets.": "No upcoming tickets.",
+    "No past tickets.": "No past tickets.",
+    "No cancelled tickets.": "No cancelled tickets.",
+    "Order": "Order",
+    "Admission": "Admission",
+    "Gate": "Gate",
+    "Seat": "Seat",
+    "Ticket code": "Ticket code",
+    "QR code": "QR code",
+    "Cancelled": "Cancelled",
+    "ticket_status_active": "Active",
+    "ticket_status_past": "Past",
+    "ticket_status_cancelled": "Cancelled",
+    "Transfer ticket": "Transfer",
+    "Cancel ticket": "Cancel",
+    "ticket_action_unavailable": "Not available for this ticket"
 }

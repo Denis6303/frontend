@@ -30,9 +30,11 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="#" class="menu--link" title="{{ __('Tickets') }}" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <a href="{{ route('dashboard.tickets.index', ['locale' => $dashLocale]) }}"
+                       class="menu--link {{ request()->routeIs('dashboard.tickets.*') ? 'active' : '' }}"
+                       title="{{ __('My Tickets') }}" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa-solid fa-ticket menu--icon"></i>
-                        <span class="menu--label">{{ __('Tickets') }}</span>
+                        <span class="menu--label">{{ __('My Tickets') }}</span>
                     </a>
                 </li>
                 <li class="menu--item">

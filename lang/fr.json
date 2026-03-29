@@ -164,5 +164,21 @@
     "Dates and times": "Dates et horaires",
     "Tickets first session note": "Les billets affichés correspondent à la première session. La disponibilité peut varier pour les autres dates.",
     "Select a date for tickets": "Choisissez une date pour voir les billets disponibles.",
-    "Event dates": "Dates de l'événement"
+    "Event dates": "Dates de l'événement",
+    "No upcoming tickets.": "Aucun billet à venir.",
+    "No past tickets.": "Aucun billet passé.",
+    "No cancelled tickets.": "Aucun billet annulé.",
+    "Order": "Commande",
+    "Admission": "Admission",
+    "Gate": "Entrée",
+    "Seat": "Place",
+    "Ticket code": "Code billet",
+    "QR code": "Code QR",
+    "Cancelled": "Annulé",
+    "ticket_status_active": "Actif",
+    "ticket_status_past": "Passée",
+    "ticket_status_cancelled": "Annulée",
+    "Transfer ticket": "Transférer",
+    "Cancel ticket": "Annuler",
+    "ticket_action_unavailable": "Action non disponible pour ce billet"
 }
