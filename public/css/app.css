@@ -248,9 +248,54 @@
        width: auto;
        object-fit: contain;
    }
-   @media (max-width: 991.98px) {
-       .header .navbar-brand { display: none !important; }
-   }
+  /* Masquer le logo dans l'en-tête de l'offcanvas (menu hamburger) */
+  .header .offcanvas-header .offcanvas-logo {
+      display: none !important;
+  }
+
+  @media (max-width: 991.98px) {
+      .header .navbar .container {
+          position: relative;
+          min-height: 72px;
+      }
+      .header .navbar-brand {
+          display: flex !important;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          margin: 0 !important;
+          z-index: 1050;
+      }
+      .header .navbar-brand .res-main-logo {
+          display: inline-block;
+      }
+      .header .navbar-brand .main-logo {
+          display: none;
+      }
+      .header .navbar-brand .res-main-logo img {
+          max-height: 34px;
+      }
+      .header.offcanvas-open .navbar-brand {
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+      }
+      .header .navbar-toggler,
+      .header .right-header {
+          position: relative;
+          z-index: 1051;
+      }
+      .header .right-header {
+          margin-left: auto;
+      }
+      /* Keep offcanvas + backdrop above header controls */
+      .header .offcanvas.offcanvas-start {
+          z-index: 1200 !important;
+      }
+      .offcanvas-backdrop.show {
+          z-index: 1190 !important;
+      }
+  }
    
    /* ============================================================
       HEADER – Right section
@@ -608,8 +653,7 @@
        width: 100%;
    }
    
-   @media (max-width: 991.98px) {
-       .header .offcanvas-header .offcanvas-logo { display: none !important; }
+  @media (max-width: 991.98px) {
        .offcanvas-body .offcanvas-user-avatar { display: none !important; }
        .offcanvas-body .offcanvas-user-info { display: none !important; }
        /* Menus hamburger : texte plus grand en responsive */

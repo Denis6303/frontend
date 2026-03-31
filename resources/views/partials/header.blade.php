@@ -17,11 +17,10 @@
                 <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 me-auto"
                    href="{{ route('home', ['locale' => $locale ?? 'fr']) }}">
                     <div class="res-main-logo">
-                        <img src="{{ asset('images/logo-icon.svg') }}" alt="">
+                        <img src="{{ asset('images/logos/black.jpeg') }}" alt="Votix">
                     </div>
                     <div class="main-logo" id="logo">
-                        <img src="{{ asset('images/logo.svg') }}" alt="">
-                        <img class="logo-inverse" src="{{ asset('images/dark-logo.svg') }}" alt="">
+                        <img src="{{ asset('images/logos/black.jpeg') }}" alt="Votix">
                     </div>
                 </a>
 
@@ -31,7 +30,7 @@
 
                     <div class="offcanvas-header">
                         <div class="offcanvas-logo" id="offcanvasNavbarLabel">
-                            <img src="{{ asset('images/logo-icon.svg') }}" alt="">
+                            <img src="{{ asset('images/logos/black.jpeg') }}" alt="Votix">
                         </div>
                         <button type="button" class="close-btn" data-bs-dismiss="offcanvas" aria-label="Close">
                             <i class="fa-solid fa-xmark"></i>
@@ -368,6 +367,17 @@
         });
         document.addEventListener('hidden.bs.dropdown', function (e) {
             if (e.target === userToggle) userToggle.classList.remove('is-open');
+        });
+    }
+
+    var offcanvas = document.getElementById('offcanvasNavbar');
+    var headerEl = document.querySelector('.header');
+    if (offcanvas && headerEl) {
+        offcanvas.addEventListener('shown.bs.offcanvas', function () {
+            headerEl.classList.add('offcanvas-open');
+        });
+        offcanvas.addEventListener('hidden.bs.offcanvas', function () {
+            headerEl.classList.remove('offcanvas-open');
         });
     }
 })();

@@ -11,11 +11,10 @@
                 </button>
                 <a class="navbar-brand order-1 order-lg-0 ml-lg-0 ml-2 me-auto" href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
                     <div class="res-main-logo">
-                        <img src="{{ asset('images/logo-icon.svg') }}" alt="">
+                        <img src="{{ asset('images/logos/black.jpeg') }}" alt="Votix">
                     </div>
                     <div class="main-logo" id="logo">
-                        <img src="{{ asset('images/logo.svg') }}" alt="">
-                        <img class="logo-inverse" src="{{ asset('images/dark-logo.svg') }}" alt="">
+                        <img src="{{ asset('images/logos/black.jpeg') }}" alt="Votix">
                     </div>
                 </a>
                 <div class="right-header order-2">

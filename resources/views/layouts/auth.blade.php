@@ -38,7 +38,7 @@
         <div class="app-form">
             <div class="app-form-sidebar">
                 <div class="sidebar-sign-logo">
-                    <img src="{{ asset('images/logo.svg') }}" alt="Votix">
+                    <img src="{{ asset('images/logos/white.png') }}" alt="Votix">
                 </div>
                 <div class="sign_sidebar_text">
                     <h1>The Easiest Way to Create Events and Sell More Tickets Online</h1>
