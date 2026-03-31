@@ -242,12 +242,12 @@
        align-items: center;
        padding: 0;
    }
-   .header .navbar-brand .res-main-logo img,
-   .header .navbar-brand .main-logo img {
-       max-height: 40px;
-       width: auto;
-       object-fit: contain;
-   }
+  .header .navbar-brand .res-main-logo img,
+  .header .navbar-brand .main-logo img {
+      max-height: 52px;
+      width: auto;
+      object-fit: contain;
+  }
   /* Masquer le logo dans l'en-tête de l'offcanvas (menu hamburger) */
   .header .offcanvas-header .offcanvas-logo {
       display: none !important;
