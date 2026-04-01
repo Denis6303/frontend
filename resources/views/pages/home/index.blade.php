@@ -17,7 +17,8 @@
   .hero-carousel, .hero-carousel .carousel-item, .hero-slide-img { min-height: 460px; }
   .hero-slide-content h2 { font-size: 1.75rem; }
 }
-.home-category-filters { display: flex; justify-content: flex-start; flex-wrap: nowrap; gap: 0.5rem; padding: 1rem 0; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.home-category-filters { display: flex; justify-content: flex-start; flex-wrap: nowrap; gap: 0.5rem; padding: 1rem 0; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+.home-category-filters::-webkit-scrollbar { display: none; }
 .home-category-filters .control { flex-shrink: 0; border-radius: 999px; padding-inline: 1rem; }
 @media (min-width: 992px) {
   .home-category-filters { justify-content: center; flex-wrap: wrap; overflow: visible; }
@@ -56,10 +57,12 @@
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     margin-top: 1.5rem;
     padding-top: 1.25rem;
   }
+  .home-category-filters::-webkit-scrollbar { display: none; }
   .home-category-filters .control {
     flex-shrink: 0;
     justify-self: start;
