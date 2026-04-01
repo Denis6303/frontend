@@ -24,7 +24,7 @@ class EventController extends Controller
             'statuses'    => ['upcoming'],
             'page'        => (int) $request->query('page', 1),
             // Pagination sur la home : 20 éléments par page
-            'per_page'    => (int) $request->query('per_page', 20),
+            'per_page'    => (int) $request->query('per_page', 16),
             'country_code'=> $request->query('country_code', 'tg'),
             'query'       => $request->query('query'),
             'location'    => $request->query('location'),
