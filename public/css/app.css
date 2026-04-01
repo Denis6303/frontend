@@ -253,6 +253,19 @@
       display: none !important;
   }
 
+  /* Pagination (home) */
+  .pagination--black-active .page-item.active .page-link {
+      background-color: #000 !important;
+      border-color: #000 !important;
+      color: #fff !important;
+  }
+  .pagination--black-active .page-link {
+      color: #000;
+  }
+  .pagination--black-active .page-link:hover {
+      color: #000;
+  }
+
   @media (max-width: 991.98px) {
       .header .navbar .container {
           position: relative;

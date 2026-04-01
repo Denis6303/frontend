@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ticketing;
 use App\Http\Controllers\Controller;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -19,15 +20,31 @@ class EventController extends Controller
      */
     public function home(Request $request, string $locale): View
     {
-        $events = $this->fetchPublicEvents([
+        $params = [
             'statuses'    => ['upcoming'],
-            'per_page'    => 8,
+            'page'        => (int) $request->query('page', 1),
+            // Pagination sur la home : 20 éléments par page
+            'per_page'    => (int) $request->query('per_page', 20),
             'country_code'=> $request->query('country_code', 'tg'),
             'query'       => $request->query('query'),
             'location'    => $request->query('location'),
-        ]);
+        ];
+
+        $events = $this->fetchPublicEvents($params, $meta);
 
         $this->rememberSlugMap($events);
+
+        $paginator = new LengthAwarePaginator(
+            $events,
+            (int) ($meta['total'] ?? count($events)),
+            (int) ($meta['per_page'] ?? $params['per_page']),
+            (int) ($meta['current_page'] ?? $params['page']),
+            [
+                'path' => $request->url(),
+                'pageName' => 'page',
+            ]
+        );
+        $paginator->appends($request->query());
 
         // Récupère les catégories pour les filtres de la home
         $categories = $this->apiService->getData('categories', [], true, 'items', true);
@@ -35,6 +52,8 @@ class EventController extends Controller
         return view('pages.home.index', [
             'locale'      => $locale,
             'events'      => $events,
+            'meta'        => $meta,
+            'paginator'   => $paginator,
             'categories'  => is_array($categories) ? $categories : [],
         ]);
     }
