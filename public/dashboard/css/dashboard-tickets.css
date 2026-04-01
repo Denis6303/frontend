@@ -88,6 +88,20 @@
 .vtx-pass__status--past    { background: #64748b; }
 .vtx-pass__status--cancelled { background: #dc2626; }
 
+.vtx-pass__status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.vtx-pass__status-right {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    white-space: nowrap;
+}
+
 .vtx-pass__title {
     font-size: 1.05rem;
     font-weight: 700;
@@ -232,18 +246,18 @@
 .vtx-pass__qr {
     background: #f8fafc;
     border: 0.5px solid rgba(15, 23, 42, 0.08);
-    padding: 10px;
-    border-radius: 12px;
+    padding: 12px;
+    border-radius: 14px;
 }
 
 .vtx-pass__qr img {
     display: block;
-    width: 118px;
-    height: 118px;
+    width: 140px;
+    height: 140px;
 }
 
 .vtx-pass__category {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 700;
     color: #d97706;
     letter-spacing: 0.05em;
@@ -251,7 +265,7 @@
 }
 
 .vtx-pass__price {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 800;
     color: #0f172a;
     letter-spacing: -0.02em;
@@ -267,6 +281,8 @@
 
 /* ── Responsive mobile ── */
 @media (max-width: 767.98px) {
+    .vtx-pass__status-row { gap: 0.45rem; }
+    .vtx-pass__status-right { gap: 0.45rem; }
     /* En mobile: garder l'image strictement à droite des infos */
     .vtx-pass__top {
         flex-direction: row;
@@ -307,14 +323,9 @@
     }
 
     .vtx-pass__qr img {
-        width: 124px;
-        height: 124px;
+        width: 150px;
+        height: 150px;
     }
 
-    .vtx-pass__stub-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
-    }
+    .vtx-pass__stub-info { display: none; }
 }

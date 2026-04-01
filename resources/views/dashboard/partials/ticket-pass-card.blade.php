@@ -37,7 +37,16 @@
         <div class="vtx-pass__recto">
             <div class="vtx-pass__top">
                 <div class="vtx-pass__info">
-                    <span class="vtx-pass__status vtx-pass__status--{{ $statusMod }}">{{ $statusLabel }}</span>
+                    <div class="vtx-pass__status-row">
+                        <span class="vtx-pass__status vtx-pass__status--{{ $statusMod }}">{{ $statusLabel }}</span>
+                        <div class="vtx-pass__status-right">
+                            <span class="vtx-pass__category">{{ $ticket['category_label'] ?? '—' }}</span>
+                            <span class="vtx-pass__price">
+                                {{ number_format((float) ($ticket['price_amount'] ?? 0), 0, ',', ' ') }}
+                                <small>{{ $ticket['display_currency'] ?? ($ticket['currency_code'] ?? '') }}</small>
+                            </span>
+                        </div>
+                    </div>
 
                     <h3 class="vtx-pass__title">{{ $ticket['event_title'] ?? '—' }}</h3>
 
@@ -84,17 +93,10 @@
             </div>
         </div>
 
-        {{-- Stub : QR + catégorie + prix --}}
+        {{-- Stub : QR uniquement --}}
         <div class="vtx-pass__stub">
             <div class="vtx-pass__qr">
                 <img src="{{ $qrUrl }}" width="130" height="130" alt="{{ __('QR code') }}">
-            </div>
-            <div class="vtx-pass__stub-info">
-                <div class="vtx-pass__category">{{ $ticket['category_label'] ?? '—' }}</div>
-                <div class="vtx-pass__price">
-                    {{ number_format((float) ($ticket['price_amount'] ?? 0), 0, ',', ' ') }}
-                    <small>{{ $ticket['display_currency'] ?? ($ticket['currency_code'] ?? '') }}</small>
-                </div>
             </div>
         </div>
 
