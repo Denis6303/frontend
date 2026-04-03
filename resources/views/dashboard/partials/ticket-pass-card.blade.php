@@ -14,8 +14,6 @@
     $isUpcoming  = $bucket === 'upcoming';
     $cover       = ! empty($ticket['event_cover']) ? $ticket['event_cover'] : null;
     $qrPayload   = (string) ($ticket['qr_value'] ?? $ticket['id'] ?? 'votix');
-    // Use a classic high-contrast QR style (closer to the expected ticket look).
-    $qrUrl       = 'https://quickchart.io/qr?size=220&ecLevel=M&margin=1&text='.rawurlencode($qrPayload);
 
     $statusLabel = match ($bucket) {
         'past'      => __('ticket_status_past'),
@@ -112,10 +110,12 @@
             </div>
         </div>
 
-        {{-- Stub : QR uniquement --}}
+        {{-- Stub : QR uniquement (qr-code-styling, voir resources/js/ticket-qr.js) --}}
         <div class="vtx-pass__stub">
             <div class="vtx-pass__qr">
-                <img src="{{ $qrUrl }}" width="130" height="130" alt="{{ __('QR code') }}">
+                <div class="vtx-pass__qr-frame">
+                    <div class="vtx-pass__qr-canvas" data-qr="{{ e($qrPayload) }}" role="img" aria-label="{{ __('QR code') }}"></div>
+                </div>
             </div>
         </div>
 

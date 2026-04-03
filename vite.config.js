@@ -6,10 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/js/app.js',
-                // Entrées dédiées au template front (styles + scripts)
-                // Exemple : à adapter une fois les fichiers du template ajoutés
-                // 'resources/css/template/main.css',
-                // 'resources/js/template/main.js',
+                'resources/js/ticket-qr.js',
             ],
             refresh: true,
         }),

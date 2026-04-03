@@ -26,6 +26,7 @@
     flex-direction: row;
     align-items: stretch;
     min-height: 0;
+    min-width: 0;
 }
 
 /* ── Infos : titre, date, lieu, commande ── */
@@ -219,7 +220,8 @@
 
 /* ── Stub QR : séparé par une ligne pointillée verticale ── */
 .vtx-pass__stub {
-    flex: 1 0 0;
+    /* 1 1 0 : la colonne peut se rétrécir si le QR + cadre dépassent (évite le débordement) */
+    flex: 1 1 0;
     min-width: 0;
     border-left: 1.5px dashed rgba(15, 23, 42, 0.13);
     display: flex;
@@ -229,6 +231,7 @@
     gap: 0.55rem;
     padding: 1.05rem 0.85rem;
     position: relative;
+    box-sizing: border-box;
 }
 
 /* Encoches semi-circulaires sur la ligne de séparation */
@@ -248,16 +251,55 @@
 .vtx-pass__stub::after  { bottom: -10px; }
 
 .vtx-pass__qr {
-    background: #f8fafc;
-    border: 0.5px solid rgba(15, 23, 42, 0.08);
-    padding: 12px;
-    border-radius: 14px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
-.vtx-pass__qr img {
+.vtx-pass__qr-frame {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .vtx-pass__stub {
+        padding: 1.05rem 0.55rem;
+    }
+
+    .vtx-pass__qr-frame {
+        padding: 7px;
+        border-radius: 14px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+}
+
+.vtx-pass__qr-canvas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.vtx-pass__qr-canvas svg {
     display: block;
-    width: 140px;
-    height: 140px;
+    width: min(204px, 100%) !important;
+    height: min(204px, 100%) !important;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
 }
 
 .vtx-pass__category {
@@ -329,9 +371,9 @@
         left: calc(50% + 40px);
     }
 
-    .vtx-pass__qr img {
-        width: 150px;
-        height: 150px;
+    .vtx-pass__qr-canvas svg {
+        width: min(150px, 100%) !important;
+        height: min(150px, 100%) !important;
     }
 
     .vtx-pass__stub-info { display: none; }

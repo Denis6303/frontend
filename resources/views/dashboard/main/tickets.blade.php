@@ -6,6 +6,10 @@
 <link href="{{ asset('dashboard/css/dashboard-tickets.css') }}" rel="stylesheet">
 @endpush
 
+@push('scripts')
+@vite(['resources/js/ticket-qr.js'])
+@endpush
+
 @section('content')
 <div class="container-fluid vtx-tickets-page">
     <div class="row">
