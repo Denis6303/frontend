@@ -76,8 +76,8 @@ class MyTicketsController extends Controller
     public function transfer(Request $request, string $locale, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'email' => ['required', 'string', 'email', 'confirmed'],
-            'email_confirmation' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
         $token = $this->apiService->getUserToken();
@@ -95,7 +95,7 @@ class MyTicketsController extends Controller
                 ],
                 'json' => [
                     'email' => $validated['email'],
-                    'email_confirmation' => $validated['email_confirmation'],
+                    'password' => $validated['password'],
                 ],
             ],
             false

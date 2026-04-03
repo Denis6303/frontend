@@ -91,8 +91,8 @@
                         <input type="email" id="transferEmail" name="email" class="form-control" required>
                     </div>
                     <div class="mb-0">
-                        <label for="transferEmailConfirmation" class="form-label">{{ __('Confirm Email') }}</label>
-                        <input type="email" id="transferEmailConfirmation" name="email_confirmation" class="form-control" required>
+                        <label for="transferPassword" class="form-label">{{ __('Password') }}</label>
+                        <input type="password" id="transferPassword" name="password" class="form-control" required autocomplete="current-password">
                     </div>
                 </div>
                 <div class="modal-footer">
