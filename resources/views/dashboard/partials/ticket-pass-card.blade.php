@@ -14,7 +14,8 @@
     $isUpcoming  = $bucket === 'upcoming';
     $cover       = ! empty($ticket['event_cover']) ? $ticket['event_cover'] : null;
     $qrPayload   = (string) ($ticket['qr_value'] ?? $ticket['id'] ?? 'votix');
-    $qrUrl       = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&color=0f172a&data='.rawurlencode($qrPayload);
+    // Use a classic high-contrast QR style (closer to the expected ticket look).
+    $qrUrl       = 'https://quickchart.io/qr?size=220&ecLevel=M&margin=1&text='.rawurlencode($qrPayload);
 
     $statusLabel = match ($bucket) {
         'past'      => __('ticket_status_past'),

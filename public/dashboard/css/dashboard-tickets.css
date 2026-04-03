@@ -43,7 +43,7 @@
 .vtx-pass__top {
     display: flex;
     gap: 0.9rem;
-    align-items: stretch;
+    align-items: center;
     min-height: 160px;
 }
 
@@ -56,13 +56,17 @@
 }
 
 .vtx-pass__cover-wrap {
-    flex: 1 1 0;
-    min-width: 0;
+    display: none;
+    flex: 0 0 132px;
+    width: 132px;
+    height: 132px;
+    min-width: 132px;
     border-radius: 14px;
     overflow: hidden;
     background: #e5e7eb;
-    /* Aligner le haut de l'image avec le titre (pas avec le badge statut) */
-    margin-top: 28px;
+    align-self: center;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .vtx-pass__cover-wrap img {
@@ -290,11 +294,14 @@
     }
 
     .vtx-pass__cover-wrap {
-        flex: 0 0 120px;
-        width: 120px;
-        height: 120px;
-        align-self: flex-start;
-        margin-top: 28px;
+        display: block;
+        flex: 0 0 112px;
+        width: 112px;
+        height: 160px;
+        min-width: 130px;
+        align-self: center;
+        margin-top: auto;
+        margin-bottom: auto;
     }
 
     .vtx-pass__body {
