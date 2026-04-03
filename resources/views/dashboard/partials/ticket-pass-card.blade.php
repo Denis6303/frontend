@@ -25,7 +25,6 @@
         'cancelled' => 'cancelled',
         default     => 'active',
     };
-    $canTransferOrCancel = $isUpcoming;
 @endphp
 
 <div class="vtx-pass-shell h-100">
@@ -90,24 +89,24 @@
                 @endif
             </div>
 
-            <div class="vtx-pass__actions">
-                <button type="button" class="btn vtx-pass__btn vtx-pass__btn--transfer"
-                    data-ticket-transfer
-                    data-ticket-id="{{ $ticket['id'] ?? '' }}"
-                    data-ticket-title="{{ $ticket['event_title'] ?? '' }}"
-                    @if(!$canTransferOrCancel) disabled title="{{ __('ticket_action_unavailable') }}" @endif>
-                    <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
-                    {{ __('Transfer ticket') }}
-                </button>
-                <button type="button" class="btn vtx-pass__btn vtx-pass__btn--cancel"
-                    data-ticket-cancel
-                    data-ticket-id="{{ $ticket['id'] ?? '' }}"
-                    data-ticket-title="{{ $ticket['event_title'] ?? '' }}"
-                    @if(!$canTransferOrCancel) disabled title="{{ __('ticket_action_unavailable') }}" @endif>
-                    <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
-                    {{ __('Cancel ticket') }}
-                </button>
-            </div>
+            @if($isUpcoming)
+                <div class="vtx-pass__actions">
+                    <button type="button" class="btn vtx-pass__btn vtx-pass__btn--transfer"
+                        data-ticket-transfer
+                        data-ticket-id="{{ $ticket['id'] ?? '' }}"
+                        data-ticket-title="{{ $ticket['event_title'] ?? '' }}">
+                        <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
+                        {{ __('Transfer ticket') }}
+                    </button>
+                    <button type="button" class="btn vtx-pass__btn vtx-pass__btn--cancel"
+                        data-ticket-cancel
+                        data-ticket-id="{{ $ticket['id'] ?? '' }}"
+                        data-ticket-title="{{ $ticket['event_title'] ?? '' }}">
+                        <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
+                        {{ __('Cancel ticket') }}
+                    </button>
+                </div>
+            @endif
         </div>
 
         {{-- Stub : QR uniquement (qr-code-styling, voir resources/js/ticket-qr.js) --}}

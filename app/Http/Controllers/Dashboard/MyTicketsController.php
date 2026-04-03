@@ -210,9 +210,12 @@ class MyTicketsController extends Controller
             }
         }
 
+        // Onglets : annulés (statut), passés (événement passé ou ticket validé / expiré), sinon à venir.
         $bucket = 'upcoming';
         if (in_array($status, ['cancelled', 'refunded', 'void'], true)) {
             $bucket = 'cancelled';
+        } elseif (in_array($status, ['validated', 'expired'], true)) {
+            $bucket = 'past';
         } elseif ($at !== null && $at->isPast()) {
             $bucket = 'past';
         }
