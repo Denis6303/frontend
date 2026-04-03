@@ -93,15 +93,13 @@
                 <div class="vtx-pass__actions">
                     <button type="button" class="btn vtx-pass__btn vtx-pass__btn--transfer"
                         data-ticket-transfer
-                        data-ticket-id="{{ $ticket['id'] ?? '' }}"
-                        data-ticket-title="{{ $ticket['event_title'] ?? '' }}">
+                        data-ticket-id="{{ $ticket['id'] ?? '' }}">
                         <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
                         {{ __('Transfer ticket') }}
                     </button>
                     <button type="button" class="btn vtx-pass__btn vtx-pass__btn--cancel"
                         data-ticket-cancel
-                        data-ticket-id="{{ $ticket['id'] ?? '' }}"
-                        data-ticket-title="{{ $ticket['event_title'] ?? '' }}">
+                        data-ticket-id="{{ $ticket['id'] ?? '' }}">
                         <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
                         {{ __('Cancel ticket') }}
                     </button>

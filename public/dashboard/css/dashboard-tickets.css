@@ -378,3 +378,85 @@
 
     .vtx-pass__stub-info { display: none; }
 }
+
+/* ── Modales transfert / annulation ticket (padding + bottom sheet mobile) ── */
+/* Le thème impose .modal-body { padding: 0 !important; } — on restaure le confort ici */
+.vtx-ticket-action-modal .modal-header {
+    padding: 1rem 1.25rem !important;
+}
+
+.vtx-ticket-action-modal .modal-body {
+    padding: 1rem 1.25rem !important;
+}
+
+.vtx-ticket-action-modal .modal-footer {
+    padding: 0.75rem 1.25rem !important;
+    gap: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+    /* Carte ancrée en bas du viewport (évite le centrage vertical de .modal-dialog-centered) */
+    .vtx-ticket-action-modal.modal {
+        align-items: flex-end !important;
+        justify-content: flex-end !important;
+        padding: 0 !important;
+    }
+
+    .vtx-ticket-action-modal .vtx-ticket-action-modal__dialog {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        /* Ne dépasse pas la moitié inférieure de l’écran (≈ 50vh) */
+        max-height: calc(50vh - env(safe-area-inset-bottom, 0px)) !important;
+        margin: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        display: flex !important;
+        align-items: flex-end !important;
+    }
+
+    /* Annule le min-height plein écran de Bootstrap sur .modal-dialog-centered */
+    .vtx-ticket-action-modal .modal-dialog.modal-dialog-centered {
+        min-height: 0 !important;
+        align-items: flex-end !important;
+    }
+
+    .vtx-ticket-action-modal .vtx-ticket-action-modal__content {
+        width: 100%;
+        max-height: calc(50vh - env(safe-area-inset-bottom, 0px));
+        display: flex;
+        flex-direction: column;
+        border-radius: 1.125rem 1.125rem 0 0 !important;
+        overflow: hidden;
+        box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.16);
+        margin-bottom: 0;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .vtx-ticket-action-modal .modal-header,
+    .vtx-ticket-action-modal .modal-footer {
+        flex-shrink: 0;
+    }
+
+    .vtx-ticket-action-modal .modal-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 1rem 1.25rem 1.25rem !important;
+    }
+
+    /* Animation depuis le bas (remplace le léger slide vertical centré Bootstrap) */
+    .vtx-ticket-action-modal.fade .vtx-ticket-action-modal__dialog {
+        transform: translate3d(0, 100%, 0) !important;
+        transition: transform 0.32s ease-out !important;
+    }
+
+    .vtx-ticket-action-modal.show .vtx-ticket-action-modal__dialog {
+        transform: translate3d(0, 0, 0) !important;
+    }
+}
