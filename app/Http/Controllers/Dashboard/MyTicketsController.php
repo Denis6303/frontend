@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class MyTicketsController extends Controller
 {
@@ -31,9 +30,6 @@ class MyTicketsController extends Controller
 
         $token = $this->apiService->getUserToken();
         $raw = $this->fetchTicketsFromApi($token);
-        if ($raw === []) {
-            $raw = $this->placeholderTickets();
-        }
 
         $normalized = array_map(fn (array $t) => $this->normalizeTicket($t), $raw);
 
@@ -77,6 +73,78 @@ class MyTicketsController extends Controller
         ]);
     }
 
+    public function transfer(Request $request, string $locale, int $id): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'string', 'email', 'confirmed'],
+            'email_confirmation' => ['required', 'string', 'email'],
+        ]);
+
+        $token = $this->apiService->getUserToken();
+        if (!$token) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $response = $this->apiService->makeApiRequest(
+            'POST',
+            "users/me/tickets/{$id}/transfer",
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$token,
+                ],
+                'json' => [
+                    'email' => $validated['email'],
+                    'email_confirmation' => $validated['email_confirmation'],
+                ],
+            ],
+            false
+        );
+
+        if (!$response->successful()) {
+            $message = data_get($response->json(), 'message', __('An error occurred.'));
+            return back()->with('error', $message);
+        }
+
+        return back()->with('info', __('Ticket transferred successfully.'));
+    }
+
+    public function cancel(Request $request, string $locale, int $id): RedirectResponse
+    {
+        $validated = $request->validate([
+            'reason' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $token = $this->apiService->getUserToken();
+        if (!$token) {
+            return redirect()->route('login', ['locale' => $locale]);
+        }
+
+        $response = $this->apiService->makeApiRequest(
+            'POST',
+            "users/me/tickets/{$id}/cancel",
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$token,
+                ],
+                'json' => [
+                    'reason' => $validated['reason'],
+                    'password' => $validated['password'],
+                ],
+            ],
+            false
+        );
+
+        if (!$response->successful()) {
+            $message = data_get($response->json(), 'message', __('An error occurred.'));
+            return back()->with('error', $message);
+        }
+
+        return back()->with('info', __('Ticket cancelled successfully.'));
+    }
+
     /**
      * @return array<int, array<string, mixed>>
      */
@@ -91,7 +159,8 @@ class MyTicketsController extends Controller
                     'Authorization' => 'Bearer '.$token,
                 ],
                 'query' => [
-                    'per_page' => 500,
+                    // Backend validates per_page with max:100.
+                    'per_page' => 100,
                 ],
             ],
             false
@@ -126,7 +195,11 @@ class MyTicketsController extends Controller
     private function normalizeTicket(array $t): array
     {
         $status = strtolower((string) ($t['status'] ?? 'valid'));
-        $start  = $t['occurrence_start'] ?? $t['event_date'] ?? data_get($t, 'occurrence.start_date') ?? data_get($t, 'event.start_date');
+        $start  = $t['occurrence_start']
+            ?? $t['event_date']
+            ?? data_get($t, 'item_occurrence.start_date')
+            ?? data_get($t, 'occurrence.start_date')
+            ?? data_get($t, 'event.start_date');
 
         $at = null;
         if (is_string($start) && $start !== '') {
@@ -145,7 +218,10 @@ class MyTicketsController extends Controller
         }
 
         $event = is_array($t['event'] ?? null) ? $t['event'] : [];
-        $cover = $event['cover_url'] ?? $t['cover_url'] ?? null;
+        if ($event === []) {
+            $event = is_array(data_get($t, 'item_occurrence.item')) ? data_get($t, 'item_occurrence.item') : [];
+        }
+        $cover = $event['cover_url'] ?? data_get($t, 'item_occurrence.item.cover_url') ?? $t['cover_url'] ?? null;
 
         $cur = strtoupper((string) ($t['currency'] ?? $event['currency'] ?? 'XOF'));
 
@@ -154,104 +230,19 @@ class MyTicketsController extends Controller
             'occurrence_start'  => $start,
             'event_title'       => $event['title'] ?? $t['event_title'] ?? '—',
             'event_cover'       => $cover,
-            'event_city'        => $event['city'] ?? $t['city'] ?? null,
-            'event_venue'       => $event['venue'] ?? $event['address'] ?? $t['venue'] ?? null,
+            'event_city'        => $event['city'] ?? data_get($t, 'item_occurrence.item.city') ?? $t['city'] ?? null,
+            'event_venue'       => $event['venue'] ?? $event['address'] ?? data_get($t, 'item_occurrence.item.address') ?? $t['venue'] ?? null,
             'category_label'    => $t['category'] ?? data_get($t, 'ticket_type.name') ?? '—',
+            'event_category_label' => data_get($t, 'item_occurrence.item.category_name') ?? data_get($t, 'event.category_name'),
+            'customer_email'    => $t['email'] ?? null,
             'price_amount'      => (float) ($t['price'] ?? data_get($t, 'ticket_type.price') ?? 0),
             'currency_code'     => $cur,
             'display_currency'  => display_currency_label($cur),
             'seat_label'        => $t['seat'] ?? $t['seat_number'] ?? null,
             'gate_label'        => $t['gate'] ?? $t['entrance'] ?? null,
-            'order_reference'   => $t['order_reference'] ?? $t['order_id'] ?? data_get($t, 'order.reference'),
-            'qr_value'          => (string) ($t['code'] ?? $t['ticket_code'] ?? $t['id'] ?? ''),
+            'order_reference'   => $t['order_number'] ?? $t['order_reference'] ?? data_get($t, 'order.number') ?? $t['order_id'] ?? data_get($t, 'order.reference'),
+            'qr_value'          => (string) ($t['qr_encoded_data'] ?? $t['code'] ?? $t['ticket_code'] ?? $t['id'] ?? ''),
         ]);
-    }
-
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    private function placeholderTickets(): array
-    {
-        $img = asset('images/event-imgs/img-1.jpg');
-
-        return [
-            [
-                'id'               => 'demo-1',
-                'status'           => 'valid',
-                'order_reference'  => 'VTX-8F2K',
-                'event'            => [
-                    'title'      => 'Summer Vibes Festival',
-                    'cover_url'  => $img,
-                    'city'       => 'Lomé',
-                    'venue'      => 'Palais des congrès',
-                    'currency'   => 'XOF',
-                ],
-                'occurrence_start' => now()->addDays(14)->setTime(20, 0)->toDateTimeString(),
-                'category'         => 'VIP',
-                'price'            => 35000,
-                'currency'         => 'XOF',
-                'seat'             => 'F12',
-                'gate'             => 'Entrée B',
-                'code'             => 'VTX-DEMO-8F2K-001',
-            ],
-            [
-                'id'               => 'demo-2',
-                'status'           => 'valid',
-                'order_reference'  => 'VTX-9QM1',
-                'event'            => [
-                    'title'      => 'Jazz sous les étoiles',
-                    'cover_url'  => $img,
-                    'city'       => 'Lomé',
-                    'venue'      => 'Hôtel 2 Février',
-                    'currency'   => 'XOF',
-                ],
-                'occurrence_start' => now()->addDays(3)->setTime(19, 30)->toDateTimeString(),
-                'category'         => 'Placement libre',
-                'price'            => 10000,
-                'currency'         => 'XOF',
-                'seat'             => null,
-                'gate'             => 'Entrée principale',
-                'code'             => 'VTX-DEMO-9QM1-002',
-            ],
-            [
-                'id'               => 'demo-3',
-                'status'           => 'valid',
-                'order_reference'  => 'VTX-3LP9',
-                'event'            => [
-                    'title'      => 'Conférence Tech 2026',
-                    'cover_url'  => $img,
-                    'city'       => 'Lomé',
-                    'venue'      => 'Centre de conventions',
-                    'currency'   => 'XOF',
-                ],
-                'occurrence_start' => now()->subDays(10)->setTime(9, 0)->toDateTimeString(),
-                'category'         => 'Standard',
-                'price'            => 25000,
-                'currency'         => 'XOF',
-                'seat'             => 'A-4',
-                'gate'             => null,
-                'code'             => 'VTX-DEMO-3LP9-003',
-            ],
-            [
-                'id'               => 'demo-4',
-                'status'           => 'cancelled',
-                'order_reference'  => 'VTX-1X00',
-                'event'            => [
-                    'title'      => 'Soirée Gala',
-                    'cover_url'  => $img,
-                    'city'       => 'Lomé',
-                    'venue'      => 'Centre culturel',
-                    'currency'   => 'XOF',
-                ],
-                'occurrence_start' => now()->addMonth()->setTime(21, 0)->toDateTimeString(),
-                'category'         => 'Or',
-                'price'            => 50000,
-                'currency'         => 'XOF',
-                'seat'             => 'P02',
-                'gate'             => 'Entrée VIP',
-                'code'             => 'VTX-DEMO-VOID-004',
-            ],
-        ];
     }
 
     /**

@@ -49,6 +49,12 @@
                     </div>
 
                     <h3 class="vtx-pass__title">{{ $ticket['event_title'] ?? '—' }}</h3>
+                    @if(!empty($ticket['event_category_label']))
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <i class="fa-solid fa-tag vtx-pass__category" aria-hidden="true"></i>
+                            <span class="vtx-pass__category">{{ $ticket['event_category_label'] }}</span>
+                        </div>
+                    @endif
 
                     <div class="vtx-pass__meta">
                         @if($startAt)
@@ -61,6 +67,12 @@
                             <div class="vtx-pass__meta-row">
                                 <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                                 <span>{{ trim(implode(' · ', array_filter([$ticket['event_venue'] ?? null, $ticket['event_city'] ?? null]))) }}</span>
+                            </div>
+                        @endif
+                        @if(!empty($ticket['customer_email']))
+                            <div class="vtx-pass__meta-row">
+                                <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                                <span>{{ $ticket['customer_email'] }}</span>
                             </div>
                         @endif
                     </div>
@@ -81,11 +93,17 @@
 
             <div class="vtx-pass__actions">
                 <button type="button" class="btn vtx-pass__btn vtx-pass__btn--transfer"
+                    data-ticket-transfer
+                    data-ticket-id="{{ $ticket['id'] ?? '' }}"
+                    data-ticket-title="{{ $ticket['event_title'] ?? '' }}"
                     @if(!$canTransferOrCancel) disabled title="{{ __('ticket_action_unavailable') }}" @endif>
                     <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
                     {{ __('Transfer ticket') }}
                 </button>
                 <button type="button" class="btn vtx-pass__btn vtx-pass__btn--cancel"
+                    data-ticket-cancel
+                    data-ticket-id="{{ $ticket['id'] ?? '' }}"
+                    data-ticket-title="{{ $ticket['event_title'] ?? '' }}"
                     @if(!$canTransferOrCancel) disabled title="{{ __('ticket_action_unavailable') }}" @endif>
                     <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
                     {{ __('Cancel ticket') }}

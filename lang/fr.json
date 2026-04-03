@@ -180,5 +180,10 @@
     "ticket_status_cancelled": "Annulée",
     "Transfer ticket": "Transférer",
     "Cancel ticket": "Annuler",
-    "ticket_action_unavailable": "Action non disponible pour ce billet"
+    "ticket_action_unavailable": "Action non disponible pour ce billet",
+    "Confirm Email": "Confirmer l'email",
+    "Reason": "Motif",
+    "Keep ticket": "Garder le ticket",
+    "Ticket transferred successfully.": "Ticket transféré avec succès.",
+    "Ticket cancelled successfully.": "Ticket annulé avec succès."
 }

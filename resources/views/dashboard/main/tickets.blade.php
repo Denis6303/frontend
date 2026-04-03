@@ -71,6 +71,64 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="ticketTransferModal" tabindex="-1" aria-labelledby="ticketTransferModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="ticketTransferForm" method="POST" action="">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ticketTransferModalLabel">{{ __('Transfer ticket') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3" id="ticketTransferContext"></p>
+                    <div class="mb-3">
+                        <label for="transferEmail" class="form-label">{{ __('Email') }}</label>
+                        <input type="email" id="transferEmail" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-0">
+                        <label for="transferEmailConfirmation" class="form-label">{{ __('Confirm Email') }}</label>
+                        <input type="email" id="transferEmailConfirmation" name="email_confirmation" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="submit" class="btn btn-dark">{{ __('Transfer ticket') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ticketCancelModal" tabindex="-1" aria-labelledby="ticketCancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="ticketCancelForm" method="POST" action="">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ticketCancelModalLabel">{{ __('Cancel ticket') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3" id="ticketCancelContext"></p>
+                    <div class="mb-3">
+                        <label for="cancelReason" class="form-label">{{ __('Reason') }}</label>
+                        <input type="text" id="cancelReason" name="reason" class="form-control" required>
+                    </div>
+                    <div class="mb-0">
+                        <label for="cancelPassword" class="form-label">{{ __('Password') }}</label>
+                        <input type="password" id="cancelPassword" name="password" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('Keep ticket') }}</button>
+                    <button type="submit" class="btn btn-danger">{{ __('Cancel ticket') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -104,6 +162,42 @@
                 if (!target) return;
                 var paneId = target.replace('#', '');
                 syncTabQuery(tabFromPaneId(paneId));
+            });
+        });
+
+        var transferModalEl = document.getElementById('ticketTransferModal');
+        var cancelModalEl = document.getElementById('ticketCancelModal');
+        var transferForm = document.getElementById('ticketTransferForm');
+        var cancelForm = document.getElementById('ticketCancelForm');
+        var transferContext = document.getElementById('ticketTransferContext');
+        var cancelContext = document.getElementById('ticketCancelContext');
+
+        var transferModal = transferModalEl && window.bootstrap ? new bootstrap.Modal(transferModalEl) : null;
+        var cancelModal = cancelModalEl && window.bootstrap ? new bootstrap.Modal(cancelModalEl) : null;
+
+        document.querySelectorAll('[data-ticket-transfer]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var id = btn.getAttribute('data-ticket-id');
+                var title = btn.getAttribute('data-ticket-title') || '';
+                if (!id || !transferForm || !transferModal) return;
+                transferForm.action = '{{ route('dashboard.tickets.transfer', ['locale' => $locale, 'id' => '__ID__']) }}'.replace('__ID__', id);
+                if (transferContext) {
+                    transferContext.textContent = title ? ('{{ __('Event') }}: ' + title) : '';
+                }
+                transferModal.show();
+            });
+        });
+
+        document.querySelectorAll('[data-ticket-cancel]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var id = btn.getAttribute('data-ticket-id');
+                var title = btn.getAttribute('data-ticket-title') || '';
+                if (!id || !cancelForm || !cancelModal) return;
+                cancelForm.action = '{{ route('dashboard.tickets.cancel', ['locale' => $locale, 'id' => '__ID__']) }}'.replace('__ID__', id);
+                if (cancelContext) {
+                    cancelContext.textContent = title ? ('{{ __('Event') }}: ' + title) : '';
+                }
+                cancelModal.show();
             });
         });
     });
