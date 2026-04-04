@@ -104,3 +104,60 @@ if (! function_exists('public_event_dates_count')) {
         return 0;
     }
 }
+
+if (! function_exists('auth_user_display_name')) {
+    /**
+     * Nom affiché dans le header : prénom + nom (session API), sinon name, sinon email local.
+     */
+    function auth_user_display_name(): string
+    {
+        $sessionUser = Session::get(config('votix_api.session_user_key'));
+        if (is_array($sessionUser)) {
+            $fn = trim((string) ($sessionUser['first_name'] ?? ''));
+            $ln = trim((string) ($sessionUser['last_name'] ?? ''));
+            $full = trim($fn.' '.$ln);
+            if ($full !== '') {
+                return $full;
+            }
+            $name = trim((string) ($sessionUser['name'] ?? ''));
+            if ($name !== '') {
+                return $name;
+            }
+            $email = $sessionUser['email'] ?? null;
+            if (is_string($email) && $email !== '') {
+                $parts = explode('@', $email, 2);
+
+                return $parts[0] !== '' ? $parts[0] : '—';
+            }
+        }
+
+        $u = auth()->user();
+        if ($u !== null) {
+            $fn = trim((string) data_get($u, 'first_name', ''));
+            $ln = trim((string) data_get($u, 'last_name', ''));
+            $full = trim($fn.' '.$ln);
+            if ($full !== '') {
+                return $full;
+            }
+
+            return trim((string) ($u->name ?? $u->email ?? '')) ?: '—';
+        }
+
+        return '—';
+    }
+}
+
+if (! function_exists('auth_user_email')) {
+    /**
+     * Email de l’utilisateur connecté (session API ou modèle local).
+     */
+    function auth_user_email(): ?string
+    {
+        $sessionUser = Session::get(config('votix_api.session_user_key'));
+        if (is_array($sessionUser) && isset($sessionUser['email']) && is_string($sessionUser['email']) && $sessionUser['email'] !== '') {
+            return $sessionUser['email'];
+        }
+
+        return auth()->user()?->email;
+    }
+}

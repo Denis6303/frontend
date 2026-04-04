@@ -60,10 +60,10 @@
                                     <a href="{{ route('dashboard.home', ['locale' => $locale ?? 'fr']) }}" class="offcanvas-user-link">
                                         <i class="fa-solid fa-gauge-high"></i> {{ __('Dashboard') }}
                                     </a>
-                                    <a href="#" class="offcanvas-user-link">
+                                    <a href="{{ route('dashboard.tickets.index', ['locale' => $locale ?? 'fr']) }}" class="offcanvas-user-link">
                                         <i class="fa-solid fa-ticket"></i> {{ __('My Tickets') }}
                                     </a>
-                                    <a href="#" class="offcanvas-user-link">
+                                    <a href="{{ route('dashboard.account', ['locale' => $locale ?? 'fr']) }}" class="offcanvas-user-link">
                                         <i class="fa-solid fa-gear"></i> {{ __('Settings') }}
                                     </a>
                                     <form method="POST" action="{{ route('logout', ['locale' => $locale ?? 'fr']) }}">
@@ -232,7 +232,7 @@
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="{{ route('dashboard.tickets.index', ['locale' => $locale ?? 'fr']) }}">
                                             <span class="dropdown-item-icon" aria-hidden="true">
                                                 <i class="fa-solid fa-ticket"></i>
                                             </span>
@@ -240,7 +240,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="{{ route('dashboard.account', ['locale' => $locale ?? 'fr']) }}">
                                             <span class="dropdown-item-icon" aria-hidden="true">
                                                 <i class="fa-solid fa-gear"></i>
                                             </span>

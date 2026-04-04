@@ -33,11 +33,12 @@
                             <ul class="dropdown-menu dropdown-menu-account dropdown-menu-end" aria-labelledby="accountClick">
                                 <li>
                                     <div class="dropdown-account-header">
-                                        <div class="account-holder-avatar">
-                                            <img src="{{ asset('images/profile-imgs/img-13.jpg') }}" alt="">
-                                        </div>
-                                        <h5>John Doe</h5>
-                                        <p>johndoe@example.com</p>
+                                        <h5>{{ auth_user_display_name() }}</h5>
+                                        @if (auth_user_email())
+                                        <p>{{ auth_user_email() }}</p>
+                                        @else
+                                        <p class="text-muted small">—</p>
+                                        @endif
                                     </div>
                                 </li>
                                 <li class="profile-link">
