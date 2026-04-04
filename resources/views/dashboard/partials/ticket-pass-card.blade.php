@@ -25,6 +25,8 @@
         'cancelled' => 'cancelled',
         default     => 'active',
     };
+    // is_cancellable === true : billet annulable → afficher le bouton « Annuler » (aligné sur l’API).
+    $showCancelAction = (bool) ($ticket['is_cancellable'] ?? true);
 @endphp
 
 <div class="vtx-pass-shell h-100">
@@ -97,12 +99,14 @@
                         <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
                         {{ __('Transfer ticket') }}
                     </button>
-                    <button type="button" class="btn vtx-pass__btn vtx-pass__btn--cancel"
-                        data-ticket-cancel
-                        data-ticket-id="{{ $ticket['id'] ?? '' }}">
-                        <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
-                        {{ __('Cancel ticket') }}
-                    </button>
+                    @if($showCancelAction)
+                        <button type="button" class="btn vtx-pass__btn vtx-pass__btn--cancel"
+                            data-ticket-cancel
+                            data-ticket-id="{{ $ticket['id'] ?? '' }}">
+                            <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
+                            {{ __('Cancel ticket') }}
+                        </button>
+                    @endif
                 </div>
             @endif
         </div>
