@@ -6,19 +6,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
-                </div>
-            @endif
-            @if(session('info'))
-                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-                    {{ session('info') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
-                </div>
-            @endif
-
             <div class="main-card">
                 <div class="dashboard-wrap-content p-4">
                     <h5 class="mb-4">{{ __('Events') }}</h5>

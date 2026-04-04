@@ -49,9 +49,6 @@
                     <a href="{{ route('dashboard.account', ['locale' => $locale]) }}" class="pe-4 ps-4 co-main-btn min-width d-inline-flex align-items-center justify-content-center text-decoration-none"><i class="fa-solid fa-plus me-1"></i>{{ __('Update profile') }}</a>
                 </div>
             </div>
-            @if($apiError)
-                <div class="alert alert-warning mt-3 mb-0">{{ $apiError }}</div>
-            @endif
             <div class="main-card mt-4">
                 <div class="dashboard-wrap-content">
                     <div class="d-flex flex-wrap justify-content-between align-items-center p-4">
@@ -176,6 +173,11 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    @if(! empty($apiError))
+    if (window.VotixFeedback) {
+        VotixFeedback.show({ type: 'error', title: @json(__('Error')), message: @json($apiError) });
+    }
+    @endif
     var el = document.getElementById('views-graphic');
     if (!el || el.getAttribute('data-votix-dashboard-chart') !== '1') return;
     var labels = @json($chartLabels);

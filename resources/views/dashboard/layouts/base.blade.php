@@ -75,28 +75,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="modal fade" id="eventSuccessModal" tabindex="-1" aria-labelledby="eventSuccessModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0">
-                    <div class="modal-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="me-3 d-flex align-items-center justify-content-center rounded-circle" style="width:40px;height:40px;background:#e6f4ea;color:#1a7f37;">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-1">{{ __('Event published') }}</h5>
-                                <p class="mb-0 text-muted small">{{ session('success') }}</p>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <button type="button" class="btn btn-dark px-4" data-bs-dismiss="modal">{{ __('Close') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    @include('partials.votix-feedback-modal')
 
     <script src="{{ asset('dashboard/js/vertical-responsive-menu.min.js') }}"></script>
     <script>
@@ -161,18 +140,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('dashboard/js/analytics.js') }}"></script>
+    <script src="{{ asset('js/votix-feedback.js') }}"></script>
     <script src="{{ asset('dashboard/js/custom.js') }}"></script>
-    @if(session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var modalEl = document.getElementById('eventSuccessModal');
-                if (modalEl && window.bootstrap) {
-                    var modal = new bootstrap.Modal(modalEl);
-                    modal.show();
-                }
-            });
-        </script>
-    @endif
     @stack('scripts')
 </body>
 </html>

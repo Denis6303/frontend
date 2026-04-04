@@ -106,7 +106,7 @@ class MyTicketsController extends Controller
             return back()->with('error', $message);
         }
 
-        return back()->with('info', __('Ticket transferred successfully.'));
+        return back()->with('success', __('Ticket transferred successfully.'));
     }
 
     public function cancel(Request $request, string $locale, int $id): RedirectResponse
@@ -142,7 +142,7 @@ class MyTicketsController extends Controller
             return back()->with('error', $message);
         }
 
-        return back()->with('info', __('Ticket cancelled successfully.'));
+        return back()->with('success', __('Ticket cancelled successfully.'));
     }
 
     /**

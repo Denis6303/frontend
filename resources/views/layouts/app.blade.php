@@ -39,23 +39,17 @@
         @includeIf('partials.header')
 
         <main>
-            @if (session('success'))
-                <div class="container mt-3">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
             @yield('content')
         </main>
+
+        @include('partials.votix-feedback-modal')
 
         {{-- Footer global du site (sera remplacé par le footer du template) --}}
         @includeIf('partials.footer')
 
         {{-- Bootstrap 5 JS (offcanvas, dropdown, etc.) pour le responsive --}}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        {{-- Scripts spécifiques au template ou aux pages --}}
+        <script src="{{ asset('js/votix-feedback.js') }}"></script>
         @stack('scripts')
     </body>
 </html>

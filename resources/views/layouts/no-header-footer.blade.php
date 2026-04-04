@@ -36,19 +36,13 @@
     </head>
     <body class="d-flex flex-column h-100">
         <main>
-            @if (session('success'))
-                <div class="container mt-3">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
-
             @yield('content')
         </main>
 
+        @include('partials.votix-feedback-modal')
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{ asset('js/votix-feedback.js') }}"></script>
         @stack('scripts')
     </body>
 </html>
