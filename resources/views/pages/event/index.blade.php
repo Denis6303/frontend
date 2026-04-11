@@ -13,6 +13,29 @@
     <div class="wrapper">
         <div class="explore-events p-80">
             <div class="container">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <form action="{{ route('ticketing.events', ['locale' => $locale]) }}" method="GET"
+                              class="page-search-form vtx-explore-live-search" role="search">
+                            @foreach((array) request('statuses', $filters['statuses'] ?? ['upcoming']) as $st)
+                                <input type="hidden" name="statuses[]" value="{{ $st }}">
+                            @endforeach
+                            @if(request('country_code', $filters['country_code'] ?? null))
+                                <input type="hidden" name="country_code" value="{{ request('country_code', $filters['country_code']) }}">
+                            @endif
+                            @if(request('location', $filters['location'] ?? null))
+                                <input type="hidden" name="location" value="{{ request('location', $filters['location']) }}">
+                            @endif
+                            <div class="page-search-inner">
+                                <i class="fa-solid fa-magnifying-glass page-search-icon"></i>
+                                <input type="search" name="query" class="page-search-input"
+                                       placeholder="{{ __('Search placeholder') }}" aria-label="{{ __('Search') }}"
+                                       value="{{ old('query', $search_query ?? request('query', request('q'))) }}"
+                                       autocomplete="off">
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="main-title">
@@ -57,4 +80,56 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    var searchForm = document.querySelector('.vtx-explore-live-search');
+    if (!searchForm) return;
+    var searchInput = searchForm.querySelector('input[name="query"]');
+    if (!searchInput) return;
+
+    function debounce(fn, wait) {
+        var t;
+        return function () {
+            var ctx = this, args = arguments;
+            clearTimeout(t);
+            t = setTimeout(function () { fn.apply(ctx, args); }, wait);
+        };
+    }
+
+    function buildUrl() {
+        var params = new URLSearchParams(new FormData(searchForm));
+        var v = (searchInput.value || '').trim();
+        if (v) {
+            params.set('query', v);
+        } else {
+            params.delete('query');
+        }
+        params.delete('page');
+        var u = new URL(searchForm.action, window.location.origin);
+        var qs = params.toString();
+        return u.pathname + (qs ? '?' + qs : '') + u.hash;
+    }
+
+    function goSearch() {
+        window.location.href = buildUrl();
+    }
+
+    var lastQuerySent = (searchInput.value || '').trim();
+    var navigateSearch = debounce(function () {
+        var v = (searchInput.value || '').trim();
+        if (v === lastQuerySent) return;
+        lastQuerySent = v;
+        goSearch();
+    }, 350);
+
+    searchInput.addEventListener('input', navigateSearch);
+    searchForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        goSearch();
+    });
+})();
+</script>
+@endpush
 

@@ -321,12 +321,13 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form action="{{ route('ticketing.events', ['locale' => $locale ?? 'fr']) }}" method="GET"
+            <form action="{{ route('home', ['locale' => $locale ?? 'fr']) }}" method="GET"
                   class="search-overlay-form" role="search">
                 <div class="search-overlay-inner">
                     <i class="fa-solid fa-search search-overlay-icon"></i>
-                    <input type="search" name="q" class="search-overlay-input"
-                           placeholder="{{ __('Search placeholder') }}" aria-label="{{ __('Search') }}" autocomplete="off">
+                    <input type="search" name="query" class="search-overlay-input"
+                           placeholder="{{ __('Search placeholder') }}" aria-label="{{ __('Search') }}" autocomplete="off"
+                           value="{{ request('query', request('q')) }}">
                 </div>
                 <button type="submit" class="main-btn btn-hover w-100 mt-3">{{ __('Search') }}</button>
             </form>
@@ -347,7 +348,10 @@
             overlay.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
             var input = overlay.querySelector('.search-overlay-input');
-            if (input) { input.focus(); input.value = ''; }
+            if (input) {
+                input.focus();
+                try { input.select(); } catch (e) {}
+            }
         }
         function closeSearch() {
             overlay.classList.remove('search-overlay--open');

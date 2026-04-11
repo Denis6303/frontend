@@ -20,13 +20,15 @@ class EventController extends Controller
      */
     public function home(Request $request, string $locale): View
     {
+        $searchQuery = $request->query('query', $request->query('q'));
+
         $params = [
             'statuses'    => ['upcoming'],
             'page'        => (int) $request->query('page', 1),
             // Pagination sur la home : 20 éléments par page
             'per_page'    => (int) $request->query('per_page', 16),
             'country_code'=> $request->query('country_code', 'tg'),
-            'query'       => $request->query('query'),
+            'query'       => $searchQuery,
             'location'    => $request->query('location'),
         ];
 
@@ -50,11 +52,12 @@ class EventController extends Controller
         $categories = $this->apiService->getData('categories', [], true, 'items', true);
 
         return view('pages.home.index', [
-            'locale'      => $locale,
-            'events'      => $events,
-            'meta'        => $meta,
-            'paginator'   => $paginator,
-            'categories'  => is_array($categories) ? $categories : [],
+            'locale'       => $locale,
+            'events'       => $events,
+            'meta'         => $meta,
+            'paginator'    => $paginator,
+            'categories'   => is_array($categories) ? $categories : [],
+            'search_query' => $searchQuery,
         ]);
     }
 
@@ -63,10 +66,12 @@ class EventController extends Controller
      */
     public function index(Request $request, string $locale): View
     {
+        $searchQuery = $request->query('query', $request->query('q'));
+
         $params = [
             'page'        => $request->query('page', 1),
             'per_page'    => $request->query('per_page', 12),
-            'query'       => $request->query('query'),
+            'query'       => $searchQuery,
             'location'    => $request->query('location'),
             'country_code'=> $request->query('country_code', 'tg'),
         ];
@@ -83,10 +88,11 @@ class EventController extends Controller
         $categories = $this->apiService->getData('categories', [], true, 'items', true);
 
         return view('pages.event.index', [
-            'locale'     => $locale,
-            'events'     => $events,
-            'meta'       => $meta,
-            'categories' => is_array($categories) ? $categories : [],
+            'locale'       => $locale,
+            'events'       => $events,
+            'meta'         => $meta,
+            'categories'   => is_array($categories) ? $categories : [],
+            'search_query' => $searchQuery,
             'filters'=> [
                 'query'        => $params['query'],
                 'location'     => $params['location'],

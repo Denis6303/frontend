@@ -172,10 +172,15 @@
                 {{-- Barre de recherche (masquée en responsive, uniquement overlay sur mobile) --}}
                 <div class="row mb-4 d-none d-lg-flex">
                     <div class="col-12">
-                        <form action="{{ route('ticketing.events', ['locale' => $locale ?? 'fr']) }}" method="GET" class="page-search-form" role="search">
+                        <form action="{{ route('home', ['locale' => $locale ?? 'fr']) }}" method="GET"
+                              class="page-search-form vtx-home-live-search" role="search"
+                              data-search-base="{{ route('home', ['locale' => $locale ?? 'fr']) }}">
                             <div class="page-search-inner">
                                 <i class="fa-solid fa-magnifying-glass page-search-icon"></i>
-                                <input type="search" name="q" class="page-search-input" placeholder="{{ __('Search placeholder') }}" aria-label="{{ __('Search') }}" value="{{ request('q') }}">
+                                <input type="search" name="query" class="page-search-input"
+                                       placeholder="{{ __('Search placeholder') }}" aria-label="{{ __('Search') }}"
+                                       value="{{ old('query', $search_query ?? request('query', request('q'))) }}"
+                                       autocomplete="off">
                             </div>
                         </form>
                     </div>
@@ -185,7 +190,7 @@
                         <div class="event-filter-items">
                             <div class="featured-controls">
                                 <div class="row" data-ref="event-filter-content">
-                                    @foreach($events as $event)
+                                    @forelse($events as $event)
                                         @php
                                             $categorySlug = \Illuminate\Support\Str::slug($event['category']['name_en'] ?? $event['category']['name'] ?? '');
                                         @endphp
@@ -194,7 +199,11 @@
                                             data-ref="mixitup-target">
                                             @include('partials.event-card', ['event' => $event])
                                         </div>
-                                    @endforeach
+                                    @empty
+                                        <div class="col-12">
+                                            <p class="text-muted mb-0">{{ __('No events found.') }}</p>
+                                        </div>
+                                    @endforelse
                                 </div>
                                 @if(isset($paginator) && $paginator->hasPages())
                                     <div class="row mt-4">
@@ -240,6 +249,52 @@
         container.addEventListener('scroll', updateButtons, { passive: true });
         window.addEventListener('resize', updateButtons);
         updateButtons();
+    })();
+
+    (function () {
+        var searchForm = document.querySelector('.vtx-home-live-search');
+        if (!searchForm) return;
+        var searchInput = searchForm.querySelector('input[name="query"]');
+        var base = searchForm.getAttribute('data-search-base');
+        if (!searchInput || !base) return;
+
+        function debounce(fn, wait) {
+            var t;
+            return function () {
+                var ctx = this, args = arguments;
+                clearTimeout(t);
+                t = setTimeout(function () { fn.apply(ctx, args); }, wait);
+            };
+        }
+
+        function goSearch() {
+            var v = (searchInput.value || '').trim();
+            var u = new URL(base, window.location.origin);
+            if (v) {
+                u.searchParams.set('query', v);
+            } else {
+                u.searchParams.delete('query');
+            }
+            u.searchParams.delete('page');
+            window.location.href = u.pathname + u.search + u.hash;
+        }
+
+        var lastQuerySent = (searchInput.value || '').trim();
+        var navigateSearch = debounce(function () {
+            var v = (searchInput.value || '').trim();
+            if (v === lastQuerySent) {
+                return;
+            }
+            lastQuerySent = v;
+            goSearch();
+        }, 350);
+
+        searchInput.addEventListener('input', navigateSearch);
+        searchForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            lastQuerySent = '';
+            goSearch();
+        });
     })();
 </script>
 @endpush
