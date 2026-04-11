@@ -178,18 +178,21 @@
 
                             @if ($amount > 0.00001)
                                 <div class="vx-wallet-fields" id="vx-wallet-fields" hidden>
-                                    <label class="vx-wallet-label" for="phone_number_pay">{{ __('Phone number to debit') }}</label>
-                                    <input
-                                        type="tel"
-                                        name="phone_number"
-                                        id="phone_number_pay"
-                                        class="form-control vx-wallet-input"
-                                        value="{{ old('phone_number') }}"
-                                        placeholder="{{ __('e.g. 90123456') }}"
-                                        autocomplete="tel"
-                                        inputmode="tel"
-                                    >
-                                    <p class="vx-wallet-hint text-muted small mb-0 mt-1">{{ __('Enter the mobile money number that will be charged.') }}</p>
+                                    <label class="visually-hidden" for="phone_number_pay">{{ __('Phone number to debit') }}</label>
+                                    <div class="vx-wallet-input-shell" id="vx-wallet-input-shell">
+                                        <span class="vx-wallet-network-label" id="vx-wallet-network-label" role="presentation"></span>
+                                        <input
+                                            type="tel"
+                                            name="phone_number"
+                                            id="phone_number_pay"
+                                            class="form-control vx-wallet-input"
+                                            value="{{ old('phone_number') }}"
+                                            autocomplete="tel"
+                                            inputmode="tel"
+                                            aria-describedby="vx-wallet-hint"
+                                        >
+                                    </div>
+                                    <p class="vx-wallet-hint text-muted small mb-0 mt-1" id="vx-wallet-hint">{{ __('Enter the mobile money number that will be charged.') }}</p>
                                     <input type="hidden" name="country" id="vx-payment-country" value="{{ old('country', 'TG') }}">
                                     <input type="hidden" name="operator" id="vx-payment-operator" value="{{ old('operator', 'YASS') }}">
                                 </div>
@@ -230,6 +233,11 @@
 @push('scripts')
 <script>
     (function () {
+        var networkNames = {
+            yass: @json(__('Mixx by Yass')),
+            flooz: @json(__('Moov Money'))
+        };
+
         // Countdown timer
         const el = document.getElementById('intent-countdown');
         if (el && el.dataset.expiresAt) {
@@ -266,18 +274,31 @@
             if (country && needsWallet && (!country.value || country.value.length !== 2)) {
                 country.value = 'TG';
             }
+            phone.placeholder = '';
+            var netLbl = document.getElementById('vx-wallet-network-label');
+            if (netLbl) {
+                netLbl.textContent = needsWallet ? (code === 'flooz' ? networkNames.flooz : networkNames.yass) : '';
+            }
+        }
+        function syncPaymentCardBorders() {
+            var checked = document.querySelector('input[name="payment_method"]:checked');
+            document.querySelectorAll('.vx-pm-card').forEach(function (c) {
+                c.classList.remove('is-selected');
+            });
+            if (!checked) return;
+            var card = checked.closest('.vx-pm-card');
+            if (!card) return;
+            card.classList.add('is-selected');
         }
         document.querySelectorAll('.vx-pm-card').forEach(function (card) {
             const inp = card.querySelector('input[type="radio"]');
             if (!inp) return;
             inp.addEventListener('change', function () {
-                document.querySelectorAll('.vx-pm-card').forEach(function (c) {
-                    c.classList.remove('is-selected');
-                });
-                card.classList.add('is-selected');
+                syncPaymentCardBorders();
                 syncWalletFields();
             });
         });
+        syncPaymentCardBorders();
         syncWalletFields();
     })();
 </script>

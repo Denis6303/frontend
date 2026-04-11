@@ -2,7 +2,7 @@
   padding: 2rem 1rem;
 }
 .vx-container {
-  max-width: 900px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -42,7 +42,7 @@
 .vx-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1.75rem;
   margin-top: 2rem;
 }
 @media (max-width: 640px) {
@@ -56,7 +56,7 @@
   border: 1px solid #000;
   border-radius: 14px;
   background: #fff;
-  padding: 1.5rem;
+  padding: 1.75rem 1.85rem;
 }
 
 .vx-card-header {
@@ -161,23 +161,31 @@
 .vx-pm-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 1.25rem;
 }
 
 .vx-pm-card {
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 12px;
+  padding: 16px 14px;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+/* Fixed outer box: larger logo inside same card footprint (tight padding). */
 .vx-pm-card--image {
-  padding: 0;
-  min-height: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 2px;
+  min-height: 72px;
+  max-height: 72px;
+  height: 72px;
+  box-sizing: border-box;
   overflow: hidden;
   gap: 0;
 }
@@ -199,7 +207,8 @@
 .vx-pm-logo-img {
   display: block;
   width: 100%;
-  height: 100%;
+  max-height: 100%;
+  height: auto;
   object-fit: contain;
   object-position: center;
 }
@@ -220,9 +229,16 @@
   line-height: 1.2;
 }
 .vx-pm-card--image .vx-pm-logo-img {
-  height: 100%;
-  padding: 1px 2px;
-  background: #fff;
+  display: block;
+  max-height: 68px;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  object-fit: contain;
+  object-position: center;
 }
 
 /* Terms */
@@ -310,23 +326,52 @@
   color: #fff;
 }
 
-/* Mobile money — phone */
+/* Mobile money — phone (cadre neutre, nom réseau sur la bordure) */
 .vx-wallet-fields {
   margin-top: 1.25rem;
   margin-bottom: 0.25rem;
 }
-.vx-wallet-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 0.35rem;
-  color: #000;
+.vx-wallet-input-shell {
+  position: relative;
+  margin-top: 0.65rem;
+  border-radius: 10px;
+  padding: 0.65rem 0.65rem 0.55rem;
+  border: 2px solid #ddd;
+  background: #fafafa;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.vx-wallet-network-label {
+  position: absolute;
+  top: -0.65rem;
+  left: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  max-width: calc(100% - 1.5rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vx-wallet-input-shell .vx-wallet-input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #000;
+  padding: 0.55rem 0.85rem;
+  font-size: 15px;
+  background: #fff;
 }
 .vx-wallet-input {
   border: 1px solid #000;
   border-radius: 10px;
   padding: 0.55rem 0.85rem;
   font-size: 15px;
+  background: #fff;
 }
 .vx-wallet-hint {
   font-size: 12px;
