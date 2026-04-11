@@ -25,7 +25,7 @@ class EventController extends Controller
         $params = [
             'statuses'    => ['upcoming'],
             'page'        => (int) $request->query('page', 1),
-            // Pagination sur la home : 20 éléments par page
+            // Pagination sur la home : 16 événements par page
             'per_page'    => (int) $request->query('per_page', 16),
             'country_code'=> $request->query('country_code', 'tg'),
             'query'       => $searchQuery,
@@ -74,8 +74,9 @@ class EventController extends Controller
         $searchQuery = $request->query('query', $request->query('q'));
 
         $params = [
-            'page'        => $request->query('page', 1),
-            'per_page'    => $request->query('per_page', 12),
+            'page'        => (int) $request->query('page', 1),
+            // Même pagination que l’accueil : 16 par page
+            'per_page'    => (int) $request->query('per_page', 16),
             'query'       => $searchQuery,
             'location'    => $request->query('location'),
             'country_code'=> $request->query('country_code', 'tg'),
@@ -94,6 +95,18 @@ class EventController extends Controller
 
         $this->rememberSlugMap($events);
 
+        $paginator = new LengthAwarePaginator(
+            $events,
+            (int) ($meta['total'] ?? count($events)),
+            (int) ($meta['per_page'] ?? $params['per_page']),
+            (int) ($meta['current_page'] ?? $params['page']),
+            [
+                'path' => $request->url(),
+                'pageName' => 'page',
+            ]
+        );
+        $paginator->appends($request->query());
+
         // Catégories réelles pour les filtres de la page liste
         $categories = $this->apiService->getData('categories', [], true, 'items', true);
 
@@ -101,6 +114,7 @@ class EventController extends Controller
             'locale'       => $locale,
             'events'       => $events,
             'meta'         => $meta,
+            'paginator'    => $paginator,
             'categories'   => is_array($categories) ? $categories : [],
             'search_query' => $searchQuery,
             'filters'=> [

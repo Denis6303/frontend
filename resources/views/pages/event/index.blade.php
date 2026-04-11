@@ -120,6 +120,13 @@
                                         </div>
                                     @endforelse
                                 </div>
+                                @if(isset($paginator) && $paginator->hasPages())
+                                    <div class="row mt-4">
+                                        <div class="col-12 d-flex justify-content-center">
+                                            {{ $paginator->withQueryString()->links('pagination.public-home') }}
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
