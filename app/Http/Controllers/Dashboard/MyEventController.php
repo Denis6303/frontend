@@ -28,6 +28,15 @@ class MyEventController extends Controller
 
         $token = $this->apiService->getUserToken();
 
+        $searchQuery = trim((string) $request->query('query', ''));
+        $eventsQuery = [
+            'page'     => 1,
+            'per_page' => 500,
+        ];
+        if ($searchQuery !== '') {
+            $eventsQuery['query'] = $searchQuery;
+        }
+
         $response = $this->apiService->makeApiRequest(
             'GET',
             'users/me/events',
@@ -36,11 +45,7 @@ class MyEventController extends Controller
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                 ],
-                'query' => [
-                    'page'     => 1,
-                    'per_page' => 500,
-                    'query'    => $request->query('query'),
-                ],
+                'query' => $eventsQuery,
             ],
             false
         );

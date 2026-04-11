@@ -18,7 +18,7 @@
                 <div class="dashboard-wrap-content p-4">
                     <h5 class="mb-4">{{ __('My Tickets') }}</h5>
                     <div class="d-md-flex flex-wrap align-items-center gap-3">
-                        <form method="get" action="{{ route('dashboard.tickets.index', ['locale' => $locale]) }}" class="dashboard-events-search-form mb-0">
+                        <form method="get" action="{{ route('dashboard.tickets.index', ['locale' => $locale]) }}" class="dashboard-events-search-form vtx-dashboard-live-search mb-0">
                             <input type="hidden" name="tab" value="{{ $activeTab }}">
                             <div class="dashboard-date-wrap dashboard-events-search-wrap">
                                 <div class="form-group mb-0">
@@ -139,7 +139,47 @@
             inp.value = tab;
         });
     }
+    function debounce(fn, wait) {
+        var t;
+        return function () {
+            var ctx = this, args = arguments;
+            clearTimeout(t);
+            t = setTimeout(function () { fn.apply(ctx, args); }, wait);
+        };
+    }
     document.addEventListener('DOMContentLoaded', function () {
+        var searchForm = document.querySelector('.vtx-tickets-page .vtx-dashboard-live-search');
+        if (searchForm) {
+            var searchInput = searchForm.querySelector('input[name="query"]');
+            if (searchInput) {
+                var lastQuerySent = (searchInput.value || '').trim();
+                var navigateSearch = debounce(function () {
+                    var v = (searchInput.value || '').trim();
+                    if (v === lastQuerySent) {
+                        return;
+                    }
+                    lastQuerySent = v;
+                    var u = new URL(window.location.href);
+                    var tabInp = searchForm.querySelector('input[name="tab"]');
+                    if (tabInp && tabInp.value) {
+                        u.searchParams.set('tab', tabInp.value);
+                    }
+                    if (v) {
+                        u.searchParams.set('query', v);
+                    } else {
+                        u.searchParams.delete('query');
+                    }
+                    ['page_upcoming', 'page_past', 'page_cancelled'].forEach(function (k) {
+                        u.searchParams.delete(k);
+                    });
+                    window.location.href = u.pathname + u.search + u.hash;
+                }, 350);
+                searchInput.addEventListener('input', navigateSearch);
+                searchForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                });
+            }
+        }
         var u = new URL(window.location.href);
         var initial = u.searchParams.get('tab');
         if (initial) {

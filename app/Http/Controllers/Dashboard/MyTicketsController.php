@@ -29,23 +29,11 @@ class MyTicketsController extends Controller
         }
 
         $token = $this->apiService->getUserToken();
-        $raw = $this->fetchTicketsFromApi($token);
+        $searchRaw = $request->query('query');
+        $searchForApi = is_string($searchRaw) ? $searchRaw : '';
+        $raw = $this->fetchTicketsFromApi($token, $searchForApi);
 
         $normalized = array_map(fn (array $t) => $this->normalizeTicket($t), $raw);
-
-        $query = mb_strtolower(trim((string) $request->query('query', '')));
-        if ($query !== '') {
-            $normalized = array_values(array_filter($normalized, static function (array $t) use ($query) {
-                $hay = mb_strtolower(
-                    ($t['event_title'] ?? '')
-                    .' '.($t['order_reference'] ?? '')
-                    .' '.($t['category_label'] ?? '')
-                    .' '.($t['qr_value'] ?? '')
-                );
-
-                return str_contains($hay, $query);
-            }));
-        }
 
         $activeTab = $request->query('tab', 'upcoming');
         if (! in_array($activeTab, ['upcoming', 'past', 'cancelled'], true)) {
@@ -148,8 +136,16 @@ class MyTicketsController extends Controller
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function fetchTicketsFromApi(string $token): array
+    private function fetchTicketsFromApi(string $token, string $searchQuery = ''): array
     {
+        $query = [
+            'per_page' => 100,
+        ];
+        $q = trim($searchQuery);
+        if ($q !== '') {
+            $query['query'] = $q;
+        }
+
         $response = $this->apiService->makeApiRequest(
             'GET',
             'users/me/tickets',
@@ -158,10 +154,7 @@ class MyTicketsController extends Controller
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer '.$token,
                 ],
-                'query' => [
-                    // Backend validates per_page with max:100.
-                    'per_page' => 100,
-                ],
+                'query' => $query,
             ],
             false
         );
