@@ -20,6 +20,33 @@
 .home-category-filters { display: flex; justify-content: flex-start; flex-wrap: nowrap; gap: 0.5rem; padding: 1rem 0; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
 .home-category-filters::-webkit-scrollbar { display: none; }
 .home-category-filters .control { flex-shrink: 0; border-radius: 999px; padding-inline: 1rem; }
+.home-category-filters a.control {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,.2);
+  outline: none;
+  box-shadow: none;
+}
+.home-category-filters a.control:hover,
+.home-category-filters a.control:focus,
+.home-category-filters a.control:focus-visible,
+.home-category-filters a.control:visited,
+.home-category-filters a.control:active {
+  text-decoration: none;
+  border-color: rgba(0,0,0,.2);
+  outline: none;
+  box-shadow: none;
+}
+.home-category-filters .control.is-active,
+.home-category-filters .control.is-active:hover,
+.home-category-filters .control.is-active:focus,
+.home-category-filters .control.is-active:focus-visible,
+.home-category-filters .control.is-active:visited,
+.home-category-filters .control.is-active:active {
+  background: #111;
+  border-color: #111;
+}
 @media (min-width: 992px) {
   .home-category-filters { justify-content: center; flex-wrap: wrap; overflow: visible; }
 }
@@ -149,14 +176,26 @@
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
                 <div id="homeCategoryFilters" class="home-category-filters">
-                    <button type="button" class="control" data-filter="all">{{ __('All') }}</button>
+                    @php
+                        $homeLocale = $locale ?? 'fr';
+                        $allQs = collect(request()->except('page'))->forget('category_id')->all();
+                        $allHref = route('home', ['locale' => $homeLocale]);
+                        $allQueryStr = http_build_query($allQs);
+                        if ($allQueryStr !== '') {
+                            $allHref .= '?' . $allQueryStr;
+                        }
+                    @endphp
+                    <a href="{{ $allHref }}" class="control {{ ! request()->filled('category_id') ? 'is-active' : '' }}">{{ __('All') }}</a>
                     @foreach(($categories ?? []) as $cat)
+                        @continue(empty($cat['id']))
                         @php
-                            $slug = \Illuminate\Support\Str::slug($cat['name_en'] ?? $cat['name'] ?? '');
+                            $catQs = collect(request()->except('page'))->put('category_id', (int) $cat['id'])->all();
+                            $catHref = route('home', ['locale' => $homeLocale]) . '?' . http_build_query($catQs);
+                            $catActive = request()->filled('category_id') && (int) request('category_id') === (int) $cat['id'];
                         @endphp
-                        <button type="button" class="control" data-filter=".{{ $slug }}">
+                        <a href="{{ $catHref }}" class="control {{ $catActive ? 'is-active' : '' }}">
                             {{ $cat['name'] ?? $cat['name_en'] ?? '' }}
-                        </button>
+                        </a>
                     @endforeach
                 </div>
                 <button type="button" class="category-scroll-arrow category-scroll-right" aria-label="Scroll categories right">
@@ -194,9 +233,7 @@
                                         @php
                                             $categorySlug = \Illuminate\Support\Str::slug($event['category']['name_en'] ?? $event['category']['name'] ?? '');
                                         @endphp
-                                        <div
-                                            class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mix {{ $categorySlug ? $categorySlug : '' }}"
-                                            data-ref="mixitup-target">
+                                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 {{ $categorySlug ? $categorySlug : '' }}">
                                             @include('partials.event-card', ['event' => $event])
                                         </div>
                                     @empty
@@ -270,6 +307,13 @@
         function goSearch() {
             var v = (searchInput.value || '').trim();
             var u = new URL(base, window.location.origin);
+            var cur = new URL(window.location.href);
+            var cat = cur.searchParams.get('category_id');
+            if (cat) {
+                u.searchParams.set('category_id', cat);
+            } else {
+                u.searchParams.delete('category_id');
+            }
             if (v) {
                 u.searchParams.set('query', v);
             } else {

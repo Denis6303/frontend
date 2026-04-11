@@ -321,15 +321,20 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form action="{{ route('home', ['locale' => $locale ?? 'fr']) }}" method="GET"
-                  class="search-overlay-form" role="search">
+            @php
+                $headerLocale = $locale ?? 'fr';
+                $overlayLiveOnListing = request()->routeIs('home', 'ticketing.index', 'ticketing.events');
+            @endphp
+            <form action="{{ route('home', ['locale' => $headerLocale]) }}" method="GET"
+                  class="search-overlay-form vtx-overlay-live-search" role="search"
+                  data-overlay-live="{{ $overlayLiveOnListing ? '1' : '0' }}"
+                  data-search-fallback="{{ route('home', ['locale' => $headerLocale]) }}">
                 <div class="search-overlay-inner">
                     <i class="fa-solid fa-search search-overlay-icon"></i>
                     <input type="search" name="query" class="search-overlay-input"
                            placeholder="{{ __('Search placeholder') }}" aria-label="{{ __('Search') }}" autocomplete="off"
                            value="{{ request('query', request('q')) }}">
                 </div>
-                <button type="submit" class="main-btn btn-hover w-100 mt-3">{{ __('Search') }}</button>
             </form>
         </div>
     </div>
@@ -343,14 +348,69 @@
     var closeBtn = document.getElementById('searchOverlayClose');
 
     if (overlay && trigger) {
+        var overlayForm = overlay.querySelector('.search-overlay-form');
+        var searchInput = overlayForm ? overlayForm.querySelector('.search-overlay-input') : null;
+        var lastOverlayQuery = searchInput ? String(searchInput.value || '').trim() : '';
+
+        function debounce(fn, wait) {
+            var t;
+            return function () {
+                var ctx = this, args = arguments;
+                clearTimeout(t);
+                t = setTimeout(function () { fn.apply(ctx, args); }, wait);
+            };
+        }
+
+        function buildOverlaySearchHref() {
+            if (!overlayForm || !searchInput) return '';
+            var v = String(searchInput.value || '').trim();
+            var live = overlayForm.getAttribute('data-overlay-live') === '1';
+            var u = live
+                ? new URL(window.location.href)
+                : new URL(overlayForm.getAttribute('data-search-fallback'), window.location.origin);
+            if (!live) {
+                var cur = new URL(window.location.href);
+                var cat = cur.searchParams.get('category_id');
+                if (cat) {
+                    u.searchParams.set('category_id', cat);
+                } else {
+                    u.searchParams.delete('category_id');
+                }
+            }
+            if (v) {
+                u.searchParams.set('query', v);
+            } else {
+                u.searchParams.delete('query');
+                u.searchParams.delete('q');
+            }
+            u.searchParams.delete('page');
+            var qs = u.searchParams.toString();
+            return u.pathname + (qs ? '?' + qs : '') + u.hash;
+        }
+
+        function navigateOverlaySearch() {
+            var href = buildOverlaySearchHref();
+            if (href) {
+                window.location.href = href;
+            }
+        }
+
+        var debouncedOverlaySearch = debounce(function () {
+            var v = String(searchInput.value || '').trim();
+            if (v === lastOverlayQuery) {
+                return;
+            }
+            lastOverlayQuery = v;
+            navigateOverlaySearch();
+        }, 350);
+
         function openSearch() {
             overlay.classList.add('search-overlay--open');
             overlay.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
-            var input = overlay.querySelector('.search-overlay-input');
-            if (input) {
-                input.focus();
-                try { input.select(); } catch (e) {}
+            if (searchInput) {
+                lastOverlayQuery = String(searchInput.value || '').trim();
+                searchInput.focus();
             }
         }
         function closeSearch() {
@@ -362,6 +422,20 @@
         if (backdrop) backdrop.addEventListener('click', closeSearch);
         if (closeBtn)  closeBtn.addEventListener('click', closeSearch);
         overlay.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSearch(); });
+
+        if (overlayForm && searchInput) {
+            searchInput.addEventListener('input', debouncedOverlaySearch);
+            overlayForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var v = String(searchInput.value || '').trim();
+                if (v === lastOverlayQuery) {
+                    closeSearch();
+                    return;
+                }
+                lastOverlayQuery = v;
+                navigateOverlaySearch();
+            });
+        }
     }
 
     var userToggle = document.getElementById('headerUserToggle');

@@ -32,6 +32,11 @@ class EventController extends Controller
             'location'    => $request->query('location'),
         ];
 
+        $catId = $request->query('category_id');
+        if ($catId !== null && $catId !== '' && ctype_digit((string) $catId)) {
+            $params['category_id'] = (int) $catId;
+        }
+
         $events = $this->fetchPublicEvents($params, $meta);
 
         $this->rememberSlugMap($events);
@@ -80,6 +85,11 @@ class EventController extends Controller
         $statuses = (array) $request->query('statuses', ['upcoming']);
         $params['statuses'] = $statuses;
 
+        $catId = $request->query('category_id');
+        if ($catId !== null && $catId !== '' && ctype_digit((string) $catId)) {
+            $params['category_id'] = (int) $catId;
+        }
+
         $events = $this->fetchPublicEvents($params, $meta);
 
         $this->rememberSlugMap($events);
@@ -98,6 +108,7 @@ class EventController extends Controller
                 'location'     => $params['location'],
                 'country_code' => $params['country_code'],
                 'statuses'     => $statuses,
+                'category_id'  => $params['category_id'] ?? null,
             ],
         ]);
     }
@@ -239,6 +250,9 @@ class EventController extends Controller
             foreach ((array) $params['statuses'] as $status) {
                 $query['statuses[]'][] = $status;
             }
+        }
+        if (! empty($params['category_id'])) {
+            $query['category_id'] = (int) $params['category_id'];
         }
 
         $response = $this->apiService->makeApiRequest(

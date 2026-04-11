@@ -946,3 +946,57 @@
    .night-mode .page-search-icon { color: #94a3b8; }
    .night-mode .page-search-input { color: #f1f5f9; }
    .night-mode .page-search-input::placeholder { color: #64748b; }
+
+   /* ============================================================
+      FILTRES CATÉGORIES — le dashboard impose a:hover { color: #3c52e9 !important }
+      ============================================================ */
+   .home-category-filters a.control,
+   .home-category-filters a.control:hover,
+   .home-category-filters a.control:focus,
+   .home-category-filters a.control:focus-visible,
+   .home-category-filters a.control:active,
+   .home-category-filters a.control:visited {
+       color: #111 !important;
+       text-decoration: none !important;
+   }
+   .home-category-filters .control.is-active,
+   .home-category-filters .control.is-active:hover,
+   .home-category-filters .control.is-active:focus,
+   .home-category-filters .control.is-active:focus-visible,
+   .home-category-filters .control.is-active:active,
+   .home-category-filters .control.is-active:visited {
+       color: #fff !important;
+   }
+   .night-mode .home-category-filters a.control,
+   .night-mode .home-category-filters a.control:hover,
+   .night-mode .home-category-filters a.control:focus,
+   .night-mode .home-category-filters a.control:focus-visible,
+   .night-mode .home-category-filters a.control:active,
+   .night-mode .home-category-filters a.control:visited {
+       color: #f1f5f9 !important;
+   }
+   .featured-controls .controls a.control,
+   .featured-controls .controls a.control:hover,
+   .featured-controls .controls a.control:focus,
+   .featured-controls .controls a.control:focus-visible,
+   .featured-controls .controls a.control:active,
+   .featured-controls .controls a.control:visited {
+       color: #111 !important;
+       text-decoration: none !important;
+   }
+   .featured-controls .controls .control.is-active,
+   .featured-controls .controls .control.is-active:hover,
+   .featured-controls .controls .control.is-active:focus,
+   .featured-controls .controls .control.is-active:focus-visible,
+   .featured-controls .controls .control.is-active:active,
+   .featured-controls .controls .control.is-active:visited {
+       color: #fff !important;
+   }
+   .night-mode .featured-controls .controls a.control,
+   .night-mode .featured-controls .controls a.control:hover,
+   .night-mode .featured-controls .controls a.control:focus,
+   .night-mode .featured-controls .controls a.control:focus-visible,
+   .night-mode .featured-controls .controls a.control:active,
+   .night-mode .featured-controls .controls a.control:visited {
+       color: #f1f5f9 !important;
+   }
