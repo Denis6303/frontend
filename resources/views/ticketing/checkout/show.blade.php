@@ -176,6 +176,25 @@
                                 @endforeach
                             </div>
 
+                            @if ($amount > 0.00001)
+                                <div class="vx-wallet-fields" id="vx-wallet-fields" hidden>
+                                    <label class="vx-wallet-label" for="phone_number_pay">{{ __('Phone number to debit') }}</label>
+                                    <input
+                                        type="tel"
+                                        name="phone_number"
+                                        id="phone_number_pay"
+                                        class="form-control vx-wallet-input"
+                                        value="{{ old('phone_number') }}"
+                                        placeholder="{{ __('e.g. 90123456') }}"
+                                        autocomplete="tel"
+                                        inputmode="tel"
+                                    >
+                                    <p class="vx-wallet-hint text-muted small mb-0 mt-1">{{ __('Enter the mobile money number that will be charged.') }}</p>
+                                    <input type="hidden" name="country" id="vx-payment-country" value="{{ old('country', 'TG') }}">
+                                    <input type="hidden" name="operator" id="vx-payment-operator" value="{{ old('operator', 'YASS') }}">
+                                </div>
+                            @endif
+
                             <div class="vx-terms">
                                 <input
                                     type="checkbox"
@@ -228,7 +247,26 @@
             }
         }
 
-        // Payment method card selection
+        // Payment method card selection + mobile money phone field
+        function syncWalletFields() {
+            const wrap = document.getElementById('vx-wallet-fields');
+            if (!wrap) return;
+            const checked = document.querySelector('input[name="payment_method"]:checked');
+            const phone = document.getElementById('phone_number_pay');
+            const op = document.getElementById('vx-payment-operator');
+            const country = document.getElementById('vx-payment-country');
+            if (!checked || !phone) return;
+            const code = checked.value;
+            const needsWallet = (code === 'yass' || code === 'flooz');
+            wrap.hidden = !needsWallet;
+            phone.required = needsWallet;
+            if (op) {
+                op.value = code === 'flooz' ? 'FLOOZ' : (code === 'yass' ? 'YASS' : (op.value || 'YASS'));
+            }
+            if (country && needsWallet && (!country.value || country.value.length !== 2)) {
+                country.value = 'TG';
+            }
+        }
         document.querySelectorAll('.vx-pm-card').forEach(function (card) {
             const inp = card.querySelector('input[type="radio"]');
             if (!inp) return;
@@ -237,8 +275,10 @@
                     c.classList.remove('is-selected');
                 });
                 card.classList.add('is-selected');
+                syncWalletFields();
             });
         });
+        syncWalletFields();
     })();
 </script>
 @endpush

@@ -309,3 +309,25 @@
   opacity: 0.8;
   color: #fff;
 }
+
+/* Mobile money — phone */
+.vx-wallet-fields {
+  margin-top: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+.vx-wallet-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+  color: #000;
+}
+.vx-wallet-input {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  font-size: 15px;
+}
+.vx-wallet-hint {
+  font-size: 12px;
+}

@@ -139,8 +139,7 @@ class OrderIntentController extends Controller
         Session::put('order_intent_key', $key);
 
         return redirect()
-            ->route('ticketing.checkout.show', ['locale' => $locale, 'key' => $key])
-            ->with('success', $result['message'] ?? __('Order created.'));
+            ->route('ticketing.checkout.show', ['locale' => $locale, 'key' => $key]);
     }
 
     /**
@@ -236,12 +235,30 @@ class OrderIntentController extends Controller
         $validated = $request->validate([
             'payment_method' => 'required|string|max:64',
             'accept_terms' => 'required|accepted',
+            'country' => 'nullable|string|size:2',
+            'operator' => 'nullable|string|max:32',
+            'phone_number' => 'nullable|string|max:32',
         ]);
 
         $method = $validated['payment_method'];
 
         if ($method === 'free' && $amount > 0.00001) {
             return redirect()->back()->withErrors(['form' => __('Free payment is only available when the amount is zero.')]);
+        }
+
+        if (in_array($method, ['yass', 'flooz'], true)) {
+            $wallet = $request->validate([
+                'phone_number' => 'required|string|max:32',
+            ]);
+            $validated['phone_number'] = preg_replace('/\s+/', '', $wallet['phone_number']);
+            $validated['country'] = strtoupper((string) ($validated['country'] ?? 'TG'));
+            if (strlen($validated['country']) !== 2) {
+                $validated['country'] = 'TG';
+            }
+            $validated['operator'] = $validated['operator'] ?? match ($method) {
+                'flooz' => 'FLOOZ',
+                default => 'YASS',
+            };
         }
 
         $payload = [
@@ -255,6 +272,11 @@ class OrderIntentController extends Controller
             }
             $payload['success_url'] = $this->returnUrl($locale, $key, 'success');
             $payload['failure_url'] = $this->returnUrl($locale, $key, 'failure');
+            if (in_array($method, ['yass', 'flooz'], true)) {
+                $payload['country'] = $validated['country'];
+                $payload['operator'] = $validated['operator'];
+                $payload['phone_number'] = $validated['phone_number'];
+            }
         }
 
         $result = $this->orderIntents->checkout($key, $payload);
