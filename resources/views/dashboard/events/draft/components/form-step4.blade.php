@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="ef-summary-cover-col">
                                     @php
-                                        $summaryCover = $coverDisplayUrl ?? $draft['cover_url'] ?? null;
+                                        $summaryCover = votix_media_url($coverDisplayUrl ?? $draft['cover_url'] ?? null);
                                     @endphp
                                     @if(!empty($summaryCover))
                                         <img src="{{ $summaryCover }}" alt="{{ $event['title'] ?? '' }}">

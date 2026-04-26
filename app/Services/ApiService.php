@@ -61,6 +61,12 @@ class ApiService
         $ttl = config('votix_api.client_token_cache_ttl', 3600);
 
         return Cache::remember($key, $ttl, function () {
+            $clientId = trim((string) config('votix_api.client_id'));
+            $clientSecret = trim((string) config('votix_api.client_secret'));
+            if ($clientId === '' || $clientSecret === '') {
+                return null;
+            }
+
             $url = $this->buildUrl(config('votix_api.token_endpoint'), []);
             // Token endpoint is usually without version prefix; buildUrl adds version. Use base_url + token_endpoint if needed.
             $tokenEndpoint = config('votix_api.token_endpoint');

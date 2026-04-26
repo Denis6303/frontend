@@ -187,12 +187,14 @@ class MyEventController extends Controller
             ? ['name' => $categoryName, 'name_en' => $categoryName]
             : null;
 
+        $rawCover = $draft['cover_url'] ?? null;
+
         return [
             'id'           => $draft['id'] ?? null,
             'title'        => $event['title'] ?? '—',
             'city'         => $event['city'] ?? null,
             'address'      => $event['address'] ?? null,
-            'cover_url'    => $draft['cover_url'] ?? null,
+            'cover_url'    => is_string($rawCover) ? votix_media_url($rawCover) : null,
             'occurrences'  => $data['occurrences'] ?? [],
             'status'       => 'saved',
             'category'     => $categoryPayload,

@@ -1,5 +1,5 @@
 @php
-    $cover   = $event['cover_url'] ?? asset('images/event-imgs/img-1.jpg');
+    $cover   = votix_media_url($event['cover_url'] ?? null) ?? asset('images/event-imgs/img-1.jpg');
     $datesCount = public_event_dates_count($event);
     $occList = is_array($event['occurrences'] ?? null) ? $event['occurrences'] : [];
     $firstOccForCard = $occList[0] ?? null;

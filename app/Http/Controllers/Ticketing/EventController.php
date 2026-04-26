@@ -261,9 +261,8 @@ class EventController extends Controller
             $query['country_code'] = $params['country_code'];
         }
         if (! empty($params['statuses'])) {
-            foreach ((array) $params['statuses'] as $status) {
-                $query['statuses[]'][] = $status;
-            }
+            // Laravel attend statuses[0], statuses[1]… (pas une clé littérale « statuses[] »).
+            $query['statuses'] = array_values((array) $params['statuses']);
         }
         if (! empty($params['category_id'])) {
             $query['category_id'] = (int) $params['category_id'];

@@ -1,5 +1,5 @@
 @php
-    $cover = $event['cover_url'] ?? ($defaultCover ?? asset('images/event-imgs/img-7.jpg'));
+    $cover = votix_media_url($event['cover_url'] ?? null) ?? ($defaultCover ?? asset('images/event-imgs/img-7.jpg'));
     $occ = $event['occurrences'][0] ?? null;
     $start = $occ['start_date'] ?? null;
     $city = $event['city'] ?? null;

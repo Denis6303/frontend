@@ -25,7 +25,7 @@
                                 <div class="row" data-ref="event-filter-content">
                                     @forelse($events as $event)
                                         @php
-                                            $cover = $event['cover_url'] ?? asset('images/event-imgs/img-1.jpg');
+                                            $cover = votix_media_url($event['cover_url'] ?? null) ?? asset('images/event-imgs/img-1.jpg');
                                             $occ   = $event['occurrences'][0] ?? null;
                                             $start = $occ['start_date'] ?? null;
                                             $price = $event['price_min'] ?? null;

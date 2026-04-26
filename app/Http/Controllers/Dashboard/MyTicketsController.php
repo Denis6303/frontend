@@ -218,6 +218,7 @@ class MyTicketsController extends Controller
             $event = is_array(data_get($t, 'item_occurrence.item')) ? data_get($t, 'item_occurrence.item') : [];
         }
         $cover = $event['cover_url'] ?? data_get($t, 'item_occurrence.item.cover_url') ?? $t['cover_url'] ?? null;
+        $cover = is_string($cover) ? votix_media_url($cover) : null;
 
         $cur = strtoupper((string) ($t['currency'] ?? $event['currency'] ?? 'XOF'));
 

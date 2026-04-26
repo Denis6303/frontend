@@ -129,26 +129,32 @@ class EventDraftController extends Controller
 
         $path = trim($path);
         if (preg_match('#^https?://#i', $path)) {
-            return $path;
+            return votix_media_url($path);
         }
 
         if (str_starts_with($path, '//')) {
-            return 'https:' . $path;
+            return votix_media_url('https:'.$path);
         }
 
-        // Fichiers publics du frontend Laravel (storage link)
+        $apiBase = rtrim((string) config('votix_api.base_url'), '/');
+
+        // Médias Spatie / disque public du backend (toujours servis par l’API, pas le domaine du front).
         if (str_starts_with($path, 'storage/')) {
-            return asset($path);
+            return $apiBase.'/'.$path;
         }
 
-        // Chemin absolu du site (ex. /storage/...)
+        if (str_starts_with($path, '/storage/')) {
+            return $apiBase.$path;
+        }
+
+        // Autres chemins absolus : site front (ex. assets).
         if (str_starts_with($path, '/')) {
             $appUrl = rtrim((string) config('app.url'), '/');
 
-            return $appUrl !== '' ? ($appUrl . $path) : (rtrim(config('votix_api.base_url'), '/') . $path);
+            return $appUrl !== '' ? ($appUrl.$path) : ($apiBase.$path);
         }
 
-        return rtrim(config('votix_api.base_url'), '/') . '/' . ltrim($path, '/');
+        return $apiBase.'/'.ltrim($path, '/');
     }
 
     /**
@@ -622,7 +628,7 @@ class EventDraftController extends Controller
             'locale'          => $locale,
             'draft'           => $draft,
             'draftId'         => $draftId,
-            'coverDisplayUrl' => $prefill['cover_url'],
+            'coverDisplayUrl' => votix_media_url(isset($prefill['cover_url']) && is_string($prefill['cover_url']) ? $prefill['cover_url'] : null),
             'summaryTickets'  => $this->extractTicketsFromDraft($draftArray),
         ]);
     }

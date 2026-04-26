@@ -2,6 +2,48 @@
 
 use Illuminate\Support\Facades\Session;
 
+if (! function_exists('votix_media_url')) {
+    /**
+     * Réécrit les URLs sous /storage/ pour utiliser l’origine de l’API (VOTIX_API_URL).
+     * Évite les images cassées quand l’API a été générée avec un APP_URL différent de l’URL réelle du backend.
+     */
+    function votix_media_url(?string $url): ?string
+    {
+        if ($url === null) {
+            return null;
+        }
+
+        $url = trim($url);
+        if ($url === '') {
+            return null;
+        }
+
+        $base = rtrim((string) config('votix_api.base_url'), '/');
+        $storagePrefix = '/storage/';
+
+        if (str_starts_with($url, $storagePrefix)) {
+            return $base.$url;
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if (is_string($path) && str_starts_with($path, $storagePrefix)) {
+            $query = parse_url($url, PHP_URL_QUERY);
+            $fragment = parse_url($url, PHP_URL_FRAGMENT);
+            $built = $base.$path;
+            if (is_string($query) && $query !== '') {
+                $built .= '?'.$query;
+            }
+            if (is_string($fragment) && $fragment !== '') {
+                $built .= '#'.$fragment;
+            }
+
+            return $built;
+        }
+
+        return $url;
+    }
+}
+
 if (! function_exists('old_or_prefill')) {
     /**
      * Valeur d’affichage : ancienne saisie seulement si la clé existe dans l’input flashé
@@ -33,22 +75,23 @@ if (! function_exists('banner_display_url_for_draft')) {
         $fromApi = trim((string) (is_array($prefill) ? ($prefill['cover_url'] ?? '') : ''));
 
         if (! Session::hasOldInput()) {
-            return $fromApi;
+            return votix_media_url($fromApi !== '' ? $fromApi : null) ?? '';
         }
 
         $input = Session::getOldInput();
         if (! is_array($input) || ! array_key_exists('image_url', $input)) {
-            return $fromApi;
+            return votix_media_url($fromApi !== '' ? $fromApi : null) ?? '';
         }
 
         $flashed = $input['image_url'];
         if (! is_string($flashed)) {
-            return $fromApi;
+            return votix_media_url($fromApi !== '' ? $fromApi : null) ?? '';
         }
 
         $flashed = trim($flashed);
+        $raw = $flashed !== '' ? $flashed : $fromApi;
 
-        return $flashed !== '' ? $flashed : $fromApi;
+        return votix_media_url($raw !== '' ? $raw : null) ?? '';
     }
 }
 

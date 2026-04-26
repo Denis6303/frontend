@@ -274,7 +274,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-12">
                         <div class="main-event-dt">
                             <div class="event-img">
-                                <img src="{{ $event['cover_url'] ?? asset('images/logos/bottomless.png') }}" alt="Event image" style="max-height:320px;object-fit:cover;width:100%;">
+                                <img src="{{ votix_media_url($event['cover_url'] ?? null) ?? asset('images/logos/bottomless.png') }}" alt="Event image" style="max-height:320px;object-fit:cover;width:100%;">
                             </div>
                             <div class="main-event-content">
                                 <div class="d-flex align-items-center justify-content-between gap-2">
