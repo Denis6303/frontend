@@ -1,0 +1,12 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/ticket-qr.js": {
+    "file": "assets/ticket-qr-a82369af.js",
+    "isEntry": true,
+    "src": "resources/js/ticket-qr.js"
+  }
+}
