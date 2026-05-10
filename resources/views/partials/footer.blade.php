@@ -6,10 +6,10 @@
                     <div class="footer-content">
                         <h4>{{ __('Company') }}</h4>
                         <ul class="footer-link-list">
-                            <li><a href="#" class="footer-link">{{ __('About Us') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Help Center') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('FAQ') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Contact Us') }}</a></li>
+                            <li><a href="{{ route('static.about', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('About Us') }}</a></li>
+                            <li><a href="{{ route('static.help', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Help Center') }}</a></li>
+                            <li><a href="{{ route('static.faq', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('FAQ') }}</a></li>
+                            <li><a href="{{ route('contact', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Contact Us') }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -17,10 +17,10 @@
                     <div class="footer-content">
                         <h4>{{ __('Useful Links') }}</h4>
                         <ul class="footer-link-list">
-                            <li><a href="#" class="footer-link">{{ __('Create Event') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Sell Tickets Online') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Privacy Policy') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Terms & Conditions') }}</a></li>
+                            <li><a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Create Event') }}</a></li>
+                            <li><a href="{{ route('static.sell', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Sell Tickets Online') }}</a></li>
+                            <li><a href="{{ route('static.privacy', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Privacy Policy') }}</a></li>
+                            <li><a href="{{ route('static.terms', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Terms & Conditions') }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -28,9 +28,7 @@
                     <div class="footer-content">
                         <h4>{{ __('Resources') }}</h4>
                         <ul class="footer-link-list">
-                            <li><a href="#" class="footer-link">{{ __('Pricing') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Blog') }}</a></li>
-                            <li><a href="#" class="footer-link">{{ __('Refer a Friend') }}</a></li>
+                            <li><a href="{{ route('static.pricing', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Pricing') }}</a></li>
                         </ul>
                     </div>
                 </div>

@@ -58,10 +58,38 @@ Route::middleware('setlocale')->prefix('{locale}')->where(['locale' => 'fr|en'])
         }
     });
 
-    // Exemple page contact (à créer)
+    // Pages statiques (footer)
+    Route::get('/a-propos', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'about', 'title' => __('About Us')]);
+    })->name('static.about');
+
+    Route::get('/centre-aide', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'help', 'title' => __('Help Center')]);
+    })->name('static.help');
+
+    Route::get('/faq', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'faq', 'title' => __('FAQ')]);
+    })->name('static.faq');
+
     Route::get('/nous-contacter', function (string $locale) {
-        return view('pages.contact');
+        return view('pages.static', ['locale' => $locale, 'page' => 'contact', 'title' => __('Contact Us')]);
     })->name('contact');
+
+    Route::get('/vendre-billets-en-ligne', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'sell', 'title' => __('Sell Tickets Online')]);
+    })->name('static.sell');
+
+    Route::get('/confidentialite', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'privacy', 'title' => __('Privacy Policy')]);
+    })->name('static.privacy');
+
+    Route::get('/conditions-generales', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'terms', 'title' => __('Terms & Conditions')]);
+    })->name('static.terms');
+
+    Route::get('/tarifs', function (string $locale) {
+        return view('pages.static', ['locale' => $locale, 'page' => 'pricing', 'title' => __('Pricing')]);
+    })->name('static.pricing');
 }
 );
 
