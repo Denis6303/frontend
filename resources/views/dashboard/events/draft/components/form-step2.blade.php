@@ -43,24 +43,24 @@
         <div class="main-card">
           
                 <div class="p-4 form-group border_bottom pb_30">
-                    <label class="form-label fs-16">Where and when is your event?*</label>
+                    <label class="form-label fs-16">{{ __('Where and when is your event?*') }}</label>
                     <p class="mt-2 fs-14 d-block mb-3">
-                        Set country, currency and main dates for your event.
+                        {{ __('Set country, currency and main dates for your event.') }}
                     </p>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fs-6">Country*</label>
+                            <label class="form-label fs-6">{{ __('Country*') }}</label>
                             <select class="selectpicker @error('country_code') is-invalid @enderror" name="country_code" data-size="5" data-live-search="true">
                                 <option value="tg" {{ $countryOld === 'tg' ? 'selected' : '' }}>Togo</option>
-                                <option value="other" {{ $countryOld === 'other' ? 'selected' : '' }}>Other</option>
+                                <option value="other" {{ $countryOld === 'other' ? 'selected' : '' }}>{{ __('Other') }}</option>
                             </select>
                             @error('country_code')
                             <p class="text-danger small mb-0">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fs-6">Currency*</label>
+                            <label class="form-label fs-6">{{ __('Currency*') }}</label>
                             <select class="selectpicker @error('currency') is-invalid @enderror" name="currency" data-size="5">
                                 <option value="XOF" {{ $currencyOld === 'XOF' ? 'selected' : '' }}>FCFA</option>
                                 <option value="EUR" {{ $currencyOld === 'EUR' ? 'selected' : '' }}>EUR</option>
@@ -74,14 +74,14 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fs-6">City</label>
+                            <label class="form-label fs-6">{{ __('City') }}</label>
                             <input class="form-control h_50 @error('city') is-invalid @enderror" type="text" name="city" value="{{ old('city', $p['city'] ?? '') }}" placeholder="{{ __('City') }}">
                             @error('city')
                             <p class="text-danger small mb-0">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fs-6">Address</label>
+                            <label class="form-label fs-6">{{ __('Address') }}</label>
                             <input class="form-control h_50 @error('address') is-invalid @enderror" type="text" name="address" value="{{ old_or_prefill('address', $p['address'] ?? '') }}" placeholder="{{ __('Address') }}">
                             @error('address')
                             <p class="text-danger small mb-0">{{ $message }}</p>
@@ -96,14 +96,14 @@
                         @foreach ($step2Starts as $idx => $startVal)
                         <div class="row g-3 mb-3 {{ $idx > 0 ? 'date-row-extra' : '' }}">
                             <div class="col-md-6">
-                            <label class="form-label fs-6">Start date & time*</label>
+                            <label class="form-label fs-6">{{ __('Start date & time*') }}</label>
                             <div class="loc-group position-relative">
                                 <input class="form-control h_50 event-datetime-picker" type="text" name="start_dates[{{ $idx }}]" id="start_date_{{ $idx }}" placeholder="YYYY-MM-DD HH:MM" value="{{ $startVal }}" autocomplete="off">
                                 <span class="absolute-icon"><i class="fa-solid fa-calendar-days"></i></span>
                             </div>
                         </div>
                             <div class="col-md-6">
-                            <label class="form-label fs-6">End date & time*</label>
+                            <label class="form-label fs-6">{{ __('End date & time*') }}</label>
                             <div class="loc-group position-relative">
                                 <input class="form-control h_50 event-datetime-picker" type="text" name="end_dates[{{ $idx }}]" id="end_date_{{ $idx }}" placeholder="YYYY-MM-DD HH:MM" value="{{ $step2Ends[$idx] ?? '' }}" autocomplete="off">
                                 <span class="absolute-icon"><i class="fa-solid fa-calendar-days"></i></span>

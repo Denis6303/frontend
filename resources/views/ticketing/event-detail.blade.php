@@ -11,7 +11,7 @@
                         <div class="barren-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.index', ['locale' => $locale ?? app()->getLocale()]) }}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.index', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Home') }}</a></li>
                                     <li class="breadcrumb-item"><a href="{{ route('ticketing.events', ['locale' => $locale ?? app()->getLocale()]) }}">Explore
                                             Events</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{ $event['title'] ?? 'Event' }}</li>
@@ -24,6 +24,12 @@
         </div>
         @php
             $category    = $event['category'] ?? null;
+            $categoryLabel = null;
+            if (is_array($category)) {
+                $categoryLabel = ($locale ?? app()->getLocale()) === 'en'
+                    ? ($category['name_en'] ?? $category['name'] ?? null)
+                    : ($category['name'] ?? $category['name_en'] ?? null);
+            }
             $occurrences = is_array($event['occurrences'] ?? null) ? $event['occurrences'] : [];
             $firstOcc    = $occurrences[0] ?? null;
             $ticketTypes = ($firstOcc && is_array($firstOcc['ticket_types'] ?? null)) ? $firstOcc['ticket_types'] : [];
@@ -49,9 +55,9 @@
                                     {{ $event['title'] ?? '—' }}
                                 </h3>
                                 <div class="event-top-info-status">
-                                    @if($category && !empty($category['name']))
+                                    @if(!empty($categoryLabel))
                                         <span class="event-type-name">
-                                            <i class="fa-solid fa-tag"></i> {{ $category['name'] }}
+                                            <i class="fa-solid fa-tag"></i> {{ $categoryLabel }}
                                         </span>
                                     @endif
                                     @if(!empty($event['city']) || !empty($event['address']))
@@ -101,14 +107,14 @@
                     <div class="col-xl-6 col-lg-6 col-md-12">
                         <div class="main-card event-right-dt">
                             <div class="bp-title">
-                                <h4>Event Details</h4>
+                                <h4>{{ __('Event details') }}</h4>
                             </div>
                             <div class="event-dt-right-group mt-4">
                                 <div class="event-dt-right-icon">
                                     <i class="fa-solid fa-calendar-day"></i>
                                 </div>
                                 <div class="event-dt-right-content">
-                                    <h4>Date and Time</h4>
+                                    <h4>{{ __('Date and time') }}</h4>
                                     <h5>
                                         @if($firstOcc && !empty($firstOcc['start_date']))
                                             {{ \Carbon\Carbon::parse($firstOcc['start_date'])->translatedFormat('D, d M Y H:i') }}
@@ -123,7 +129,7 @@
                                     <i class="fa-solid fa-location-dot"></i>
                                 </div>
                                 <div class="event-dt-right-content">
-                                <h4>Location</h4>
+                                <h4>{{ __('Location') }}</h4>
                                 <h5 class="mb-0">
                                     {{ trim(implode(', ', array_filter([$event['city'] ?? '', $event['address'] ?? '']))) ?: '—' }}
                                 </h5>
@@ -210,7 +216,7 @@
 
                                 <div class="booking-btn mt-4">
                                     <a href="{{ route('ticketing.cart', ['locale' => $locale ?? app()->getLocale()]) }}"
-                                        class="main-btn btn-hover w-100">Book Now</a>
+                                        class="main-btn btn-hover w-100">{{ __('Book now') }}</a>
                                 </div>
                             </div>
                         </div>

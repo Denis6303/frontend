@@ -3,14 +3,14 @@
 @section('title', __('Sign up'))
 
 @section('auth-top-link')
-    {{ __('Déjà un compte ?') }} <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Connexion') }}</a>
+    {{ __('Already have an account?') }} <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Login') }}</a>
 @endsection
 
 @section('content')
     <div class="registration">
         <form method="POST" action="{{ route('register', ['locale' => $locale ?? app()->getLocale()]) }}">
             @csrf
-            <h2 class="registration-title">{{ __('Créer un compte Votix') }}</h2>
+            <h2 class="registration-title">{{ __('Create a Votix account') }}</h2>
 
             @if ($errors->any())
                 <div class="alert alert-danger mt-3">
@@ -30,16 +30,16 @@
                 </div>
                 <div class="loc-group position-relative">
                     <input class="form-control h_50" type="password" name="password" placeholder="{{ __('Password') }}" required minlength="8" id="password-field">
-                    <span class="pass-show-eye" id="toggle-password" role="button" aria-label="Afficher le mot de passe"><i class="fas fa-eye-slash"></i></span>
+                    <span class="pass-show-eye" id="toggle-password" role="button" aria-label="{{ __('Show password') }}"><i class="fas fa-eye-slash"></i></span>
                 </div>
             </div>
             <button class="main-btn btn-hover w-100 mt-4" type="submit">{{ __('Sign up') }}</button>
         </form>
         <div class="agree-text">
-            En cliquant sur « S'inscrire », vous acceptez les <a href="#">Conditions générales</a> et la <a href="#">Politique de confidentialité</a> de Votix.
+            {{ __('By clicking "Sign up", you accept Votix Terms & Conditions and Privacy Policy.') }}
         </div>
         <div class="divider">
-            <span>ou</span>
+            <span>{{ __('or') }}</span>
         </div>
         <div class="social-btns-list mb-lg-5">
             <button type="button" class="social-login-btn">
@@ -48,7 +48,7 @@
             </button>
         </div>
         <div class="new-sign-link">
-            {{ __('Déjà un compte ?') }} <a class="signup-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Connexion') }}</a>
+            {{ __('Already have an account?') }} <a class="signup-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Login') }}</a>
         </div>
     </div>
 

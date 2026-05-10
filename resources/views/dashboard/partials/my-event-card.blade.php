@@ -14,10 +14,13 @@
     $cardContext = $cardContext ?? 'upcoming';
 
     $categoryLabels = [];
+    $categoryLocale = $locale ?? app()->getLocale();
     if (! empty($event['categories']) && is_array($event['categories'])) {
         foreach ($event['categories'] as $cat) {
             if (is_array($cat)) {
-                $n = $cat['name'] ?? $cat['name_en'] ?? null;
+                $n = $categoryLocale === 'en'
+                    ? ($cat['name_en'] ?? $cat['name'] ?? null)
+                    : ($cat['name'] ?? $cat['name_en'] ?? null);
                 if ($n !== null && $n !== '') {
                     $categoryLabels[] = $n;
                 }
@@ -28,7 +31,9 @@
     }
     $categoriesDisplay = count($categoryLabels) ? implode(', ', $categoryLabels) : null;
     if ($categoriesDisplay === null) {
-        $categoriesDisplay = $event['category']['name'] ?? $event['category']['name_en'] ?? null;
+        $categoriesDisplay = $categoryLocale === 'en'
+            ? ($event['category']['name_en'] ?? $event['category']['name'] ?? null)
+            : ($event['category']['name'] ?? $event['category']['name_en'] ?? null);
     }
 
     $canUnpublish = $cardContext === 'upcoming' && $status === 'upcoming' && $eventId;
@@ -65,7 +70,7 @@
                             <div class="dashboard-event-meta-value" title="{{ $address }}">{{ $address !== null && $address !== '' ? $address : '—' }}</div>
                         </div>
                         <div class="dashboard-event-meta-item">
-                            <div class="dashboard-event-meta-label">{{ __('Categorie') }}</div>
+                            <div class="dashboard-event-meta-label">{{ __('Category') }}</div>
                             <div class="dashboard-event-meta-value" title="{{ $categoriesDisplay }}">{{ $categoriesDisplay !== null && $categoriesDisplay !== '' ? $categoriesDisplay : '—' }}</div>
                         </div>
                         <div class="dashboard-event-meta-item">

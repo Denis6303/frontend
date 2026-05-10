@@ -101,6 +101,7 @@
 (function() {
     var tickets = @json($ticketsInitial ?? []);
     var currency = @json($curLabel);
+    var defaultTicketLabel = @json(__('Ticket'));
 
     function renderTicketCard(t, idx) {
         var price = parseFloat(t.price) === 0 ? '{{ __("Free") }}' : t.price + ' ' + currency;
@@ -109,7 +110,7 @@
                 '<div class="d-flex align-items-center top-name">' +
                     '<div class="icon-box">' +
                         '<span class="icon-big rotate-icon icon icon-purple"><i class="fa-solid fa-ticket"></i></span>' +
-                        '<h5 class="fs-16 mb-1 mt-1">' + (t.name || 'Ticket') + ' - ' + price + '</h5>' +
+                        '<h5 class="fs-16 mb-1 mt-1">' + (t.name || defaultTicketLabel) + ' - ' + price + '</h5>' +
                         '<p class="text-gray-50 m-0"><span class="visitor-date-time">' + (t.online_quantity || 0) + ' {{ __("tickets") }}</span></p>' +
                     '</div>' +
                 '</div>' +

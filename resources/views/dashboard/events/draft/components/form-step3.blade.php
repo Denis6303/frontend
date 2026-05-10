@@ -8,7 +8,7 @@
             <div class="p_30 bp-form main-form">
                 <div class="form-group">
                     <div class="ticket-section mb-4">
-                        <label class="form-label fs-16">Define your tickets*</label>
+                        <label class="form-label fs-16">{{ __('Define your tickets*') }}</label>
                         <p class="mt-2 fs-14 d-block mb-3 pe_right">
                             {{ __('Create tickets for your event by clicking on the Add Tickets button.') }}
                         </p>

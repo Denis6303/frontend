@@ -3,7 +3,7 @@
 @section('title', __('Forgot Password'))
 
 @section('auth-top-link')
-    <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __('Retour à la connexion') }}</a>
+    <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __('Back to login') }}</a>
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@
             <button class="main-btn btn-hover w-100 mt-4" type="submit">{{ __('Send link') }}</button>
         </form>
         <div class="new-sign-link">
-            <a class="signup-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __('Retour à la connexion') }}</a>
+            <a class="signup-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __('Back to login') }}</a>
         </div>
     </div>
 @endsection

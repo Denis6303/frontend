@@ -40,6 +40,57 @@
     "Error": "Erreur",
     "Information": "Information",
     "Warning": "Attention",
+  "Previous": "Précédent",
+  "Next": "Suivant",
+  "Concert of the year 2025": "Concert de l'année 2025",
+  "The most anticipated event of the season": "L'événement le plus attendu de la saison",
+  "Electro festival Summer Vibes": "Festival électro Summer Vibes",
+  "Intimate acoustic concert": "Concert acoustique intimiste",
+  "A unique evening in a small setting": "Une soirée unique en petit comité",
+  "Book now": "Réserver maintenant",
+  "Cart": "Panier",
+  "Order Summary": "Récapitulatif de commande",
+  "Your cart is empty for now.": "Votre panier est vide pour le moment.",
+  "See events": "Voir les événements",
+  "Company": "Company",
+  "About Us": "À propos",
+  "Help Center": "Help Center",
+  "Contact Us": "Contact",
+  "Useful Links": "Liens utiles",
+  "Sell Tickets Online": "Vendre des billets en ligne",
+  "Privacy Policy": "Politique de confidentialité",
+  "Terms & Conditions": "Conditions générales",
+  "Resources": "Ressources",
+  "Blog": "Blog",
+  "Refer a Friend": "Parrainer un ami",
+  "All rights reserved.": "Tous droits réservés.",
+  "Privacy Settings": "Paramètres de confidentialité",
+  "Allow Barren to Access My Organisation": "Autoriser Barren à accéder à mon organisation",
+  "Lock Organisation Profile": "Verrouiller le profil de l’organisation",
+  "Hide address on my organisation profile": "Masquer l’adresse sur le profil de mon organisation",
+  "Allow people to contact my organisation": "Autoriser les personnes à contacter mon organisation",
+  "Allow people to follow my organisation": "Autoriser les personnes à suivre mon organisation",
+  "Hide reviews on my organisation profile": "Masquer les avis sur le profil de mon organisation",
+  "Hide review interactions from public": "Masquer les interactions des avis au public",
+  "Copy Link": "Copier le lien",
+  "Facebook": "Facebook",
+  "Instagram": "Instagram",
+  "Twitter": "Twitter",
+  "LinkedIn": "LinkedIn",
+  "Youtube": "YouTube",
+  "Address 1": "Adresse 1",
+  "Address 2": "Adresse 2",
+  "France": "France",
+  "Germany": "Allemagne",
+  "United Kingdom": "Royaume-Uni",
+  "United States": "États-Unis",
+  "City/Suburb": "Ville/Quartier",
+  "Zip/Post Code": "Code postal",
+  "Update": "Mettre à jour",
+  "About My Organisation": "À propos de mon organisation",
+  "Profile": "Profil",
+  "Tell us about yourself and let people know who you are": "Parlez de vous et faites savoir aux autres qui vous êtes",
+  "Find me on": "Retrouvez-moi sur",
     "Email verified": "Email vérifié",
     "Your email has been verified. You can now use all features.": "Votre adresse email a bien été vérifiée. Vous pouvez maintenant utiliser toutes les fonctionnalités.",
     "Go to home": "Retour à l'accueil",
@@ -194,5 +245,59 @@
     "Reason": "Motif",
     "Keep ticket": "Garder le ticket",
     "Ticket transferred successfully.": "Ticket transféré avec succès.",
-    "Ticket cancelled successfully.": "Ticket annulé avec succès."
+    "Ticket cancelled successfully.": "Ticket annulé avec succès.",
+    "Event": "Événement",
+    "Back": "Retour",
+    "Show": "Afficher",
+    "Category": "Catégorie",
+    "Access conditions": "Conditions d'accès",
+    "Summary": "Récapitulatif",
+    "Buy": "Acheter",
+    "No ticket selected": "Aucun billet sélectionné",
+    "Show password": "Afficher le mot de passe",
+    "or": "ou",
+    "By clicking \"Sign up\", you accept Votix Terms & Conditions and Privacy Policy.": "En cliquant sur « S'inscrire », vous acceptez les Conditions générales et la Politique de confidentialité de Votix.",
+    "Upcoming": "À venir",
+    "Past": "Passés",
+    "Drafts": "Brouillons"
+    ,"Authentication": "Authentification"
+    ,"The easiest way to create events and sell more tickets online": "La façon la plus simple de créer des événements et de vendre plus de billets en ligne"
+    ,"Where and when is your event?*": "Où et quand a lieu votre événement ?*"
+    ,"Set country, currency and main dates for your event.": "Définissez le pays, la devise et les dates principales de votre événement."
+    ,"Country*": "Pays*"
+    ,"Currency*": "Devise*"
+    ,"Start date & time*": "Date et heure de début*"
+    ,"End date & time*": "Date et heure de fin*"
+    ,"Define your tickets*": "Définissez vos billets*"
+    ,"PNG / JPG, max 5 MB": "PNG / JPG, max 5 MB"
+    ,"Details": "Détails"
+    ,"Tell people what your event is about": "Présentez votre événement au public"
+    ,"Step 1 of 4": "Étape 1 sur 4"
+    ,"Step 2 of 4": "Étape 2 sur 4"
+    ,"Step 3 of 4": "Étape 3 sur 4"
+    ,"Step 4 of 4": "Étape 4 sur 4"
+    ,"Define where your event takes place and when it starts and ends.": "Définissez où votre événement se déroule et quand il commence et se termine."
+    ,"Configure your free or paid tickets, quantities and conditions.": "Configurez vos billets gratuits ou payants, les quantités et les conditions."
+    ,"Review your draft, choose publication options and finish.": "Vérifiez votre brouillon, choisissez les options de publication puis finalisez."
+    ,"Ticket": "Billet"
+    ,"Identity & description": "Identité et description"
+    ,"Visuals & format": "Visuels et format"
+    ,"Enter event name": "Saisissez le nom de l'événement"
+    ,"Click to upload": "Cliquez pour téléverser"
+    ,"Attendance format": "Format de participation"
+    ,"How will people join your event?": "Comment les participants rejoindront-ils votre événement ?"
+    ,"In person": "En présentiel"
+    ,"Physical venue": "Lieu physique"
+    ,"Online": "En ligne"
+    ,"Virtual event": "Événement virtuel"
+    ,"Schedules, special instructions, itinerary — anything attendees need to know.": "Horaires, consignes particulières, itinéraire : tout ce que les participants doivent savoir."
+    ,"Add another date": "Ajouter une autre date"
+    ,"No ticket price": "Pas de prix de billet"
+    ,"You will set ticket prices": "Vous définirez les prix des billets"
+    ,"Publish immediately": "Publier immédiatement"
+    ,"Plan publication later": "Planifier la publication plus tard"
+    ,"Public event": "Événement public"
+    ,"Only invited people": "Uniquement les personnes invitées"
+    ,"All": "Tout"
+    ,"Recommended size 1600 × 700 px — PNG or JPG, max 5 MB.": "Taille recommandée 1600 × 700 px — PNG ou JPG, max 5 Mo."
 }

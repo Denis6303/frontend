@@ -1,6 +1,6 @@
 @extends('layouts.no-header-footer')
 
-@section('title', ($event['title'] ?? 'Événement') . ' - Votix')
+@section('title', ($event['title'] ?? __('Event')) . ' - Votix')
 
 @push('styles')
 <style>
@@ -178,6 +178,12 @@
 
         @php
             $category    = $event['category'] ?? null;
+            $categoryLabel = null;
+            if (is_array($category)) {
+                $categoryLabel = ($locale ?? app()->getLocale()) === 'en'
+                    ? ($category['name_en'] ?? $category['name'] ?? null)
+                    : ($category['name'] ?? $category['name_en'] ?? null);
+            }
             $occurrences = is_array($event['occurrences'] ?? null) ? $event['occurrences'] : [];
             $datesCount  = public_event_dates_count($event);
             $occurrencesForDisplay = array_values(array_filter($occurrences, static function ($o) {
@@ -236,7 +242,7 @@
                                     <h3 class="event-main-title mb-0 flex-grow-1 min-w-0 pe-2">{{ $event['title'] ?? '—' }}</h3>
                                     <a class="sidebar-register-link event-details-back-link flex-shrink-0 text-end"
                                        href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}">
-                                        <i class="fa-regular fa-circle-left me-2"></i>{{ __("Retour à l'accueil") }}
+                                        <i class="fa-regular fa-circle-left me-2"></i>{{ __('Back to home') }}
                                     </a>
                                 </div>
                                 @php
@@ -286,7 +292,7 @@
                                        role="button"
                                        aria-expanded="false"
                                        aria-controls="eventDescriptionMobile">
-                                        {{ __('Afficher') }}
+                                        {{ __('Show') }}
                                         <i class="fa-solid fa-arrow-right ms-2"></i>
                                     </a>
                                 </div>
@@ -355,14 +361,14 @@
                                 </div>
                             </div>
 
-                            @if($category && !empty($category['name']))
+                            @if(!empty($categoryLabel))
                                 <div class="event-dt-right-group">
                                     <div class="event-dt-right-icon">
                                         <i class="fa-solid fa-tag"></i>
                                     </div>
                                     <div class="event-dt-right-content">
-                                        <h4>{{ __('Catégorie') }}</h4>
-                                        <h5 class="mb-0">{{ $category['name'] }}</h5>
+                                        <h4>{{ __('Category') }}</h4>
+                                        <h5 class="mb-0">{{ $categoryLabel }}</h5>
                                     </div>
                                 </div>
                             @endif
@@ -491,7 +497,7 @@
                                                                         <div><strong>{{ __('Description') }}:</strong> {{ $tt['description'] }}</div>
                                                                     @endif
                                                                     @if(!empty($tt['general_conditions']))
-                                                                        <div><strong>{{ __("Conditions d'accès") }}:</strong> {{ $tt['general_conditions'] }}</div>
+                                                                        <div><strong>{{ __('Access conditions') }}:</strong> {{ $tt['general_conditions'] }}</div>
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -505,7 +511,7 @@
 
                                 {{-- ── Order Summary ── --}}
                                 <div id="order-summary" class="border rounded-3 p-3 mb-3 d-none">
-                                    <h6 class="mb-2 fw-bold">{{ __('Récapitulatif') }}</h6>
+                                    <h6 class="mb-2 fw-bold">{{ __('Summary') }}</h6>
                                     <ul id="summary-list" class="list-unstyled mb-2 fs-6"></ul>
                                     <div class="d-flex justify-content-between fw-semibold border-top pt-2 fs-6">
                                         <span>{{ __('Total') }}</span>
@@ -516,7 +522,7 @@
                                 {{-- ── Coupon ── --}}
                                 <div class="mb-3">
                                     <button type="button" class="btn btn-outline-secondary w-100" id="coupon-toggle-btn">
-                                        {{ __('Code coupon') }}
+                                        {{ __('Coupon code') }}
                                     </button>
                                     <div class="mt-2 d-none" id="coupon-field-wrap">
                                         <input type="text" class="form-control" id="coupon-code-input" placeholder="{{ __('Enter coupon code') }}">
@@ -542,13 +548,13 @@
                                 <div class="booking-btn mt-4 d-none d-md-block">
                                     @if (session(config('votix_api.session_access_token_key')))
                                         <button type="button" class="main-btn btn-hover w-100" id="desktop-checkout-btn">
-                                            {{ __('Acheter') }}
+                                            {{ __('Buy') }}
                                             <i class="fa-solid fa-arrow-right ms-2"></i>
                                         </button>
                                     @else
                                         <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"
                                            class="main-btn btn-hover w-100">
-                                            {{ __('Acheter') }}
+                                            {{ __('Buy') }}
                                             <i class="fa-solid fa-arrow-right ms-2"></i>
                                         </a>
                                     @endif
@@ -566,7 +572,7 @@
              style="z-index:1050;">
             <div class="d-flex align-items-center gap-3">
                 <div class="flex-grow-1">
-                    <div id="sticky-summary-text" class="small text-muted">{{ __('Aucun billet sélectionné') }}</div>
+                    <div id="sticky-summary-text" class="small text-muted">{{ __('No ticket selected') }}</div>
                     <div id="sticky-total" class="fw-bold fs-5"></div>
                 </div>
                 @if (session(config('votix_api.session_access_token_key')))
@@ -574,13 +580,13 @@
                             class="main-btn btn-hover flex-shrink-0 disabled"
                             id="sticky-book-btn"
                             aria-disabled="true">
-                        {{ __('Acheter') }}
+                        {{ __('Buy') }}
                         <i class="fa-solid fa-arrow-right ms-2"></i>
                     </button>
                 @else
                     <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"
                        class="main-btn btn-hover flex-shrink-0">
-                        {{ __('Acheter') }}
+                        {{ __('Buy') }}
                         <i class="fa-solid fa-arrow-right ms-2"></i>
                     </a>
                 @endif
@@ -667,7 +673,7 @@
         if (lines.length === 0) {
             summaryEl.classList.add('d-none');
             // Sticky bar: reset
-            stickyText.textContent = '{{ __("Aucun billet sélectionné") }}';
+            stickyText.textContent = '{{ __("No ticket selected") }}';
             stickyTotal.textContent = '';
             if (stickyBtn) {
                 stickyBtn.classList.add('disabled');

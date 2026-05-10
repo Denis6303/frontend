@@ -101,7 +101,7 @@
                 </div>
                 <div class="ef-banner-placeholder" id="banner-placeholder"
                      style="{{ $bannerUrl !== '' ? 'display:none' : '' }}">
-                    <p><strong>{{ __('Click to upload') }}</strong><br>PNG / JPG, max 5 MB</p>
+                    <p><strong>{{ __('Click to upload') }}</strong><br>{{ __('PNG / JPG, max 5 MB') }}</p>
                 </div>
             </div>
             @error('image')

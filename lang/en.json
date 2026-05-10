@@ -11,6 +11,53 @@
     "Follow Us": "Follow Us",
     "Search": "Search",
     "Search placeholder": "Search for an event...",
+  "Previous": "Previous",
+  "Next": "Next",
+  "Concert of the year 2025": "Concert of the year 2025",
+  "The most anticipated event of the season": "The most anticipated event of the season",
+  "Electro festival Summer Vibes": "Electro festival Summer Vibes",
+  "Intimate acoustic concert": "Intimate acoustic concert",
+  "A unique evening in a small setting": "A unique evening in a small setting",
+  "Book now": "Book now",
+  "Cart": "Cart",
+  "Order Summary": "Order Summary",
+  "Your cart is empty for now.": "Your cart is empty for now.",
+  "See events": "See events",
+  "Useful Links": "Useful Links",
+  "Sell Tickets Online": "Sell Tickets Online",
+  "Privacy Policy": "Privacy Policy",
+  "Terms & Conditions": "Terms & Conditions",
+  "Resources": "Resources",
+  "Blog": "Blog",
+  "Refer a Friend": "Refer a Friend",
+  "All rights reserved.": "All rights reserved.",
+  "Privacy Settings": "Privacy Settings",
+  "Allow Barren to Access My Organisation": "Allow Barren to Access My Organisation",
+  "Lock Organisation Profile": "Lock Organisation Profile",
+  "Hide address on my organisation profile": "Hide address on my organisation profile",
+  "Allow people to contact my organisation": "Allow people to contact my organisation",
+  "Allow people to follow my organisation": "Allow people to follow my organisation",
+  "Hide reviews on my organisation profile": "Hide reviews on my organisation profile",
+  "Hide review interactions from public": "Hide review interactions from public",
+  "Copy Link": "Copy Link",
+  "Facebook": "Facebook",
+  "Instagram": "Instagram",
+  "Twitter": "Twitter",
+  "LinkedIn": "LinkedIn",
+  "Youtube": "YouTube",
+  "Address 1": "Address 1",
+  "Address 2": "Address 2",
+  "France": "France",
+  "Germany": "Germany",
+  "United Kingdom": "United Kingdom",
+  "United States": "United States",
+  "City/Suburb": "City/Suburb",
+  "Zip/Post Code": "Zip/Post Code",
+  "Update": "Update",
+  "About My Organisation": "About My Organisation",
+  "Profile": "Profile",
+  "Tell us about yourself and let people know who you are": "Tell us about yourself and let people know who you are",
+  "Find me on": "Find me on",
     "Acheter tickets": "Buy tickets",
     "All": "All",
     "Arts": "Arts",
@@ -203,4 +250,63 @@
     "Keep ticket": "Keep ticket",
     "Ticket transferred successfully.": "Ticket transferred successfully.",
     "Ticket cancelled successfully.": "Ticket cancelled successfully."
+  ,"Event": "Event"
+  ,"Back": "Back"
+  ,"Show": "Show"
+  ,"Category": "Category"
+  ,"Access conditions": "Access conditions"
+  ,"Summary": "Summary"
+  ,"Buy": "Buy"
+  ,"No ticket selected": "No ticket selected"
+  ,"Show password": "Show password"
+  ,"or": "or"
+  ,"By clicking \"Sign up\", you accept Votix Terms & Conditions and Privacy Policy.": "By clicking \"Sign up\", you accept Votix Terms & Conditions and Privacy Policy."
+  ,"New to Votix?": "New to Votix?"
+  ,"Already have an account?": "Already have an account?"
+  ,"Back to home": "Back to home"
+  ,"Forgot password?": "Forgot password?"
+  ,"Sign in to Votix": "Sign in to Votix"
+  ,"Create a Votix account": "Create a Votix account"
+  ,"Upcoming": "Upcoming"
+  ,"Past": "Past"
+  ,"Drafts": "Drafts"
+  ,"Back to login": "Back to login"
+  ,"Authentication": "Authentication"
+  ,"The easiest way to create events and sell more tickets online": "The easiest way to create events and sell more tickets online"
+  ,"Where and when is your event?*": "Where and when is your event?*"
+  ,"Set country, currency and main dates for your event.": "Set country, currency and main dates for your event."
+  ,"Country*": "Country*"
+  ,"Currency*": "Currency*"
+  ,"Start date & time*": "Start date & time*"
+  ,"End date & time*": "End date & time*"
+  ,"Define your tickets*": "Define your tickets*"
+  ,"PNG / JPG, max 5 MB": "PNG / JPG, max 5 MB"
+  ,"Details": "Details"
+  ,"Tell people what your event is about": "Tell people what your event is about"
+  ,"Step 1 of 4": "Step 1 of 4"
+  ,"Step 2 of 4": "Step 2 of 4"
+  ,"Step 3 of 4": "Step 3 of 4"
+  ,"Step 4 of 4": "Step 4 of 4"
+  ,"Define where your event takes place and when it starts and ends.": "Define where your event takes place and when it starts and ends."
+  ,"Configure your free or paid tickets, quantities and conditions.": "Configure your free or paid tickets, quantities and conditions."
+  ,"Review your draft, choose publication options and finish.": "Review your draft, choose publication options and finish."
+  ,"Ticket": "Ticket"
+  ,"Identity & description": "Identity & description"
+  ,"Visuals & format": "Visuals & format"
+  ,"Enter event name": "Enter event name"
+  ,"Click to upload": "Click to upload"
+  ,"Attendance format": "Attendance format"
+  ,"How will people join your event?": "How will people join your event?"
+  ,"In person": "In person"
+  ,"Physical venue": "Physical venue"
+  ,"Online": "Online"
+  ,"Virtual event": "Virtual event"
+  ,"Schedules, special instructions, itinerary — anything attendees need to know.": "Schedules, special instructions, itinerary — anything attendees need to know."
+  ,"Add another date": "Add another date"
+  ,"No ticket price": "No ticket price"
+  ,"You will set ticket prices": "You will set ticket prices"
+  ,"Publish immediately": "Publish immediately"
+  ,"Plan publication later": "Plan publication later"
+  ,"Public event": "Public event"
+  ,"Only invited people": "Only invited people"
 }

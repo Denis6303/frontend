@@ -9,18 +9,18 @@
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="main-title">
-                            <h3>Explore Events</h3>
+                            <h3>{{ __('Explore Events') }}</h3>
                         </div>
                     </div>
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="event-filter-items">
                             <div class="featured-controls">
                                 <div class="controls">
-                                    <button type="button" class="control" data-filter="all">All</button>
-                                    <button type="button" class="control" data-filter=".arts">Arts</button>
-                                    <button type="button" class="control" data-filter=".business">Business</button>
-                                    <button type="button" class="control" data-filter=".concert">Concert</button>
-                                    <button type="button" class="control" data-filter=".workshops">Workshops</button>
+                                    <button type="button" class="control" data-filter="all">{{ __('All') }}</button>
+                                    <button type="button" class="control" data-filter=".arts">{{ __('Arts') }}</button>
+                                    <button type="button" class="control" data-filter=".business">{{ __('Business') }}</button>
+                                    <button type="button" class="control" data-filter=".concert">{{ __('Concert') }}</button>
+                                    <button type="button" class="control" data-filter=".workshops">{{ __('Workshops') }}</button>
                                 </div>
                                 <div class="row" data-ref="event-filter-content">
                                     @forelse($events as $event)

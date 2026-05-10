@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, shrink-to-fit=9">
-    <meta name="description" content="Votix - Billetterie évènementielle">
+    <meta name="description" content="Votix - Event ticketing platform">
     <meta name="author" content="Votix">
 
-    <title>@yield('title', 'Authentification') - {{ config('app.name', 'Votix') }}</title>
+    <title>@yield('title', __('Authentication')) - {{ config('app.name', 'Votix') }}</title>
 
     <link rel="icon" type="image/png" href="{{ asset('images/fav.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
                     <img src="{{ asset('images/logos/white.png') }}" alt="Votix">
                 </div>
                 <div class="sign_sidebar_text">
-                    <h1>The Easiest Way to Create Events and Sell More Tickets Online</h1>
+                    <h1>{{ __('The easiest way to create events and sell more tickets online') }}</h1>
                 </div>
             </div>
             <div class="app-form-content">
@@ -50,7 +50,7 @@
                         <div class="col-lg-10 col-md-10">
                             <div class="app-top-items">
                                 <div class="app-top-left-link">
-                                    <a class="sidebar-register-link" href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __("Retour à l'accueil") }}</a>
+                                    <a class="sidebar-register-link" href="{{ route('home', ['locale' => $locale ?? app()->getLocale()]) }}"><i class="fa-regular fa-circle-left me-2"></i>{{ __('Back to home') }}</a>
                                 </div>
                                 <div class="app-top-right-link">
                                     @yield('auth-top-link')
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="copyright-footer">
-                    © {{ date('Y') }}, {{ config('app.name', 'Votix') }}. All rights reserved.
+                    © {{ date('Y') }}, {{ config('app.name', 'Votix') }}. {{ __('All rights reserved.') }}
                 </div>
             </div>
         </div>

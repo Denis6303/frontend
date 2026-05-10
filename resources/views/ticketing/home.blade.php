@@ -50,8 +50,8 @@
                             <div class="hero-slide-overlay"></div>
                         </div>
                         <div class="carousel-caption hero-slide-content">
-                            <h2>Concert de l'année 2025</h2>
-                            <p>L'événement le plus attendu de la saison</p>
+                            <h2>{{ __('Concert of the year 2025') }}</h2>
+                            <p>{{ __('The most anticipated event of the season') }}</p>
                             <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => 'event-1']) }}" class="main-btn btn-hover">
                                 {{ __('Acheter tickets') }}
                                 <i class="fa-solid fa-arrow-right ms-3"></i>
@@ -64,7 +64,7 @@
                             <div class="hero-slide-overlay"></div>
                         </div>
                         <div class="carousel-caption hero-slide-content">
-                            <h2>Festival électro Summer Vibes</h2>
+                            <h2>{{ __('Electro festival Summer Vibes') }}</h2>
                             <p>3 jours de musique en plein air</p>
                             <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => 'event-2']) }}" class="main-btn btn-hover">
                                 {{ __('Acheter tickets') }}
@@ -78,8 +78,8 @@
                             <div class="hero-slide-overlay"></div>
                         </div>
                         <div class="carousel-caption hero-slide-content">
-                            <h2>Concert acoustique intimiste</h2>
-                            <p>Une soirée unique en petit comité</p>
+                            <h2>{{ __('Intimate acoustic concert') }}</h2>
+                            <p>{{ __('A unique evening in a small setting') }}</p>
                             <a href="{{ route('events.show', ['locale' => $locale ?? 'fr', 'slug' => 'event-3']) }}" class="main-btn btn-hover">
                                 {{ __('Acheter tickets') }}
                                 <i class="fa-solid fa-arrow-right ms-3"></i>
@@ -89,11 +89,11 @@
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Précédent</span>
+                    <span class="visually-hidden">{{ __('Previous') }}</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Suivant</span>
+                    <span class="visually-hidden">{{ __('Next') }}</span>
                 </button>
             </div>
         </div>

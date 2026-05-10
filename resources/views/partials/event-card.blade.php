@@ -7,7 +7,10 @@
     $price   = $event['price_min'] ?? null;
     $city    = $event['city'] ?? null;
     $address = $event['address'] ?? null;
-    $categoryName = $event['category']['name'] ?? null;
+    $cardLocale = $locale ?? app()->getLocale();
+    $categoryName = $cardLocale === 'en'
+        ? ($event['category']['name_en'] ?? $event['category']['name'] ?? null)
+        : ($event['category']['name'] ?? $event['category']['name_en'] ?? null);
     $status       = $event['status'] ?? null;
     $likes        = $event['likes_count'] ?? null;
     $views        = $event['nb_visites'] ?? null;

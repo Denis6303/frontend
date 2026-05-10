@@ -37,7 +37,7 @@
 
             {{-- Back button --}}
             <a href="{{ $backUrl ?: route('ticketing.events', ['locale' => $locale]) }}" class="vx-back">
-                ← {{ __('Retour') }}
+                ← {{ __('Back') }}
             </a>
 
             {{-- Errors --}}

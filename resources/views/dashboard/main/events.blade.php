@@ -21,7 +21,7 @@
                                             type="search"
                                             name="query"
                                             value="{{ request('query') }}"
-                                            placeholder="{{ __('Rechercher') }}"
+                                            placeholder="{{ __('Search by event name') }}"
                                             autocomplete="off"
                                         >
                                     </div>
@@ -31,13 +31,13 @@
                         <div class="rs ms-auto mt_r4">
                             <div class="nav custom2-tabs btn-group" role="tablist">
                                 <button class="tab-link {{ $activeTab === 'upcoming' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#upcoming-tab" type="button" role="tab" aria-controls="upcoming-tab" aria-selected="{{ $activeTab === 'upcoming' ? 'true' : 'false' }}">
-                                    À venir (<span class="total_event_counter">{{ $eventPaginators['upcoming']->total() ?? 0 }}</span>)
+                                    {{ __('Upcoming') }} (<span class="total_event_counter">{{ $eventPaginators['upcoming']->total() ?? 0 }}</span>)
                                 </button>
                                 <button class="tab-link {{ $activeTab === 'completed' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#past-tab" type="button" role="tab" aria-controls="past-tab" aria-selected="{{ $activeTab === 'completed' ? 'true' : 'false' }}">
-                                    Passés (<span class="total_event_counter">{{ $eventPaginators['completed']->total() ?? 0 }}</span>)
+                                    {{ __('Past') }} (<span class="total_event_counter">{{ $eventPaginators['completed']->total() ?? 0 }}</span>)
                                 </button>
                                 <button class="tab-link {{ $activeTab === 'saved' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#draft-tab" type="button" role="tab" aria-controls="draft-tab" aria-selected="{{ $activeTab === 'saved' ? 'true' : 'false' }}">
-                                    Brouillons (<span class="total_event_counter">{{ $eventPaginators['saved']->total() ?? 0 }}</span>)
+                                    {{ __('Drafts') }} (<span class="total_event_counter">{{ $eventPaginators['saved']->total() ?? 0 }}</span>)
                                 </button>
                             </div>
                         </div>

@@ -11,7 +11,7 @@
                         <div class="barren-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.index', ['locale' => $locale ?? app()->getLocale()]) }}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('ticketing.index', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Home') }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{ __('Checkout') }}</li>
                                 </ol>
                             </nav>

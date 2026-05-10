@@ -8,7 +8,7 @@
         <div class="modal-dialog modal-medium-2 modal-dialog-scrollable modal-dialog-centered modal-sm-height modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orgSettingsLabel">Privacy Settings</h5>
+                    <h5 class="modal-title" id="orgSettingsLabel">{{ __('Privacy Settings') }}</h5>
                     <button type="button" class="close-model-btn" data-bs-dismiss="modal" aria-label="Close">
                         <i class="uil uil-multiply"></i>
                     </button>
@@ -18,7 +18,7 @@
                         <div class="mt-4">
                             <div class="setting-step main-card p-4">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Allow Barren to Access My Organisation</h3>
+                                    <h3 class="setting-title">{{ __('Allow Barren to Access My Organisation') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox">
                                         <span class="checkbox-slider"></span>
@@ -39,7 +39,7 @@
         <div class="modal-dialog modal-medium-2 modal-dialog-scrollable modal-dialog-centered modal-sm-height modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orgPrivacySettingsLabel">Privacy Settings</h5>
+                    <h5 class="modal-title" id="orgPrivacySettingsLabel">{{ __('Privacy Settings') }}</h5>
                     <button type="button" class="close-model-btn" data-bs-dismiss="modal" aria-label="Close">
                         <i class="uil uil-multiply"></i>
                     </button>
@@ -49,7 +49,7 @@
                         <div class="main-card p-4 mt-4">
                             <div class="setting-step border_bottom">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Lock Organisation Profile</h3>
+                                    <h3 class="setting-title">{{ __('Lock Organisation Profile') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox">
                                         <span class="checkbox-slider"></span>
@@ -62,7 +62,7 @@
                             </div>
                             <div class="setting-step border_bottom pt-4">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Hide address on my organisation profile</h3>
+                                    <h3 class="setting-title">{{ __('Hide address on my organisation profile') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox" checked>
                                         <span class="checkbox-slider"></span>
@@ -74,7 +74,7 @@
                             </div>
                             <div class="setting-step border_bottom pt-4">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Allow people to contact my organisation</h3>
+                                    <h3 class="setting-title">{{ __('Allow people to contact my organisation') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox" checked>
                                         <span class="checkbox-slider"></span>
@@ -87,7 +87,7 @@
                             </div>
                             <div class="setting-step border_bottom pt-4">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Allow people to follow my organisation</h3>
+                                    <h3 class="setting-title">{{ __('Allow people to follow my organisation') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox" checked>
                                         <span class="checkbox-slider"></span>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="setting-step border_bottom pt-4">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Hide reviews on my organisation profile</h3>
+                                    <h3 class="setting-title">{{ __('Hide reviews on my organisation profile') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox">
                                         <span class="checkbox-slider"></span>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="setting-step border_bottom pt-4">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="setting-title">Hide review interactions from public</h3>
+                                    <h3 class="setting-title">{{ __('Hide review interactions from public') }}</h3>
                                     <label class="btn-switch m-0 ml-2">
                                         <input type="checkbox">
                                         <span class="checkbox-slider"></span>
@@ -134,7 +134,7 @@
         <div class="modal-dialog modal-medium-2 modal-dialog-scrollable modal-dialog-centered modal-sm-height modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orgProfileUpdatepopLabel">Organisation details</h5>
+                    <h5 class="modal-title" id="orgProfileUpdatepopLabel">{{ __('Organisation details') }}</h5>
                     <button type="button" class="close-model-btn" data-bs-dismiss="modal" aria-label="Close">
                         <i class="uil uil-multiply"></i>
                     </button>
@@ -152,115 +152,115 @@
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Name*</label>
+                                    <label class="form-label">{{ __('Name') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="John Doe">
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Profile Link*</label>
+                                    <label class="form-label">{{ __('Profile Link') }}*</label>
                                     <div class="loc-group position-relative">
                                         <input class="form-control h_40" type="text" placeholder=""
                                                value="https://www.barren.com/b/organiser/john-doe">
-                                        <span class="copy-link">Copy Link</span>
+                                        <span class="copy-link">{{ __('Copy Link') }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">About*</label>
+                                    <label class="form-label">{{ __('About') }}*</label>
                                     <textarea class="form-textarea" placeholder="About"></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Email*</label>
+                                    <label class="form-label">{{ __('Email') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="Johndoe@example.com">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Phone*</label>
+                                    <label class="form-label">{{ __('Phone') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Website*</label>
+                                    <label class="form-label">{{ __('Website') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Facebook*</label>
+                                    <label class="form-label">{{ __('Facebook') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Instagram*</label>
+                                    <label class="form-label">{{ __('Instagram') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Twitter*</label>
+                                    <label class="form-label">{{ __('Twitter') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">LinkedIn*</label>
+                                    <label class="form-label">{{ __('LinkedIn') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Youtube*</label>
+                                    <label class="form-label">{{ __('Youtube') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
-                                <h4 class="address-title">Address</h4>
+                                <h4 class="address-title">{{ __('Address') }}</h4>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Address 1*</label>
+                                    <label class="form-label">{{ __('Address 1') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Address 2*</label>
+                                    <label class="form-label">{{ __('Address 2') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group main-form mt-4">
-                                    <label class="form-label">Country*</label>
+                                    <label class="form-label">{{ __('Country') }}*</label>
                                     <select class="selectpicker" data-size="5" title="Nothing selected" data-live-search="true">
-                                        <option value="France">France</option>
-                                        <option value="Germany">Germany</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="United States">United States</option>
+                                        <option value="France">{{ __('France') }}</option>
+                                        <option value="Germany">{{ __('Germany') }}</option>
+                                        <option value="United Kingdom">{{ __('United Kingdom') }}</option>
+                                        <option value="United States">{{ __('United States') }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">State*</label>
+                                    <label class="form-label">{{ __('State') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">City/Suburb*</label>
+                                    <label class="form-label">{{ __('City/Suburb') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group mt-4">
-                                    <label class="form-label">Zip/Post Code*</label>
+                                    <label class="form-label">{{ __('Zip/Post Code') }}*</label>
                                     <input class="form-control h_40" type="text" placeholder="" value="">
                                 </div>
                             </div>
@@ -268,8 +268,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="co-main-btn min-width btn-hover h_40" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="main-btn min-width btn-hover h_40">Update</button>
+                    <button type="button" class="co-main-btn min-width btn-hover h_40" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="button" class="main-btn min-width btn-hover h_40">{{ __('Update') }}</button>
                 </div>
             </div>
         </div>
@@ -279,14 +279,14 @@
         <div class="row">
             <!-- <div class="col-md-12">
                 <div class="d-main-title">
-                    <h3><i class="fa-solid fa-circle-info me-3"></i>About My Organisation</h3>
+                    <h3><i class="fa-solid fa-circle-info me-3"></i>{{ __('About My Organisation') }}</h3>
                 </div>
             </div> -->
             <div class="col-lg-6 col-md-12">
                 <div class="conversion-setup">
                     <div class="main-card">
                         <div class="bp-title position-relative">
-                            <h4>Profile</h4>
+                            <h4>{{ __('Profile') }}</h4>
                             <div class="profile-edit-btn">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#orgSettings" class="btn">
                                     <i class="fa-solid fa-user-gear"></i>
@@ -313,7 +313,7 @@
                                 </div>
                             </div>
                             <div class="about-step">
-                                <h5>Tell us about yourself and let people know who you are</h5>
+                                <h5>{{ __('Tell us about yourself and let people know who you are') }}</h5>
                                 <p class="mb-0">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tincidunt interdum nunc
                                     et auctor. Phasellus quis pharetra sapien. Integer ligula sem, sodales vitae varius
@@ -321,7 +321,7 @@
                                 </p>
                             </div>
                             <div class="about-step">
-                                <h5>Find me on</h5>
+                                <h5>{{ __('Find me on') }}</h5>
                                 <div class="social-links">
                                     <a href="#" class="social-link" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Facebook" aria-label="Facebook">
                                         <i class="fab fa-facebook-square"></i>
@@ -344,7 +344,7 @@
                                 </div>
                             </div>
                             <div class="about-step">
-                                <h5>Address</h5>
+                                <h5>{{ __('Address') }}</h5>
                                 <p class="mb-0">
                                     00 Challis St, Newport, Victoria, 0000, Australia
                                 </p>

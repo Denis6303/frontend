@@ -32,7 +32,7 @@
                     <label class="form-label">{{ __('Password') }} *</label>
                     <div class="loc-group position-relative">
                         <input class="form-control h_50" type="password" name="password" placeholder="{{ __('New password') }}" required minlength="8" id="password-field">
-                        <span class="pass-show-eye" id="toggle-password" role="button" aria-label="Afficher le mot de passe"><i class="fas fa-eye-slash"></i></span>
+                        <span class="pass-show-eye" id="toggle-password" role="button" aria-label="{{ __('Show password') }}"><i class="fas fa-eye-slash"></i></span>
                     </div>
                 </div>
                 <div class="form-group mt-4">

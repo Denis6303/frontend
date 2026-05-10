@@ -1,16 +1,16 @@
 @extends('layouts.auth')
 
-@section('title', __('Connexion'))
+@section('title', __('Login'))
 
 @section('auth-top-link')
-    {{ __('Nouveau sur Votix ?') }} <a class="sidebar-register-link" href="{{ route('register', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Sign up') }}</a>
+    {{ __('New to Votix?') }} <a class="sidebar-register-link" href="{{ route('register', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Sign up') }}</a>
 @endsection
 
 @section('content')
     <div class="registration">
         <form method="POST" action="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">
             @csrf
-            <h2 class="registration-title">{{ __('Connexion à Votix') }}</h2>
+            <h2 class="registration-title">{{ __('Sign in to Votix') }}</h2>
 
             @if ($errors->any())
                 <div class="alert alert-danger mt-3">
@@ -27,17 +27,17 @@
             <div class="form-group mt-4">
                 <div class="field-password">
                     <label class="form-label">{{ __('Password') }} *</label>
-                    <a class="forgot-pass-link" href="{{ route('password.request', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Mot de passe oublié ?') }}</a>
+                    <a class="forgot-pass-link" href="{{ route('password.request', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Forgot password?') }}</a>
                 </div>
                 <div class="loc-group position-relative">
                     <input class="form-control h_50" type="password" name="password" placeholder="{{ __('Your password') }}" required id="password-field">
-                    <span class="pass-show-eye" id="toggle-password" role="button" aria-label="Afficher le mot de passe"><i class="fas fa-eye-slash"></i></span>
+                    <span class="pass-show-eye" id="toggle-password" role="button" aria-label="{{ __('Show password') }}"><i class="fas fa-eye-slash"></i></span>
                 </div>
             </div>
-            <button class="main-btn btn-hover w-100 mt-4" type="submit">{{ __('Connexion') }} <i class="fas fa-sign-in-alt ms-2"></i></button>
+            <button class="main-btn btn-hover w-100 mt-4" type="submit">{{ __('Login') }} <i class="fas fa-sign-in-alt ms-2"></i></button>
         </form>
         <div class="divider">
-            <span>ou</span>
+            <span>{{ __('or') }}</span>
         </div>
         <div class="social-btns-list">
             <button type="button" class="social-login-btn">
@@ -46,7 +46,7 @@
             </button>
         </div>
         <div class="new-sign-link">
-            {{ __('Nouveau sur Votix ?') }} <a class="signup-link" href="{{ route('register', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Sign up') }}</a>
+            {{ __('New to Votix?') }} <a class="signup-link" href="{{ route('register', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Sign up') }}</a>
         </div>
     </div>
 

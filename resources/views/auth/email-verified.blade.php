@@ -3,7 +3,7 @@
 @section('title', __('Email verified'))
 
 @section('auth-top-link')
-    <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Connexion') }}</a>
+    <a class="sidebar-register-link" href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}">{{ __('Login') }}</a>
 @endsection
 
 @section('content')

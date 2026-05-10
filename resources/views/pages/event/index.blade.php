@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Événements - Votix')
+@section('title', __('Events') . ' - Votix')
 
 @push('styles')
 <style>
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="main-title">
-                            <h3>Explore Events</h3>
+                            <h3>{{ __('Explore Events') }}</h3>
                         </div>
                     </div>
                     <div class="col-xl-12 col-lg-12 col-md-12">
@@ -97,12 +97,15 @@
                                     @foreach(($categories ?? []) as $cat)
                                         @continue(empty($cat['id']))
                                         @php
+                                            $catLabel = ($locale ?? app()->getLocale()) === 'en'
+                                                ? ($cat['name_en'] ?? $cat['name'] ?? '')
+                                                : ($cat['name'] ?? $cat['name_en'] ?? '');
                                             $catQs = collect(request()->except('page'))->put('category_id', (int) $cat['id'])->all();
                                             $catHref = route('ticketing.events', ['locale' => $locale]) . '?' . http_build_query($catQs);
                                             $catActive = request()->filled('category_id') && (int) request('category_id') === (int) $cat['id'];
                                         @endphp
                                         <a href="{{ $catHref }}" class="control {{ $catActive ? 'is-active' : '' }}">
-                                            {{ $cat['name'] ?? $cat['name_en'] ?? '' }}
+                                            {{ $catLabel }}
                                         </a>
                                     @endforeach
                                 </div>

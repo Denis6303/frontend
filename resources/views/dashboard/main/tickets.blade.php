@@ -29,7 +29,7 @@
                                             type="search"
                                             name="query"
                                             value="{{ request('query') }}"
-                                            placeholder="{{ __('Rechercher') }}"
+                                            placeholder="{{ __('Search by event name') }}"
                                             autocomplete="off"
                                         >
                                     </div>
@@ -39,13 +39,13 @@
                         <div class="rs ms-auto mt_r4">
                             <div class="nav custom2-tabs btn-group" role="tablist">
                                 <button class="tab-link {{ $activeTab === 'upcoming' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#tickets-upcoming-tab" type="button" role="tab" aria-controls="tickets-upcoming-tab" aria-selected="{{ $activeTab === 'upcoming' ? 'true' : 'false' }}">
-                                    À venir (<span class="total_event_counter">{{ $ticketPaginators['upcoming']->total() ?? 0 }}</span>)
+                                    {{ __('Upcoming') }} (<span class="total_event_counter">{{ $ticketPaginators['upcoming']->total() ?? 0 }}</span>)
                                 </button>
                                 <button class="tab-link {{ $activeTab === 'past' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#tickets-past-tab" type="button" role="tab" aria-controls="tickets-past-tab" aria-selected="{{ $activeTab === 'past' ? 'true' : 'false' }}">
-                                    Passés (<span class="total_event_counter">{{ $ticketPaginators['past']->total() ?? 0 }}</span>)
+                                    {{ __('Past') }} (<span class="total_event_counter">{{ $ticketPaginators['past']->total() ?? 0 }}</span>)
                                 </button>
                                 <button class="tab-link {{ $activeTab === 'cancelled' ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#tickets-cancelled-tab" type="button" role="tab" aria-controls="tickets-cancelled-tab" aria-selected="{{ $activeTab === 'cancelled' ? 'true' : 'false' }}">
-                                    Annulés (<span class="total_event_counter">{{ $ticketPaginators['cancelled']->total() ?? 0 }}</span>)
+                                    {{ __('Cancelled') }} (<span class="total_event_counter">{{ $ticketPaginators['cancelled']->total() ?? 0 }}</span>)
                                 </button>
                             </div>
                         </div>

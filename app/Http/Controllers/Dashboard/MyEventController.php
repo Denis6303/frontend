@@ -147,6 +147,7 @@ class MyEventController extends Controller
             return [];
         }
 
+        $locale = app()->getLocale();
         $map = [];
         foreach ($items as $cat) {
             if (! is_array($cat)) {
@@ -156,7 +157,9 @@ class MyEventController extends Controller
             if ($id === null) {
                 continue;
             }
-            $name = $cat['name'] ?? $cat['name_en'] ?? $cat['name_fr'] ?? null;
+            $name = $locale === 'en'
+                ? ($cat['name_en'] ?? $cat['name'] ?? $cat['name_fr'] ?? null)
+                : ($cat['name'] ?? $cat['name_fr'] ?? $cat['name_en'] ?? null);
             if ($name !== null && $name !== '') {
                 $map[(int) $id] = (string) $name;
             }

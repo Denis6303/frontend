@@ -100,6 +100,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var locale = document.documentElement.lang === 'fr' ? 'fr' : 'en';
     var fpConfig = { enableTime: true, time_24hr: true, dateFormat: 'Y-m-d H:i', locale: locale };
     var removeLabel = {!! json_encode(__('Remove this date')) !!};
+    var startDateTimeLabel = {!! json_encode(__('Start date & time*')) !!};
+    var endDateTimeLabel = {!! json_encode(__('End date & time*')) !!};
 
     function bindFlatpickr(container) {
         (container || document).querySelectorAll('.event-datetime-picker').forEach(function (el) {
@@ -140,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
             row.className = 'row g-3 mb-3 date-row-extra';
             row.innerHTML =
                 '<div class="col-md-6">' +
-                    '<label class="form-label fs-6">Start date & time*</label>' +
+                    '<label class="form-label fs-6">' + startDateTimeLabel + '</label>' +
                     '<div class="loc-group position-relative">' +
                         '<input class="form-control h_50 event-datetime-picker" type="text" ' +
                         'name="start_dates[' + index + ']" id="start_date_' + index + '" placeholder="YYYY-MM-DD HH:MM" autocomplete="off">' +
@@ -148,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     '</div>' +
                 '</div>' +
                 '<div class="col-md-6">' +
-                    '<label class="form-label fs-6">End date & time*</label>' +
+                    '<label class="form-label fs-6">' + endDateTimeLabel + '</label>' +
                     '<div class="loc-group position-relative">' +
                         '<input class="form-control h_50 event-datetime-picker" type="text" ' +
                         'name="end_dates[' + index + ']" id="end_date_' + index + '" placeholder="YYYY-MM-DD HH:MM" autocomplete="off">' +

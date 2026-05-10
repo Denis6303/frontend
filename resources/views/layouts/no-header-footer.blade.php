@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, shrink-to-fit=9">
-        <meta name="description" content="Votix - Billetterie évènementielle">
+        <meta name="description" content="Votix - Event ticketing platform">
         <meta name="author" content="Votix">
 
         <title>@yield('title', config('app.name', 'Votix'))</title>
