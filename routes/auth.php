@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/login', fn (string $locale) => view('pages.auth.login'))->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/auth/{provider}/redirect', [AuthController::class, 'socialRedirect'])
+    ->where('provider', 'google|tiktok')
+    ->name('auth.social.redirect');
+Route::get('/auth/{provider}/callback', [AuthController::class, 'socialCallback'])
+    ->where('provider', 'google|tiktok')
+    ->name('auth.social.callback');
 
 Route::get('/register', fn (string $locale) => view('pages.auth.register'))->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
