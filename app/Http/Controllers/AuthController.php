@@ -294,7 +294,10 @@ class AuthController extends Controller
         }
 
         $state = bin2hex(random_bytes(24));
+        $codeVerifier = $this->generatePkceCodeVerifier();
+        $codeChallenge = $this->pkceCodeChallengeFromVerifier($codeVerifier);
         Session::put('social_oauth_state_tiktok', $state);
+        Session::put('social_oauth_code_verifier_tiktok', $codeVerifier);
         Session::put('social_oauth_locale', $locale);
 
         $clientId = (string) config('services.tiktok.client_id', '');
@@ -310,6 +313,8 @@ class AuthController extends Controller
             'scope' => 'user.info.basic,user.info.profile',
             'redirect_uri' => $redirectUri,
             'state' => $state,
+            'code_challenge' => $codeChallenge,
+            'code_challenge_method' => 'S256',
         ]);
 
         return redirect()->away('https://www.tiktok.com/v2/auth/authorize/?' . $query);
@@ -424,8 +429,12 @@ class AuthController extends Controller
     {
         $state = (string) $request->query('state', '');
         $expectedState = (string) Session::pull('social_oauth_state_tiktok', '');
+        $codeVerifier = (string) Session::pull('social_oauth_code_verifier_tiktok', '');
         if ($state === '' || $expectedState === '' || ! hash_equals($expectedState, $state)) {
             throw ValidationException::withMessages(['state' => __('Invalid OAuth state.')]);
+        }
+        if ($codeVerifier === '') {
+            throw ValidationException::withMessages(['code_verifier' => __('Missing PKCE code verifier.')]);
         }
 
         $code = (string) $request->query('code', '');
@@ -448,6 +457,7 @@ class AuthController extends Controller
                 'code' => $code,
                 'grant_type' => 'authorization_code',
                 'redirect_uri' => $redirectUri,
+                'code_verifier' => $codeVerifier,
             ]);
         if (! $tokenRes->successful()) {
             throw ValidationException::withMessages(['provider' => __('Unable to retrieve TikTok access token.')]);
@@ -498,5 +508,19 @@ class AuthController extends Controller
         ], false);
 
         return rtrim($request->getSchemeAndHttpHost(), '/') . $relativeCallback;
+    }
+
+    protected function generatePkceCodeVerifier(): string
+    {
+        $bytes = random_bytes(64);
+
+        return rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
+    }
+
+    protected function pkceCodeChallengeFromVerifier(string $codeVerifier): string
+    {
+        $hash = hash('sha256', $codeVerifier, true);
+
+        return rtrim(strtr(base64_encode($hash), '+/', '-_'), '=');
     }
 }
