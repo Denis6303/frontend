@@ -471,13 +471,22 @@ class AuthController extends Controller
         $profileRes = Http::timeout(config('votix_api.timeout', 30))
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ])
-            ->post('https://open.tiktokapis.com/v2/user/info/', [
-                'fields' => ['open_id', 'display_name', 'username', 'avatar_url'],
+            ->get('https://open.tiktokapis.com/v2/user/info/', [
+                'fields' => 'open_id,display_name,username,avatar_url',
             ]);
         if (! $profileRes->successful()) {
-            throw ValidationException::withMessages(['provider' => __('Unable to retrieve TikTok profile.')]);
+            $errorMessage = $profileRes->json('error.message')
+                ?? $profileRes->json('message')
+                ?? __('Unable to retrieve TikTok profile.');
+
+            Log::error('TikTok profile request failed', [
+                'status' => $profileRes->status(),
+                'body' => $profileRes->body(),
+            ]);
+
+            throw ValidationException::withMessages(['provider' => $errorMessage]);
         }
 
         $user = $profileRes->json('data.user') ?? $profileRes->json('user') ?? [];
