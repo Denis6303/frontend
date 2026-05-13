@@ -552,7 +552,7 @@
                                             <i class="fa-solid fa-arrow-right ms-2"></i>
                                         </button>
                                     @else
-                                        <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"
+                                        <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale(), 'redirect' => request()->fullUrl()]) }}"
                                            class="main-btn btn-hover w-100">
                                             {{ __('Buy') }}
                                             <i class="fa-solid fa-arrow-right ms-2"></i>
@@ -584,7 +584,7 @@
                         <i class="fa-solid fa-arrow-right ms-2"></i>
                     </button>
                 @else
-                    <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale()]) }}"
+                    <a href="{{ route('login', ['locale' => $locale ?? app()->getLocale(), 'redirect' => request()->fullUrl()]) }}"
                        class="main-btn btn-hover flex-shrink-0">
                         {{ __('Buy') }}
                         <i class="fa-solid fa-arrow-right ms-2"></i>

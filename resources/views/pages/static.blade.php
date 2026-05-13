@@ -27,7 +27,11 @@
             <div class="container">
                 <div class="main-card p-4 p-md-5">
                     <h1 class="h3 mb-4">{{ $title ?? __('Information') }}</h1>
-                    @include('pages.static.pages.' . ($page ?? 'about'))
+                    @if (!empty($pageData) && is_array($pageData))
+                        @include('pages.static.pages.shared', $pageData)
+                    @else
+                        @include('pages.static.pages.' . ($page ?? 'about'))
+                    @endif
                 </div>
             </div>
         </div>

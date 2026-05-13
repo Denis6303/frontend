@@ -29,6 +29,10 @@ class Authenticate extends Middleware
             return null;
         }
 
+        if ($request->isMethod('get')) {
+            $request->session()->put('url.intended', $request->fullUrl());
+        }
+
         $locale = $request->route('locale', app()->getLocale() ?? 'fr');
 
         return route('login', ['locale' => $locale]);

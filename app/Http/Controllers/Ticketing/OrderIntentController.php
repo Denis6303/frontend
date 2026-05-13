@@ -78,6 +78,11 @@ class OrderIntentController extends Controller
 
         $customerId = $this->customerId();
         if ($customerId === null) {
+            $intended = $validated['return_url'] ?? $request->headers->get('referer');
+            if (is_string($intended) && trim($intended) !== '') {
+                Session::put('url.intended', trim($intended));
+            }
+
             return redirect()
                 ->route('login', ['locale' => $request->route('locale', app()->getLocale())])
                 ->withErrors(['form' => __('Please sign in to continue.')]);

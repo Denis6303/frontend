@@ -373,7 +373,7 @@ class EventDraftController extends Controller
     public function showStep1(Request $request, string $locale)
     {
         if (! session(config('votix_api.session_access_token_key'))) {
-            return redirect()->route('login', ['locale' => $locale]);
+            return redirect()->guest(route('login', ['locale' => $locale]));
         }
 
         // Nouveau formulaire : pas de ?draft_id= → ne pas réutiliser le brouillon en session (sinon données du dernier brouillon).
@@ -399,7 +399,7 @@ class EventDraftController extends Controller
     public function showStep2(Request $request, string $locale)
     {
         if (! session(config('votix_api.session_access_token_key'))) {
-            return redirect()->route('login', ['locale' => $locale]);
+            return redirect()->guest(route('login', ['locale' => $locale]));
         }
 
         $draftId = $request->query('draft_id') ?: Session::get('event_draft.current_id');
@@ -421,7 +421,7 @@ class EventDraftController extends Controller
     public function showStep3(Request $request, string $locale)
     {
         if (! session(config('votix_api.session_access_token_key'))) {
-            return redirect()->route('login', ['locale' => $locale]);
+            return redirect()->guest(route('login', ['locale' => $locale]));
         }
 
         $draftId = $request->query('draft_id') ?: Session::get('event_draft.current_id');
@@ -605,7 +605,7 @@ class EventDraftController extends Controller
     public function showStep4(Request $request, string $locale)
     {
         if (! session(config('votix_api.session_access_token_key'))) {
-            return redirect()->route('login', ['locale' => $locale]);
+            return redirect()->guest(route('login', ['locale' => $locale]));
         }
 
         $draftId = $request->input('draft_id') ?: Session::get('event_draft.current_id');

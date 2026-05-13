@@ -32,6 +32,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'redirect' => 'nullable|string|max:2048',
         ]);
 
         $response = $this->apiService->makeApiRequest('POST', 'auth/login', [
@@ -60,7 +61,7 @@ class AuthController extends Controller
 
         $locale = $request->route('locale', 'fr');
         $successMessage = $response->json('message') ?: __('Welcome back.');
-        return redirect()->route('home', ['locale' => $locale])->with('success', $successMessage);
+        return $this->redirectAfterAuthentication($request, $locale, $successMessage);
     }
 
     /**
@@ -106,7 +107,7 @@ class AuthController extends Controller
 
         $locale = $request->route('locale', 'fr');
         $successMessage = $response->json('message') ?: __('A verification email has been sent. Please check your inbox.');
-        return redirect()->route('home', ['locale' => $locale])->with('success', $successMessage);
+        return $this->redirectAfterAuthentication($request, $locale, $successMessage);
     }
 
     /**
@@ -285,6 +286,14 @@ class AuthController extends Controller
                 ->withErrors(['form' => __('Unsupported social provider.')]);
         }
 
+        $redirect = $request->query('redirect');
+        if (is_string($redirect)) {
+            $safe = $this->safeIntendedUrl($redirect, $request);
+            if ($safe !== null) {
+                Session::put('url.intended', $safe);
+            }
+        }
+
         if ($provider === 'google') {
             $redirectUri = $this->resolveSocialRedirectUri($request, $locale, 'google');
             return Socialite::driver('google')
@@ -386,8 +395,7 @@ class AuthController extends Controller
             Session::put(config('votix_api.session_user_key'), $user);
         }
 
-        return redirect()->route('home', ['locale' => $locale])
-            ->with('success', __('Welcome back.'));
+        return $this->redirectAfterAuthentication($request, $locale, __('Welcome back.'));
     }
 
     /**
@@ -517,6 +525,59 @@ class AuthController extends Controller
         ], false);
 
         return rtrim($request->getSchemeAndHttpHost(), '/') . $relativeCallback;
+    }
+
+    protected function redirectAfterAuthentication(Request $request, string $locale, string $message): RedirectResponse
+    {
+        $candidate = Session::pull('url.intended');
+        if (! is_string($candidate)) {
+            $candidate = $request->input('redirect');
+        }
+
+        $safe = $this->safeIntendedUrl(is_string($candidate) ? $candidate : null, $request);
+        if ($safe !== null) {
+            return redirect()->to($safe)->with('success', $message);
+        }
+
+        return redirect()->route('home', ['locale' => $locale])->with('success', $message);
+    }
+
+    protected function safeIntendedUrl(?string $url, Request $request): ?string
+    {
+        if (! is_string($url) || trim($url) === '') {
+            return null;
+        }
+
+        $url = trim($url);
+        if (str_starts_with($url, '/')) {
+            return $url;
+        }
+
+        $parts = parse_url($url);
+        if (! is_array($parts)) {
+            return null;
+        }
+
+        $targetHost = strtolower((string) ($parts['host'] ?? ''));
+        if ($targetHost === '') {
+            return null;
+        }
+
+        $requestHost = strtolower((string) $request->getHost());
+        $allowedHosts = array_filter(array_unique(array_map('strtolower', array_merge(
+            [$requestHost],
+            [parse_url((string) config('app.url'), PHP_URL_HOST) ?: '']
+        ))));
+        $localAliases = ['127.0.0.1', 'localhost'];
+        if (in_array($targetHost, $localAliases, true)) {
+            $allowedHosts = array_values(array_unique(array_merge($allowedHosts, $localAliases)));
+        }
+
+        if (! in_array($targetHost, $allowedHosts, true)) {
+            return null;
+        }
+
+        return $url;
     }
 
     protected function generatePkceCodeVerifier(): string

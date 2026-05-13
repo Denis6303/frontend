@@ -17,7 +17,9 @@
                     <div class="footer-content">
                         <h4>{{ __('Useful Links') }}</h4>
                         <ul class="footer-link-list">
-                            <li><a href="{{ route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Create Event') }}</a></li>
+                            <li><a href="{{ session(config('votix_api.session_access_token_key'))
+                                ? route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()])
+                                : route('login', ['locale' => $locale ?? app()->getLocale(), 'redirect' => route('dashboard.events.draft.create.step1', ['locale' => $locale ?? app()->getLocale()])]) }}" class="footer-link">{{ __('Create Event') }}</a></li>
                             <li><a href="{{ route('static.sell', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Sell Tickets Online') }}</a></li>
                             <li><a href="{{ route('static.privacy', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Privacy Policy') }}</a></li>
                             <li><a href="{{ route('static.terms', ['locale' => $locale ?? app()->getLocale()]) }}" class="footer-link">{{ __('Terms & Conditions') }}</a></li>
